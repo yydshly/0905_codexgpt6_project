@@ -1,0 +1,82 @@
+{
+  "sourceCommit": "9ccc492",
+  "baselineCommit": "aa4eb11",
+  "baseline": {
+    "timestamp": "2026-09-04T21:14:04.515Z",
+    "browser": "152.0.7977.82",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "startupMs": 639,
+    "idleRendersInOneSecond": 0,
+    "samples": {
+      "day": {
+        "frameCount": 95,
+        "meanFrameMs": 9.3,
+        "p95FrameMs": 20.90000000000009,
+        "calls": 1505,
+        "meshes": 409,
+        "sceneTriangles": 96774,
+        "gpu": "ANGLE (Intel, Intel(R) UHD Graphics (0x0000A788) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+      },
+      "night": {
+        "frameCount": 95,
+        "meanFrameMs": 8.246315789473686,
+        "p95FrameMs": 16.700000000000273,
+        "calls": 1505,
+        "meshes": 409,
+        "sceneTriangles": 96774,
+        "gpu": "ANGLE (Intel, Intel(R) UHD Graphics (0x0000A788) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+      }
+    }
+  },
+  "refined": {
+    "timestamp": "2026-09-04T23:50:37.884Z",
+    "browser": "152.0.7977.82",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "startupMs": 1011,
+    "idleRendersInOneSecond": 0,
+    "samples": {
+      "day": {
+        "frameCount": 95,
+        "meanFrameMs": 4.430526315789475,
+        "p95FrameMs": 8.399999999999864,
+        "calls": 349,
+        "meshes": 171,
+        "instanceBatches": 15,
+        "sceneTriangles": 94942,
+        "gpu": "ANGLE (Intel, Intel(R) UHD Graphics (0x0000A788) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+      },
+      "night": {
+        "frameCount": 95,
+        "meanFrameMs": 4.298947368421054,
+        "p95FrameMs": 4.300000000000182,
+        "calls": 349,
+        "meshes": 171,
+        "instanceBatches": 15,
+        "sceneTriangles": 94942,
+        "gpu": "ANGLE (Intel, Intel(R) UHD Graphics (0x0000A788) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+      }
+    }
+  },
+  "drawCallReductionPercent": 76.81,
+  "acceptance": {
+    "passed": 8,
+    "failed": 0,
+    "durationSeconds": 31.6,
+    "interactionPath": "Actual Playwright mouse, keyboard, downloads and file uploads; read-only instrumentation",
+    "additionalChecks": [
+      "Camera preset state follows orbit/zoom and local restore",
+      "Mode ARIA state and selection label follow editing/dragging",
+      "Instanced keyboard and rug fringe resolve to editable object",
+      "Material change and delete/undo preserve instanced picking",
+      "Selected and deselected PNG exports byte-for-byte equal",
+      "Selection label matches the true projected anchor after a camera preset replaces custom zoom"
+    ]
+  },
+  "scope": "Default 8-object scene, camera-only orbit; moving furniture still refreshes its shadows. Short headless frame samples are not GPU timings or a device-wide FPS guarantee."
+}
