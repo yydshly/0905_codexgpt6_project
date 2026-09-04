@@ -104,7 +104,7 @@ export function parsePlan(raw: unknown): Plan {
   const ids=new Set<string>();
   const finite=(v:unknown)=>typeof v==='number'&&Number.isFinite(v);
   for(const o of p.objects) {
-    if(!o||typeof o!=='object'||typeof o.id!=='string'||o.id.length>100||ids.has(o.id)||!Object.hasOwn(CATALOG,o.kind)||!finite(o.x)||!finite(o.z)||!finite(o.rotation)||Math.abs(o.rotation)>3600||!CATALOG[o.kind].materials.includes(o.material)) throw new Error('方案物件数据无效或存在重复编号，当前方案未更改。');
+    if(!o||typeof o!=='object'||typeof o.id!=='string'||!/^[A-Za-z0-9_-]{1,100}$/.test(o.id)||ids.has(o.id)||!Object.hasOwn(CATALOG,o.kind)||!finite(o.x)||!finite(o.z)||!finite(o.rotation)||Math.abs(o.rotation)>3600||!CATALOG[o.kind].materials.includes(o.material)) throw new Error('方案物件数据无效或存在重复编号，当前方案未更改。');
     ids.add(o.id);
     if(['taskLamp','floorLamp'].includes(o.kind)&&(typeof o.on!=='boolean'||!finite(o.brightness)||o.brightness!<0||o.brightness!>100)) throw new Error('方案的灯光数据无效。');
     if(o.parentId!==undefined && typeof o.parentId!=='string') throw new Error('方案的桌面关联无效。');

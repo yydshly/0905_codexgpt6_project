@@ -50,10 +50,10 @@ test('完整验收：添加、拖动、旋转、灯光、材质、历史、本�
   await page.getByRole('button',{name:'导出',exact:true}).click();await page.locator('#file-input').setInputFiles(jsonPath);await expect(page.locator('#export-dialog')).not.toBeVisible();expect(compareCore(await plan(page))).toEqual(compareCore(exported));
   steps.push({step:'PNG 实际下载 / JSON 导出再导入',png:{width:bytes.readUInt32BE(16),height:bytes.readUInt32BE(20),bytes:bytes.length},roundTripExact:true});
   const beforeBad=await plan(page);await page.getByRole('button',{name:'导出',exact:true}).click();
-  for(const data of ['broken JSON',JSON.stringify({...beforeBad,objects:[...beforeBad.objects,beforeBad.objects[0]]}),JSON.stringify({...beforeBad,objects:beforeBad.objects.map((o:any,i:number)=>i===0?{...o,x:99}:o)})]){
+  for(const data of ['broken JSON',JSON.stringify({...beforeBad,objects:[...beforeBad.objects,beforeBad.objects[0]]}),JSON.stringify({...beforeBad,objects:beforeBad.objects.map((o:any,i:number)=>i===0?{...o,x:99}:o)}),JSON.stringify({...beforeBad,objects:beforeBad.objects.map((o:any,i:number)=>i===0?{...o,id:'bad"><img src=x onerror="window.__unsafeImport=1">'}:o)})]){
     await page.locator('#file-input').setInputFiles({name:'invalid.json',mimeType:'application/json',buffer:Buffer.from(data)});await expect(page.locator('#toast')).toHaveClass(/error/);expect(await plan(page)).toEqual(beforeBad);
   }
-  await page.keyboard.press('Escape');await expect(page.locator('#export-dialog')).not.toBeVisible();await expect(page.locator('#export')).toBeFocused();expect(errors).toEqual([]);
+  expect(await page.evaluate(()=>(window as any).__unsafeImport)).toBeUndefined();await page.keyboard.press('Escape');await expect(page.locator('#export-dialog')).not.toBeVisible();await expect(page.locator('#export')).toBeFocused();expect(errors).toEqual([]);
   await writeFile(path.join(evidence,'journey.json'),JSON.stringify({timestamp:new Date().toISOString(),browser:browser.version(),steps,invalidImportsPreserved:true,consoleErrors:errors},null,2));
 });
 
