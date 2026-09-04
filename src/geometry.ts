@@ -37,6 +37,48 @@ function rod(p:T.Object3D,a:number[],b:number[],r:number,mat:T.Material){const a
 function cup(p:T.Object3D,x:number,y:number,z:number){const white=material('#d7d2c2');cylinder(p,.044,.039,.085,white,x,y+.043,z);cylinder(p,.037,.037,.002,material('#574537'),x,y+.086,z);const h=mesh(p,new T.TorusGeometry(.03,.007,8,20),white,x+.045,y+.05,z);h.rotation.y=Math.PI/2;}
 function books(p:T.Object3D,x:number,y:number,z:number,count:number,seed:number){const rand=seeded(seed),colors=['#5e7464','#c4b49a','#e2d7be','#ab7c59','#545953','#949780'];let cursor=x;for(let i=0;i<count;i++){const w=.04+rand()*.035,h=.17+rand()*.1;box(p,w,h,.2,material(colors[Math.floor(rand()*colors.length)]),cursor+w/2,y+h/2,z,.003);for(const dy of [-.045,.045])box(p,w*.74,.006,.003,material('#dad1b8'),cursor+w/2,y+h/2+dy,z+.101,.001);cursor+=w+.007;}}
 function vase(p:T.Object3D,x:number,y:number,z:number){cylinder(p,.06,.085,.18,material('#d8c9ab'),x,y+.09,z);cylinder(p,.045,.06,.06,material('#d8c9ab'),x,y+.21,z);for(let i=0;i<5;i++){rod(p,[x,y+.2,z],[x+(i-2)*.027,y+.42+(i%2)*.08,z+.02],.002,material('#7a7154'));sphere(p,.045,material('#a9946d'),x+(i-2)*.033,y+.41+(i%2)*.08,z+.02,.7,1.8,.6);}}
+
+// Batch only siblings within one editable object. Ray hits still resolve to its itemId.
+function batchRepeatedMeshes(root:T.Object3D) {
+  for(const child of [...root.children]) if(!(child instanceof T.Mesh)) batchRepeatedMeshes(child);
+  const buckets=new Map<string,T.Mesh[]>();
+  for(const child of root.children) {
+    if(!(child instanceof T.Mesh)||child instanceof T.InstancedMesh||Array.isArray(child.material)||child.name)continue;
+    const key=[child.geometry.uuid,child.material.uuid,child.castShadow,child.receiveShadow].join(':');
+    const list=buckets.get(key)||[];list.push(child);buckets.set(key,list);
+  }
+  for(const list of buckets.values()) {
+    if(list.length<3)continue;
+    const first=list[0],batch=new T.InstancedMesh(first.geometry,first.material,list.length);
+    batch.castShadow=first.castShadow;batch.receiveShadow=first.receiveShadow;
+    list.forEach((part,i)=>{part.updateMatrix();batch.setMatrixAt(i,part.matrix);root.remove(part);});
+    batch.instanceMatrix.needsUpdate=true;batch.computeBoundingBox();batch.computeBoundingSphere();root.add(batch);
+  }
+}
+
+function chairBack() {
+  const key='sculpted-chair-back';if(geos.has(key))return geos.get(key)!;
+  const geo=new RoundedBoxGeometry(.57,.34,.095,5,.04),p=geo.attributes.position;
+  for(let i=0;i<p.count;i++) {
+    const x=p.getX(i),y=p.getY(i),z=p.getZ(i);
+    p.setXYZ(i,x*(1-.05*(y/.17+1)/2),y,z-.135*(x/.285)**2+y*.09);
+  }
+  geo.computeVertexNormals();geos.set(key,geo);return geo;
+}
+
+// A tapered, cupped leaf surface, with a raised midrib and softly rippled edges.
+function figLeaf() {
+  const key='sculpted-fig-leaf';if(geos.has(key))return geos.get(key)!;
+  const positions:number[]=[],uv:number[]=[],indices:number[]=[],rows=16,cols=8;
+  for(let i=0;i<=rows;i++)for(let j=0;j<=cols;j++) {
+    const t=i/rows,u=j/cols*2-1;
+    const width=.135*Math.pow(Math.sin(Math.PI*t),.72)*(1+.16*Math.sin(t*Math.PI*3));
+    const x=u*width,y=.03*Math.sin(t*Math.PI)-.024*u*u*Math.sin(t*Math.PI)+.005*Math.sin(t*26)*u*u;
+    positions.push(x,y,t*.32);uv.push(j/cols,t);
+    if(i<rows&&j<cols){const a=i*(cols+1)+j,b=a+cols+1;indices.push(a,b,a+1,b,b+1,a+1);}
+  }
+  const geo=new T.BufferGeometry();geo.setAttribute('position',new T.Float32BufferAttribute(positions,3));geo.setAttribute('uv',new T.Float32BufferAttribute(uv,2));geo.setIndex(indices);geo.computeVertexNormals();geos.set(key,geo);return geo;
+}
 export function createFurniture(item:Item,preview=false):T.Group {
   const g=new T.Group();g.userData.itemId=item.id;const m=material(item.material,item.kind),metal=material('#333a34'),oak=material('oak'),cream=material('#e9e5da');
   if(item.kind==='desk') {
@@ -52,8 +94,8 @@ export function createFurniture(item:Item,preview=false):T.Group {
   }
   if(item.kind==='chair') {
     box(g,.55,.11,.5,m,0,.455,0,.075);
-    const back=box(g,.57,.36,.095,m,0,.71,.245,.09);back.rotation.x=-.1;
-    for(const x of [-.24,.24]){rod(g,[x,.4,-.18],[x*1.15,.035,-.23],.021,metal);rod(g,[x,.4,.18],[x*1.15,.035,.28],.021,metal);rod(g,[x,.47,.13],[x,.65,.13],.015,metal);box(g,.065,.035,.34,oak,x,.66,.015,.017);}
+    mesh(g,chairBack(),m,0,.72,.235);
+    for(const x of [-.24,.24]){rod(g,[x,.4,-.18],[x*1.15,.008,-.23],.021,metal);rod(g,[x,.4,.18],[x*1.15,.008,.28],.021,metal);rod(g,[x,.45,0],[x,.65,0],.015,metal);rod(g,[x*.85,.45,.18],[x*.85,.65,.18],.012,metal);box(g,.065,.035,.30,oak,x,.66,-.07,.017);}
   }
   if(item.kind==='monitor') {
     box(g,.31,.018,.22,m,0,.011,.01,.03);box(g,.045,.22,.045,m,0,.13,-.04,.012);
@@ -69,7 +111,7 @@ export function createFurniture(item:Item,preview=false):T.Group {
     sphere(g,.003,cream,0,.074,-.031);
   }
   if(item.kind==='shelf') {
-    for(const x of [-.557,.557])box(g,.045,2.0,.36,m,x,1.025,0,.006);
+    for(const x of [-.557,.557])box(g,.045,2.05,.36,m,x,1.025,0,.006);
     for(const y of [.12,.5,.89,1.28,1.68,2.04])box(g,1.18,.045,.38,m,0,y,0,.007);
     box(g,1.08,.33,.023,material('#c2ab87'),0,.295,-.17,.003);
     box(g,1.08,.005,.012,metal,0,.14,.194,.001);
@@ -79,10 +121,10 @@ export function createFurniture(item:Item,preview=false):T.Group {
     const frame=box(g,.21,.27,.015,metal,.29,1.44,.015,.004);frame.rotation.z=-.06;box(g,.18,.235,.01,cream,.29,1.44,.026,.001);sphere(g,.06,material('#ad8860'),.29,1.44,.034,1,1,.01);
   }
   if(item.kind==='taskLamp') {
-    cylinder(g,.112,.13,.028,m,0,.018,0);cylinder(g,.038,.057,.27,m,0,.16,0);
-    mesh(g,new T.SphereGeometry(.177,40,20,0,Math.PI*2,0,Math.PI/2),m,0,.29,0);
-    const bulb=new T.MeshStandardMaterial({color:'#ffedc1',emissive:'#ffd48c',emissiveIntensity:item.on?1.2:0,roughness:.65});bulb.name='bulb';cylinder(g,.17,.17,.015,bulb,0,.29,0);
-    if(!preview){const light=new T.PointLight('#ffd297',item.on?(item.brightness||0)/100*5:0,2.6,2);light.position.set(0,.255,.02);light.name='fixtureLight';g.add(light);}
+    cylinder(g,.112,.13,.028,m,0,.016,0);cylinder(g,.038,.057,.24,m,0,.14,0);
+    const capKey='mushroom-cap';if(!geos.has(capKey))geos.set(capKey,new T.SphereGeometry(.17,40,20,0,Math.PI*2,0,Math.PI/2));mesh(g,geos.get(capKey)!,m,0,.25,0);
+    const bulb=new T.MeshStandardMaterial({color:'#ffedc1',emissive:'#ffd48c',emissiveIntensity:item.on?1.2:0,roughness:.65});bulb.name='bulb';cylinder(g,.165,.165,.015,bulb,0,.25,0);
+    if(!preview){const light=new T.PointLight('#ffd297',item.on?(item.brightness||0)/100*5:0,2.6,2);light.position.set(0,.225,.02);light.name='fixtureLight';g.add(light);}
   }
   if(item.kind==='floorLamp') {
     cylinder(g,.22,.23,.035,metal,0,.024,0);cylinder(g,.016,.02,1.39,metal,0,.71,0);
@@ -92,9 +134,20 @@ export function createFurniture(item:Item,preview=false):T.Group {
     if(!preview){const light=new T.PointLight('#ffcc8d',item.on?(item.brightness||0)/100*8:0,4.7,2);light.position.set(0,1.24,0);light.name='fixtureLight';g.add(light);}
   }
   if(item.kind==='plant') {
-    cylinder(g,.19,.145,.33,m,0,.18,0,40);cylinder(g,.17,.17,.015,material('#514432'),0,.347,0);
-    const trunk=material('#77604a'),leaf1=material('#425f36'),leaf2=material('#637c43');
-    for(let j=0;j<3;j++){const a=j*2.4;rod(g,[0,.31,0],[Math.cos(a)*.12,1.2-j*.12,Math.sin(a)*.12],.009,trunk);for(let i=0;i<5;i++){const phi=a+i*2.3,y=.53+i*.15-j*.02,x=Math.cos(phi)*(.18+i*.008),z=Math.sin(phi)*(.18+i*.008);rod(g,[Math.cos(a)*.065,y-.06,Math.sin(a)*.065],[x,y,z],.003,trunk);const leaf=sphere(g,.16,i%2?leaf1:leaf2,x,y+.04,z,.75,.22,1.35);leaf.rotation.set(.28,phi,.3);}}
+    cylinder(g,.19,.145,.33,m,0,.165,0,40);cylinder(g,.17,.17,.015,material('#514432'),0,.327,0);
+    const trunk=material('#77604a'),leaf1=material('#42623e'),leaf2=material('#65804a'),vein=material('#81905b');
+    leaf1.side=leaf2.side=T.DoubleSide;
+    for(let j=0;j<3;j++){
+      const a=j*2.4,tx=Math.cos(a)*.045,tz=Math.sin(a)*.045;
+      rod(g,[0,.31,0],[tx,1.25-j*.14,tz],.007,trunk);
+      for(let i=0;i<5;i++){
+        const phi=a+i*2.3,y=.52+i*.15-j*.025,start=new T.Vector3(tx,y,tz),leafTransform=new T.Object3D();
+        leafTransform.position.copy(start);leafTransform.rotation.set(-.75+(i%3)*.45,phi,(i%2?1:-1)*.18,'YXZ');leafTransform.scale.setScalar(.88+(i%3)*.06);leafTransform.updateMatrix();
+        mesh(g,figLeaf(),i%2?leaf1:leaf2).applyMatrix4(leafTransform.matrix);
+        const curve=new T.QuadraticBezierCurve3(new T.Vector3(0,.003,0),new T.Vector3(0,.05,.15),new T.Vector3(0,.006,.30));
+        const veinKey='fig-midrib';if(!geos.has(veinKey))geos.set(veinKey,new T.TubeGeometry(curve,12,.0015,4,false));mesh(g,geos.get(veinKey)!,vein).applyMatrix4(leafTransform.matrix);
+      }
+    }
   }
   if(item.kind==='rug') {
     box(g,2.5,.022,1.85,m,0,.014,0,.04);
@@ -102,15 +155,16 @@ export function createFurniture(item:Item,preview=false):T.Group {
     for(const x of [-1.18,1.18])box(g,.014,.001,1.65,border,x,.026,0,.001);
     for(let i=0;i<34;i++)for(const x of [-1.28,1.28])box(g,.08,.008,.009,material('#c9bda6'),x,.012,-.84+i*.05,.002);
   }
-  return g;
+  batchRepeatedMeshes(g);return g;
 }
 
 export function createRoom(scene:T.Scene) {
   const room=new T.Group();scene.add(room);const wall=material('#e5e2d7'),trim=material('#d2cdbb'),woodMat=material('oak');
   box(room,5.48,.22,4.68,material('#d7d1c2'),0,-.13,0,.025);
   // Individually joined oak boards and shared procedural grain.
+  const plankMaterials=['#c7b697','#c5b396','#cbbb9e','#cebd9f'].map(color=>{const m=woodMat.clone();m.color.set(color);return m;});
   for(let row=0;row<16;row++)for(let col=0;col<4;col++){
-    const m=woodMat.clone();m.color.set(['#c7b697','#c5b396','#cbbb9e','#cebd9f'][(row*7+col*3)%4]);
+    const m=plankMaterials[(row*7+col*3)%4];
     const x=-2.6+(col+.5)*1.3;const plank=box(room,1.3,.035,.275,m,x,-.012,-2.2+(row+.5)*.275,0);plank.castShadow=false;
   }
   box(room,5.4,2.8,.12,wall,0,1.4,-2.26,.006);
@@ -138,7 +192,7 @@ export function createRoom(scene:T.Scene) {
   for(let i=0;i<4;i++)box(art,.77,.009,.009,material('#e1cfac'),0,-.11+i*.07,.042,.001);
   // Under-floor gallery plinth and an infinite neutral studio ground.
   const ground=mesh(scene,new T.PlaneGeometry(200,200),material('#edece5'),0,-.255,0);ground.rotation.x=-Math.PI/2;ground.castShadow=false;ground.receiveShadow=false;
-  return room;
+  batchRepeatedMeshes(room);return room;
 }
 function metalTrim(){return material('#7b7767');}
 export function thumbCamera(kind:Kind) { const c=CATALOG[kind];const h=c.height;return {target:new T.Vector3(0,h*.43,0),size:Math.max(c.width,c.depth,h)*1.48}; }

@@ -112,3 +112,39 @@ test('八类物件可添加，材质预览同步，键盘焦点和连续调光�
   await choose(page,'taskLamp-1');const h0=await history(page),range=page.getByRole('slider',{name:'灯光亮度'}),b=await range.boundingBox();await page.mouse.move(b!.x+b!.width*.65,b!.y+b!.height/2);await page.mouse.down();await page.mouse.move(b!.x+b!.width*.3,b!.y+b!.height/2,{steps:16});await page.mouse.up();expect((await history(page)).past).toBe(h0.past+1);expect((await plan(page)).objects.find((o:any)=>o.id==='taskLamp-1').brightness).toBeLessThan(40);
   await page.getByRole('button',{name:'撤销',exact:true}).click();expect((await plan(page)).objects.find((o:any)=>o.id==='taskLamp-1').brightness).toBe(65);
 });
+
+test('优化回归：镜头预设状态、保存恢复与编辑模式提示',async({page})=>{
+  await ready(page);
+  const views=page.locator('[data-view]');
+  await expect(page.locator('[data-view="default"]')).toHaveAttribute('aria-pressed','true');
+  await page.getByRole('button',{name:'近景',exact:true}).click();await expect(page.locator('[data-view="close"]')).toHaveAttribute('aria-pressed','true');
+  await page.getByRole('button',{name:'放大',exact:true}).click();
+  expect(await views.evaluateAll(elements=>elements.every(e=>e.getAttribute('aria-pressed')==='false'))).toBe(true);
+  await page.getByRole('button',{name:'保存方案',exact:true}).click();const saved=await plan(page);
+  await page.reload();await expect(page.locator('html')).toHaveAttribute('data-ready','true');expect((await plan(page)).camera).toEqual(saved.camera);
+  expect(await views.evaluateAll(elements=>elements.every(e=>e.getAttribute('aria-pressed')==='false'))).toBe(true);
+  await page.getByRole('button',{name:'俯视',exact:true}).click();await page.getByRole('button',{name:'保存方案',exact:true}).click();await page.reload();await expect(page.locator('html')).toHaveAttribute('data-ready','true');await expect(page.locator('[data-view="top"]')).toHaveAttribute('aria-pressed','true');
+  await page.getByRole('button',{name:'恢复默认视角',exact:true}).click();await expect(page.locator('[data-view="default"]')).toHaveAttribute('aria-pressed','true');
+  await choose(page,'plant-1');const point=await page.evaluate(()=>(window as any).__study.project('plant-1',[0,.17,0]));
+  await page.mouse.move(point.x,point.y);await expect(page.locator('#canvas-host canvas')).toHaveCSS('cursor','grab');
+  await expect(page.locator('.object-label')).toContainText('琴叶榕 · 拖动移动');
+  const h=await history(page);await page.mouse.down();await page.mouse.move(point.x+35,point.y-8,{steps:8});await expect(page.locator('.object-label')).toHaveClass(/is-dragging/);await expect(page.locator('.object-label')).toContainText('X ');await page.mouse.up();expect((await history(page)).past).toBe(h.past+1);
+  await page.getByRole('button',{name:'观察',exact:true}).click();await expect(page.locator('#orbit-mode')).toHaveAttribute('aria-pressed','true');await expect(page.locator('#edit-mode')).toHaveAttribute('aria-pressed','false');await expect(page.locator('.object-label')).toContainText('已选中');
+  const before=await plan(page);await page.mouse.move(point.x,point.y);await page.mouse.down();await page.mouse.move(point.x+45,point.y+15,{steps:8});await page.mouse.up();expect((await plan(page)).objects).toEqual(before.objects);expect((await plan(page)).camera).not.toEqual(before.camera);
+  expect(await views.evaluateAll(elements=>elements.every(e=>e.getAttribute('aria-pressed')==='false'))).toBe(true);
+  await page.setViewportSize({width:1280,height:800});await settle(page);const label=await page.locator('.object-label').boundingBox(),host=await page.locator('#canvas-host').boundingBox();expect(label!.x).toBeGreaterThanOrEqual(host!.x);expect(label!.x+label!.width).toBeLessThanOrEqual(host!.x+host!.width);
+  await page.keyboard.press('Escape');await expect(page.locator('.object-label')).toBeHidden();
+});
+
+test('优化回归：合批键帽/毯穗仍可选中，材质、删除撤销和导出无辅助标记',async({page})=>{
+  await ready(page);await page.getByRole('button',{name:'俯视',exact:true}).click();
+  const key=await page.evaluate(()=>(window as any).__study.project('desk-1',[0,.807,.23]));await page.mouse.click(key.x,key.y);expect((await plan(page)).selectedId).toBe('desk-1');
+  await page.getByRole('button',{name:'材质：深胡桃木',exact:true}).click();await page.keyboard.press('Escape');await page.mouse.click(key.x,key.y);expect((await plan(page)).selectedId).toBe('desk-1');
+  const fringe=await page.evaluate(()=>(window as any).__study.project('rug-1',[1.28,.016,.01]));await page.mouse.click(fringe.x,fringe.y);expect((await plan(page)).selectedId).toBe('rug-1');
+  const before=await plan(page);await page.keyboard.press('Delete');expect((await plan(page)).objects).toHaveLength(7);await page.keyboard.press('Control+z');expect((await plan(page)).objects).toEqual(before.objects);expect((await plan(page)).selectedId).toBe('rug-1');
+  await page.getByRole('button',{name:'恢复默认视角',exact:true}).click();await settle(page);
+  const selectedDownload=page.waitForEvent('download');await page.getByRole('button',{name:'导出',exact:true}).click();await page.locator('#export-png').click();const selectedFile=await selectedDownload;const withSelection=await readFile((await selectedFile.path())!);
+  await page.getByRole('button',{name:'关闭导出',exact:true}).click();await page.keyboard.press('Escape');await settle(page);
+  await page.getByRole('button',{name:'导出',exact:true}).click();const cleanDownload=page.waitForEvent('download');await page.locator('#export-png').click();const cleanFile=await cleanDownload;const clean=await readFile((await cleanFile.path())!);expect(withSelection.equals(clean)).toBe(true);
+  await page.getByRole('button',{name:'关闭导出',exact:true}).click();await page.getByRole('button',{name:'近景',exact:true}).click();await settle(page);const metrics=await page.evaluate(()=>(window as any).__study.metrics());expect(metrics.calls).toBeLessThan(700);expect(metrics.instanceBatches).toBeGreaterThan(5);
+});
