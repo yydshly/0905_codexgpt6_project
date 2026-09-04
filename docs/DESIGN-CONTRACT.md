@@ -51,4 +51,4 @@
 | 镜头预设 / 缩放 / 本地恢复 / 标签投影 | 自定义及俯视保存刷新、锚点断言 | pass | 完成 |
 | 合批拾取 / 材质 / 删除撤销 / PNG 隔离 | 新增键帽、毯穗与 PNG 字节比较用例 | pass | 完成 |
 | 原布置、保存恢复与文件闭环 | 原六项验收保留；完整 8/8 通过 | pass | 完成 |
-| 性能 / 资产 / GitHub | optimization.json、ASSETS、REFINEMENT | 本地通过 | 远端 CI 状态见优化报告 |
+| 性能 / 资产 / GitHub | optimization.json、ASSETS、REFINEMENT | pass；远端 8/8 | 完成，详情见优化报告 |

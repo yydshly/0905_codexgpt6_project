@@ -52,6 +52,6 @@
 
 TypeScript、生产构建、8 项浏览器验收、`git diff --check` 均通过；`npm audit --audit-level=high` 为 0 漏洞。产物约 674 kB JavaScript / 201 kB gzip；Three.js 及后处理的分块体积提示仍保留。
 
-GitHub Actions：[初次 7/8 运行](https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33930584456)、[修正后代码验证](https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33930945834)，最终远端结果将在完成后记录。CI 的 Linux SwiftShader 测量与上述本地 GPU 数据分开。
+GitHub Actions：[初次 7/8 运行](https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33930584456)、[修正后代码验证](https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33930945834)。修正后 **8/8 通过**，浏览器测试约 **5.0 分钟**，完整工作流 **5 分 42 秒**，截图及测试记录已上传到 Actions artifacts。CI 的 Linux SwiftShader 测量与上述本地 GPU 数据分开。
 
 单个本地存档、无家具间完整碰撞、无灯具独立投影、手机完整属性编辑和跨浏览器尚未覆盖的边界沿用第一版，见 [验收报告](VERIFICATION.md)。

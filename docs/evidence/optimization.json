@@ -78,5 +78,15 @@
       "Selection label matches the true projected anchor after a camera preset replaces custom zoom"
     ]
   },
-  "scope": "Default 8-object scene, camera-only orbit; moving furniture still refreshes its shadows. Short headless frame samples are not GPU timings or a device-wide FPS guarantee."
+  "scope": "Default 8-object scene, camera-only orbit; moving furniture still refreshes its shadows. Short headless frame samples are not GPU timings or a device-wide FPS guarantee.",
+  "githubActions": {
+    "runId": 33930945834,
+    "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33930945834",
+    "sourceCommit": "9ccc492",
+    "conclusion": "success",
+    "passed": 8,
+    "failed": 0,
+    "jobDurationSeconds": 342,
+    "environment": "Ubuntu / Playwright Chromium / SwiftShader; not mixed into local hardware metrics"
+  }
 }

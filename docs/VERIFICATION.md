@@ -95,6 +95,7 @@ JSON 下载原件：[verified-plan.json](evidence/verified-plan.json)。测试�
 - 首轮 GitHub Actions 的 5 个功能验收通过，性能项因 SwiftShader 软件渲染运行超出 90 秒而超时。已将 CI 的观察采样限定为 35 帧 / 16 步拖动；本地硬件性能采样仍为完整 100 帧 / 70 步，所有功能操作断言保留。该修正在提交 `88e3da4` 中记录。
 - 修正后 [GitHub Actions 第 33920359280 次运行](https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33920359280) 的 6 项验收全部通过，测试 4.2 分钟、完整工作流 4 分 45 秒。
 - 最终代码提交 `96cff0f`（包含异常 JSON 编号校验）再次完成 [GitHub Actions 第 33920893295 次运行](https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33920893295)：6/6 通过，完整工作流 4 分 19 秒。这是初轮通过记录；第二轮代码与结果另见 [优化报告](REFINEMENT.md)。
+- 第二轮最终源码 `9ccc492` 的 [GitHub Actions 第 33930945834 次运行](https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33930945834) **8/8 通过**，测试约 5.0 分钟、完整工作流 5 分 42 秒。后续提交仅更新文档与证据。
 
 ## 已知边界与未验证项
 
