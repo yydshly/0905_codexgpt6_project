@@ -1,0 +1,42 @@
+{
+  "timestamp": "2026-09-04T21:14:00.504Z",
+  "browser": "152.0.7977.82",
+  "steps": [
+    {
+      "step": "打开默认书房",
+      "objects": 8
+    },
+    {
+      "step": "添加/拖动/旋转/调光",
+      "lamp": {
+        "id": "taskLamp-00a31ad1-aeea-4d3b-9103-e8b78505cfd0",
+        "kind": "taskLamp",
+        "x": 1.4068,
+        "z": -1,
+        "rotation": 15,
+        "material": "sage",
+        "on": true,
+        "brightness": 99,
+        "parentId": "desk-1"
+      },
+      "oneDragOneHistory": true,
+      "cameraUnchanged": true
+    },
+    {
+      "step": "材质/深夜/撤销重做/保存刷新恢复",
+      "keyDataExact": true,
+      "storedBytes": 1168
+    },
+    {
+      "step": "PNG 实际下载 / JSON 导出再导入",
+      "png": {
+        "width": 1628,
+        "height": 1206,
+        "bytes": 1311877
+      },
+      "roundTripExact": true
+    }
+  ],
+  "invalidImportsPreserved": true,
+  "consoleErrors": []
+}
