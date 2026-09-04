@@ -17,7 +17,7 @@ export function material(name:string,kind?:Kind):T.MeshStandardMaterial {
   const key=name+':'+(kind||'');if(mats.has(key))return mats.get(key)!;
   const def=MATERIALS[name];const woodLike=name==='oak'||name==='walnut';const woven=kind==='rug'||kind==='chair'||(kind==='floorLamp'&&name==='linen');
   const m=new T.MeshStandardMaterial({color:def?.color||name,roughness:woodLike?.58:woven?.95:.7,metalness:name==='silver'?.65:name==='charcoal'?.22:0});
-  if(woodLike) { wood ||= texture('wood');m.map=wood;m.bumpMap=wood;m.bumpScale=.012; }
+  if(woodLike) { wood ||= texture('wood');m.map=wood;m.bumpMap=wood;m.bumpScale=.0012; }
   if(woven) {fabric ||= texture('fabric');m.map=fabric;m.bumpMap=fabric;m.bumpScale=.009;}
   mats.set(key,m);return m;
 }
@@ -48,7 +48,7 @@ export function createFurniture(item:Item,preview=false):T.Group {
     for(let row=0;row<4;row++)for(let col=0;col<14;col++)box(g,.028,.006,.032,cream,-.259+col*.039,.801,.147+row*.043,.003);
     box(g,.074,.033,.112,cream,.43,.803,.22,.023);
     box(g,.19,.027,.26,material('#b88665'),-.68,.796,.18,.005);box(g,.175,.017,.247,cream,-.68,.809,.18,.002);
-    cup(g,.77,.784,.21);
+    cup(g,.80,.784,-.30);
   }
   if(item.kind==='chair') {
     box(g,.55,.11,.5,m,0,.455,0,.075);
@@ -111,7 +111,7 @@ export function createRoom(scene:T.Scene) {
   // Individually joined oak boards and shared procedural grain.
   for(let row=0;row<16;row++)for(let col=0;col<4;col++){
     const m=woodMat.clone();m.color.set(['#c7b697','#c5b396','#cbbb9e','#cebd9f'][(row*7+col*3)%4]);
-    const x=-2.6+(col+.5)*1.3;box(room,1.296,.035,.271,m,x,-.012,-2.2+(row+.5)*.275,.001);
+    const x=-2.6+(col+.5)*1.3;const plank=box(room,1.298,.035,.273,m,x,-.012,-2.2+(row+.5)*.275,0);plank.castShadow=false;
   }
   box(room,5.4,2.8,.12,wall,0,1.4,-2.26,.006);
   // West wall with a true opening: 1.85 m wide × 1.58 m tall.

@@ -83,7 +83,7 @@ export class StudyScene {
     const corners=[[-def.width/2-.045,-def.depth/2-.045],[def.width/2+.045,-def.depth/2-.045],[def.width/2+.045,def.depth/2+.045],[-def.width/2-.045,def.depth/2+.045]];
     const points:T.Vector3[]=[];
     for(const [x,z]of corners){points.push(new T.Vector3(x-Math.sign(x)*.12,y,z),new T.Vector3(x,y,z),new T.Vector3(x,y,z),new T.Vector3(x,y,z-Math.sign(z)*.12));}
-    const geo=new T.BufferGeometry().setFromPoints(points),line=new T.LineSegments(geo,new T.LineBasicMaterial({color:'#557761',depthTest:false,transparent:true,opacity:.95}));line.renderOrder=100;line.position.set(o.x,0,o.z);line.rotation.y=o.rotation*Math.PI/180;this.selection.add(line);
+    const geo=new T.BufferGeometry().setFromPoints(points),line=new T.LineSegments(geo,new T.LineBasicMaterial({color:this.plan.mood==='night'?'#b8e1ad':'#4a794f',depthTest:false,transparent:true,opacity:1}));line.renderOrder=100;line.position.set(o.x,0,o.z);line.rotation.y=o.rotation*Math.PI/180;this.selection.add(line);
   }
   private cast(e:PointerEvent){const rect=this.renderer.domElement.getBoundingClientRect();this.pointer.set((e.clientX-rect.left)/rect.width*2-1,-(e.clientY-rect.top)/rect.height*2+1);this.ray.setFromCamera(this.pointer,this.camera);}
   private pointerDown=(e:PointerEvent)=>{
@@ -105,9 +105,9 @@ export class StudyScene {
     try{this.renderer.setPixelRatio(1);this.renderer.setSize(w*2,h*2,false);this.composer.setPixelRatio(1);this.composer.setSize(w*2,h*2);this.composer.render();return await new Promise<Blob>((resolve,reject)=>this.renderer.domElement.toBlob(b=>b?resolve(b):reject(new Error('图片生成失败，请重试。')),'image/png'));}
     finally{this.selection.visible=true;this.renderer.setPixelRatio(ratio);this.renderer.setSize(w,h);this.composer.setPixelRatio(ratio);this.composer.setSize(w,h);this.invalidate();}
   }
-  thumbnails():Record<Kind,string>{
-    const result={} as Record<Kind,string>;const r=new T.WebGLRenderer({antialias:true,alpha:true});r.setSize(240,180);r.setPixelRatio(1);r.toneMapping=T.ACESFilmicToneMapping;r.toneMappingExposure=1.15;
-    for(const kind of Object.keys(CATALOG) as Kind[]){const s=new T.Scene();s.add(new T.HemisphereLight('#ffffff','#c8bba3',3));const light=new T.DirectionalLight('#ffffff',3);light.position.set(2,4,5);s.add(light);const g=createFurniture({id:'thumb',kind,x:0,z:0,rotation:0,material:CATALOG[kind].materials[0],on:false,brightness:0},true);s.add(g);const info=thumbCamera(kind),h=info.size*.78,cam=new T.OrthographicCamera(-h*4/3/2,h*4/3/2,h/2,-h/2,.1,30);cam.position.set(3,2.4,4);cam.lookAt(info.target);r.render(s,cam);result[kind]=r.domElement.toDataURL('image/png');this.disposeUnique(g);}
+  thumbnails():Record<string,string>{
+    const result:Record<string,string>={};const r=new T.WebGLRenderer({antialias:true,alpha:true});r.setSize(240,180);r.setPixelRatio(1);r.toneMapping=T.ACESFilmicToneMapping;r.toneMappingExposure=1.15;
+    for(const kind of Object.keys(CATALOG) as Kind[])for(const material of CATALOG[kind].materials){const s=new T.Scene();s.add(new T.HemisphereLight('#ffffff','#c8bba3',3));const light=new T.DirectionalLight('#ffffff',3);light.position.set(2,4,5);s.add(light);const g=createFurniture({id:'thumb',kind,x:0,z:0,rotation:0,material,on:false,brightness:0},true);s.add(g);const info=thumbCamera(kind),h=info.size*.78,cam=new T.OrthographicCamera(-h*4/3/2,h*4/3/2,h/2,-h/2,.1,30);cam.position.set(3,2.4,4);cam.lookAt(info.target);r.render(s,cam);result[`${kind}:${material}`]=r.domElement.toDataURL('image/png');if(material===CATALOG[kind].materials[0])result[kind]=result[`${kind}:${material}`];this.disposeUnique(g);}
     r.dispose();return result;
   }
   getMetrics(){let meshes=0,triangles=0;this.scene.traverse(o=>{if(o instanceof T.Mesh){meshes++;triangles+=(o.geometry.index?.count||o.geometry.attributes.position.count)/3;}});const gl=this.renderer.getContext(),ext=gl.getExtension('WEBGL_debug_renderer_info');return {...this.metrics,meshes,sceneTriangles:Math.round(triangles),gpu:ext?gl.getParameter(ext.UNMASKED_RENDERER_WEBGL):gl.getParameter(gl.RENDERER),pixelRatio:this.renderer.getPixelRatio(),canvas:[this.renderer.domElement.width,this.renderer.domElement.height]};}

@@ -13,7 +13,7 @@ let plan=initialPlan(),savedSignature='',restored=false,loadError='';
 try{const raw=localStorage.getItem(STORAGE);if(raw){const stored=JSON.parse(raw);plan=parsePlan(stored.plan);savedSignature=signature(plan);restored=true;}}catch{loadError='本地方案无法读取，已安全打开默认书房。原始存档未被覆盖。';}
 let scene:StudyScene|undefined;
 let past:Plan[]=[],future:Plan[]=[],transaction:Plan|null=null;
-let category='全部',thumbs={} as Record<Kind,string>,saveLabel=restored?'已恢复本地方案':'尚未保存',toastTimer=0;
+let category='全部',thumbs:Record<string,string>={},saveLabel=restored?'已恢复本地方案':'尚未保存',toastTimer=0,renderedSelection:string|null|undefined;
 function signature(p:Plan){return JSON.stringify({...p,selectedId:null});}
 
 $('#app').innerHTML=`
@@ -52,6 +52,10 @@ function refresh(panel=true){scene?.sync(plan);$('#undo').toggleAttribute('disab
 function renderCatalog(){const list=(Object.keys(CATALOG) as Kind[]).filter(k=>category==='全部'||CATALOG[k].category===category);$('#catalog').innerHTML=list.map(k=>`<button class="catalog-card" data-add="${k}" aria-label="添加${CATALOG[k].name}"><span class="thumb">${thumbs[k]?`<img src="${thumbs[k]}" alt="${CATALOG[k].name}三维缩略图" draggable="false"/>`:icon(CATALOG[k].icon)}<span class="add-mark">${icon('Plus')}</span></span><strong>${CATALOG[k].name}</strong><small>${CATALOG[k].category} <span> / </span> ${k==='desk'?'1.95 m':k==='shelf'?'2.05 m':k==='rug'?'2.50 m':'精选'}</small></button>`).join('');document.querySelectorAll('[data-add]').forEach(b=>b.addEventListener('click',()=>{try{const item=createItem(plan,(b as HTMLElement).dataset.add as Kind);mutate(()=>{plan.objects.push(item);plan.selectedId=item.id;});toast(`已添加${CATALOG[item.kind].name}${item.parentId?'，已放置在书桌上':''}`);document.body.classList.remove('library-open');}catch(e){toast((e as Error).message,true);}}));icons();}
 function renderPanel(){
   const o=current();
+  const focused=document.activeElement as HTMLElement|null;
+  const restoreFocus=focused?.closest('#properties')?(focused.id?`#${focused.id}`:focused.dataset.material?`[data-material="${focused.dataset.material}"]`:null):null;
+  const selectionChanged=renderedSelection!==plan.selectedId;renderedSelection=plan.selectedId;
+  if(selectionChanged)$('#properties').scrollTop=0;
   if(!o){$('#properties').innerHTML=`<div class="panel-heading"><span>${icon('SlidersHorizontal')}空间概览</span><span class="subtle-tag">STUDIO 01</span></div><div class="intro-card"><span class="intro-overline">你的理想，自有形状。</span><h2>为灵感，<br/>留一处空间<span>。</span></h2><p>一张书桌，一盏暖灯。<br/>从这里，开始你喜欢的日常。</p><div class="intro-rule"></div><div class="space-stats"><span><strong>22.9<small>m²</small></strong>房间面积</span><span><strong>08<small>类</small></strong>精选物件</span></div><span class="intro-leaf">${icon('Sprout')}</span></div><div class="guide-title">让布置变得简单</div><div class="guide"><span>${icon('MousePointer2')}</span><div><strong>选中你喜欢的物件</strong><p>点击场景物件，查看与修改属性</p></div></div><div class="guide"><span>${icon('Move')}</span><div><strong>挪到刚刚好的位置</strong><p>直接拖动，自动吸附 0.1 米网格</p></div></div><div class="guide"><span>${icon('Orbit')}</span><div><strong>换个角度看生活</strong><p>右键拖动观察，滚轮拉近细节</p></div></div><div class="scene-list-title"><span>${icon('Layers3')}空间中的物件</span><small>${String(plan.objects.length).padStart(2,'0')}</small></div><div class="scene-list">${plan.objects.map(item=>`<button data-select="${item.id}">${icon(CATALOG[item.kind].icon)}<span>${CATALOG[item.kind].name}</span>${icon('ArrowUpRight')}</button>`).join('')}</div><div class="property-tip">${icon('LockKeyhole')}灵感私藏于此，无需登录。</div>`;
     document.querySelectorAll<HTMLElement>('[data-select]').forEach(b=>b.onclick=()=>select(b.dataset.select!));icons();return;
   }
@@ -64,7 +68,8 @@ function renderPanel(){
   document.querySelectorAll<HTMLElement>('[data-material]').forEach(b=>b.onclick=()=>mutate(()=>updateItem(plan,o.id,{material:b.dataset.material!})));
   if($('#light-toggle'))$('#light-toggle').onclick=()=>mutate(()=>updateItem(plan,o.id,{on:!current()!.on}));
   const range=$<HTMLInputElement>('#brightness');if(range){range.onpointerdown=()=>begin();range.oninput=()=>{begin();updateItem(plan,o.id,{brightness:Number(range.value)});$('#brightness-value').textContent=range.value+'%';refresh(false);};range.onchange=()=>finish();range.onblur=()=>finish();}
-  $('#delete-item').onclick=remove;icons();
+  const preview=$<HTMLImageElement>('.selected-preview img');if(preview&&thumbs[`${o.kind}:${o.material}`])preview.src=thumbs[`${o.kind}:${o.material}`];
+  $('#delete-item').onclick=remove;icons();if(selectionChanged)$('#properties').scrollTop=0;else if(restoreFocus)$(restoreFocus)?.focus({preventScroll:true});
 }
 function select(id:string|null){plan.selectedId=id;refresh();}
 function rotate(delta:number){const o=current();if(o)mutate(()=>updateItem(plan,o.id,{rotation:o.rotation+delta}));}
@@ -94,7 +99,7 @@ document.addEventListener('keydown',e=>{
   if(editing||dialog.open)return;
   if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='z'){e.preventDefault();e.shiftKey?redo():undo();return;}
   if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='y'){e.preventDefault();redo();return;}
-  if(e.key==='Escape'){select(null);document.body.classList.remove('library-open');}
+  if(e.key==='Escape'){select(null);const wasOpen=document.body.classList.contains('library-open');document.body.classList.remove('library-open');if(wasOpen)$('#open-library').focus();}
   if(e.key==='Delete'||e.key==='Backspace'){e.preventDefault();remove();}
   if(e.key.toLowerCase()==='r')rotate(15);
   if(e.key.toLowerCase()==='v')setMode('edit');if(e.key.toLowerCase()==='c')setMode('orbit');
