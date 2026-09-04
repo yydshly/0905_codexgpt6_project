@@ -123,6 +123,9 @@ test('优化回归：镜头预设状态、保存恢复与编辑模式提示',asy
   await page.getByRole('button',{name:'保存方案',exact:true}).click();const saved=await plan(page);
   await page.reload();await expect(page.locator('html')).toHaveAttribute('data-ready','true');expect((await plan(page)).camera).toEqual(saved.camera);
   expect(await views.evaluateAll(elements=>elements.every(e=>e.getAttribute('aria-pressed')==='false'))).toBe(true);
+  await choose(page,'chair-1');await page.getByRole('button',{name:'近景',exact:true}).click();await settle(page);
+  const anchor=await page.evaluate(()=>(window as any).__study.project('chair-1',[0,1.04,0])),tag=await page.locator('.object-label').boundingBox();
+  expect(tag!.x+tag!.width/2).toBeCloseTo(anchor.x,0);expect(tag!.y+tag!.height).toBeCloseTo(anchor.y,0);
   await page.getByRole('button',{name:'俯视',exact:true}).click();await page.getByRole('button',{name:'保存方案',exact:true}).click();await page.reload();await expect(page.locator('html')).toHaveAttribute('data-ready','true');await expect(page.locator('[data-view="top"]')).toHaveAttribute('aria-pressed','true');
   await page.getByRole('button',{name:'恢复默认视角',exact:true}).click();await expect(page.locator('[data-view="default"]')).toHaveAttribute('aria-pressed','true');
   await choose(page,'plant-1');const point=await page.evaluate(()=>(window as any).__study.project('plant-1',[0,.17,0]));
@@ -137,7 +140,7 @@ test('优化回归：镜头预设状态、保存恢复与编辑模式提示',asy
 });
 
 test('优化回归：合批键帽/毯穗仍可选中，材质、删除撤销和导出无辅助标记',async({page})=>{
-  await ready(page);await page.getByRole('button',{name:'俯视',exact:true}).click();
+  await ready(page);await page.getByRole('button',{name:'俯视',exact:true}).click();await settle(page);
   const key=await page.evaluate(()=>(window as any).__study.project('desk-1',[0,.807,.23]));await page.mouse.click(key.x,key.y);expect((await plan(page)).selectedId).toBe('desk-1');
   await page.getByRole('button',{name:'材质：深胡桃木',exact:true}).click();await page.keyboard.press('Escape');await page.mouse.click(key.x,key.y);expect((await plan(page)).selectedId).toBe('desk-1');
   const fringe=await page.evaluate(()=>(window as any).__study.project('rug-1',[1.28,.016,.01]));await page.mouse.click(fringe.x,fringe.y);expect((await plan(page)).selectedId).toBe('rug-1');

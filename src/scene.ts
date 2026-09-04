@@ -67,7 +67,7 @@ export class StudyScene {
   invalidate(){this.dirty=true;}
   resize(){const w=this.host.clientWidth,h=this.host.clientHeight;if(!w||!h||this.exporting)return;const height=Math.max(6.8,7.4/(w/h));this.camera.left=-height*w/h/2;this.camera.right=height*w/h/2;this.camera.top=height/2;this.camera.bottom=-height/2;this.camera.updateProjectionMatrix();this.renderer.setSize(w,h);this.composer.setSize(w,h);this.positionSelectionLabel();this.invalidate();}
   getCamera():CameraState{const rounded=(values:number[])=>values.map(v=>Math.round(v*100000)/100000);return {position:rounded(this.camera.position.toArray()),target:rounded(this.controls.target.toArray()),zoom:Math.round(this.camera.zoom*100000)/100000};}
-  applyCamera(c:CameraState){this.camera.position.fromArray(c.position);this.controls.target.fromArray(c.target);this.camera.zoom=c.zoom;this.camera.updateProjectionMatrix();this.controls.update();this.invalidate();}
+  applyCamera(c:CameraState){this.camera.position.fromArray(c.position);this.controls.target.fromArray(c.target);this.camera.zoom=c.zoom;this.camera.updateProjectionMatrix();this.controls.update();this.camera.updateMatrixWorld(true);this.positionSelectionLabel();this.cb.camera();this.invalidate();}
   view(v:keyof typeof CAMERA_VIEWS){this.applyCamera(CAMERA_VIEWS[v]);}
   getView():keyof typeof CAMERA_VIEWS|null {
     for(const [name,preset]of Object.entries(CAMERA_VIEWS)) {
@@ -114,6 +114,8 @@ export class StudyScene {
   private positionSelectionLabel(){
     const item=this.plan?.objects.find(o=>o.id===this.plan.selectedId),group=item&&this.groups.get(item.id);
     if(!item||!group){this.selectionLabel.hidden=true;return;}
+    // OrbitControls updates the pose before the next renderer frame updates its inverse matrix.
+    this.camera.updateMatrixWorld(true);
     const p=group.position.clone();p.y+=CATALOG[item.kind].height+.14;p.project(this.camera);
     const w=this.host.clientWidth,h=this.host.clientHeight;
     this.selectionLabel.hidden=p.z>1||p.z< -1||Math.abs(p.x)>1.15||Math.abs(p.y)>1.15;
@@ -122,7 +124,7 @@ export class StudyScene {
     this.selectionLabel.style.left=`${T.MathUtils.clamp((p.x+1)/2*w,Math.min(110,w/2),Math.max(w-110,w/2))}px`;
     this.selectionLabel.style.top=`${T.MathUtils.clamp((1-p.y)/2*h,115,h-75)}px`;
   }
-  private cast(e:PointerEvent){const rect=this.renderer.domElement.getBoundingClientRect();this.pointer.set((e.clientX-rect.left)/rect.width*2-1,-(e.clientY-rect.top)/rect.height*2+1);this.ray.setFromCamera(this.pointer,this.camera);}
+  private cast(e:PointerEvent){this.camera.updateMatrixWorld(true);for(const group of this.groups.values())group.updateMatrixWorld(true);const rect=this.renderer.domElement.getBoundingClientRect();this.pointer.set((e.clientX-rect.left)/rect.width*2-1,-(e.clientY-rect.top)/rect.height*2+1);this.ray.setFromCamera(this.pointer,this.camera);}
   private pick(e:PointerEvent){this.cast(e);const hit=this.ray.intersectObjects([...this.groups.values()],true)[0];let root:T.Object3D|null=hit?.object||null;while(root&&!root.userData.itemId)root=root.parent;return root?.userData.itemId as string|undefined;}
   private pointerDown=(e:PointerEvent)=>{
     if(e.button!==0||this.mode!=='edit')return;const id=this.pick(e)||null;
