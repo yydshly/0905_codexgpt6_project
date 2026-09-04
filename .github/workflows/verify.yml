@@ -2,7 +2,9 @@ name: Verify study editor
 on:
   push:
     branches: [main]
+    paths-ignore: ['docs/**', 'README.md', 'THIRD_PARTY_LICENSES.txt']
   pull_request:
+    paths-ignore: ['docs/**', 'README.md', 'THIRD_PARTY_LICENSES.txt']
   workflow_dispatch:
 permissions:
   contents: read
@@ -11,8 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 12
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-node@v7.0.0
         with:
           node-version: 22
           cache: npm
@@ -22,7 +24,7 @@ jobs:
       - run: npm test
       - name: Keep actual browser evidence
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: browser-acceptance-evidence
           path: |

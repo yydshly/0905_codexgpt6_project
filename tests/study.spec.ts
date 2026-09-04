@@ -42,7 +42,7 @@ test('完整验收：添加、拖动、旋转、灯光、材质、历史、本�
   await page.getByRole('button',{name:'保存方案',exact:true}).click();await expect(page.locator('#save-state')).toHaveText('已保存到本地');const saved=await plan(page);
   await page.reload();await expect(page.locator('html')).toHaveAttribute('data-ready','true');await expect(page.locator('#save-state')).toHaveText('已恢复本地方案');expect(compareCore(await plan(page))).toEqual(compareCore(saved));
   steps.push({step:'材质/深夜/撤销重做/保存刷新恢复',keyDataExact:true,storedBytes:await page.evaluate(()=>localStorage.getItem('ideal-study.plan.v1')!.length)});
-  await page.setViewportSize({width:1280,height:800});await choose(page,lampId);await shot(page,'04-night-selected-1280x800.png');
+  await page.setViewportSize({width:1280,height:800});await choose(page,lampId);const deleteBox=await page.locator('#delete-item').boundingBox();expect(deleteBox!.y+deleteBox!.height).toBeLessThanOrEqual(769);await shot(page,'04-night-selected-1280x800.png');
   await page.getByRole('button',{name:'导出',exact:true}).click();
   const pngEvent=page.waitForEvent('download');await page.locator('#export-png').click();const png=await pngEvent;const pngPath=path.join(evidence,'06-exported-scene.png');await png.saveAs(pngPath);const bytes=await readFile(pngPath);expect(bytes.subarray(1,4).toString()).toBe('PNG');expect(bytes.byteLength).toBeGreaterThan(60000);const canvasBox=await page.locator('#canvas-host').boundingBox();expect(bytes.readUInt32BE(16)).toBe(canvasBox!.width*2);expect(bytes.readUInt32BE(20)).toBe(canvasBox!.height*2);
   const jsonEvent=page.waitForEvent('download');await page.locator('#export-json').click();const json=await jsonEvent;const jsonPath=path.join(evidence,'verified-plan.json');await json.saveAs(jsonPath);const exported=JSON.parse(await readFile(jsonPath,'utf8'));expect(compareCore(exported)).toEqual(compareCore(await plan(page)));
@@ -81,8 +81,11 @@ test('多视角、两种桌面尺寸、黄昏、键盘和真实帧时测量',asy
   const perf:any={timestamp:new Date().toISOString(),browser:browser.version(),viewport:{width:1280,height:800},startupMs:Math.round(startup),userAgent:await page.evaluate(()=>navigator.userAgent),samples:{}};
   for(const mood of ['day','night']){
     await page.locator(`[data-mood="${mood}"]`).click();await page.getByRole('button',{name:'观察',exact:true}).click();
-    await page.evaluate(()=>{const w=window as any;w.__frames=[];w.__frameDone=false;let last=performance.now();function sample(t:number){w.__frames.push(t-last);last=t;if(w.__frames.length<100)requestAnimationFrame(sample);else w.__frameDone=true;}requestAnimationFrame(sample);});
-    const b=await page.locator('#canvas-host').boundingBox();await page.mouse.move(b!.x+b!.width*.6,b!.y+b!.height*.58);await page.mouse.down();await page.mouse.move(b!.x+b!.width*.6+85,b!.y+b!.height*.58+12,{steps:70});await page.mouse.up();await page.waitForFunction(()=>(window as any).__frameDone);
+    // CI uses SwiftShader: fewer samples keep this a functional software-renderer check.
+    // The committed local hardware measurements always use the full 100-frame/70-step path.
+    const sampleCount=process.env.CI?35:100,pointerSteps=process.env.CI?16:70;
+    await page.evaluate(count=>{const w=window as any;w.__frames=[];w.__frameDone=false;let last=performance.now();function sample(t:number){w.__frames.push(t-last);last=t;if(w.__frames.length<count)requestAnimationFrame(sample);else w.__frameDone=true;}requestAnimationFrame(sample);},sampleCount);
+    const b=await page.locator('#canvas-host').boundingBox();await page.mouse.move(b!.x+b!.width*.6,b!.y+b!.height*.58);await page.mouse.down();await page.mouse.move(b!.x+b!.width*.6+85,b!.y+b!.height*.58+12,{steps:pointerSteps});await page.mouse.up();await page.waitForFunction(()=>(window as any).__frameDone);
     const frames=await page.evaluate(()=>(window as any).__frames.slice(5));const sorted=frames.slice().sort((a:number,b:number)=>a-b),metrics=await page.evaluate(()=>(window as any).__study.metrics());perf.samples[mood]={frameCount:frames.length,meanFrameMs:frames.reduce((a:number,b:number)=>a+b,0)/frames.length,p95FrameMs:sorted[Math.floor(sorted.length*.95)],...metrics};await page.getByRole('button',{name:'恢复默认视角',exact:true}).click();
   }
   const r0=await page.evaluate(()=>(window as any).__study.metrics().renders);await page.waitForTimeout(1000);const r1=await page.evaluate(()=>(window as any).__study.metrics().renders);expect(r1-r0).toBeLessThanOrEqual(1);perf.idleRendersInOneSecond=r1-r0;perf.consoleWarnings=warnings;expect(warnings).toEqual([]);

@@ -111,7 +111,7 @@ export function createRoom(scene:T.Scene) {
   // Individually joined oak boards and shared procedural grain.
   for(let row=0;row<16;row++)for(let col=0;col<4;col++){
     const m=woodMat.clone();m.color.set(['#c7b697','#c5b396','#cbbb9e','#cebd9f'][(row*7+col*3)%4]);
-    const x=-2.6+(col+.5)*1.3;const plank=box(room,1.298,.035,.273,m,x,-.012,-2.2+(row+.5)*.275,0);plank.castShadow=false;
+    const x=-2.6+(col+.5)*1.3;const plank=box(room,1.3,.035,.275,m,x,-.012,-2.2+(row+.5)*.275,0);plank.castShadow=false;
   }
   box(room,5.4,2.8,.12,wall,0,1.4,-2.26,.006);
   // West wall with a true opening: 1.85 m wide × 1.58 m tall.
