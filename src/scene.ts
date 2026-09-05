@@ -6,7 +6,7 @@ import { SSAOPass } from 'three/addons/postprocessing/SSAOPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { SMAAPass } from 'three/addons/postprocessing/SMAAPass.js';
 import { createFurniture, createRoom, thumbCamera } from './geometry';
-import { CATALOG, DEFAULT_CAMERA, localPoint, type Plan, type Kind, type CameraState, type Item } from './model';
+import { CATALOG, DEFAULT_CAMERA, CAMERA_LIMITS, displayName, localPoint, type Plan, type Kind, type CameraState, type Item } from './model';
 
 const CAMERA_VIEWS={default:DEFAULT_CAMERA,top:{position:[.05,11,.12],target:[0,0,0],zoom:1.1},close:{position:[5.4,3.5,6.2],target:[.25,1.05,-.72],zoom:1.6}} satisfies Record<string,CameraState>;
 
@@ -31,6 +31,7 @@ export class StudyScene {
   private fill=new T.DirectionalLight('#eef3fa',1.3);
   private room:T.Group;
   private selectionLabel=document.createElement('div');
+  private selectionText=document.createElement('span');
   private shadowKey='';
   private selectionKey='';
   private exporting=false;
@@ -41,7 +42,7 @@ export class StudyScene {
     this.renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));this.renderer.info.autoReset=false;this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=T.PCFSoftShadowMap;
     this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.05;
     this.renderer.domElement.setAttribute('aria-label','可编辑的三维书房');this.renderer.domElement.tabIndex=0;host.append(this.renderer.domElement);
-    this.selectionLabel.className='object-label';this.selectionLabel.hidden=true;this.selectionLabel.setAttribute('aria-hidden','true');host.append(this.selectionLabel);
+    this.selectionLabel.className='object-label';this.selectionLabel.hidden=true;this.selectionLabel.setAttribute('aria-hidden','true');this.selectionText.className='object-label-text';this.selectionLabel.append(this.selectionText);host.append(this.selectionLabel);
     this.scene.background=new T.Color('#eeede7');this.room=createRoom(this.scene);this.scene.add(this.ambient,this.sun,this.fill);
     this.sun.position.set(-3.7,5.6,3);this.sun.castShadow=true;this.sun.shadow.mapSize.set(2048,2048);Object.assign(this.sun.shadow.camera,{left:-5,right:5,top:6,bottom:-5,near:.5,far:18});this.sun.shadow.bias=-.0002;this.sun.shadow.normalBias=.025;this.sun.shadow.radius=3;
     // Camera-only changes reuse the world-space shadow map.
@@ -49,7 +50,7 @@ export class StudyScene {
     this.fill.position.set(3,4,5);
     this.scene.add(this.selection);
     this.composer=new EffectComposer(this.renderer);this.composer.addPass(new RenderPass(this.scene,this.camera));this.ao=new SSAOPass(this.scene,this.camera,host.clientWidth,host.clientHeight);this.ao.ssaoMaterial.defines.PERSPECTIVE_CAMERA=0;this.ao.depthRenderMaterial.defines.PERSPECTIVE_CAMERA=0;this.ao.kernelRadius=.28;this.ao.minDistance=.0001;this.ao.maxDistance=.004;this.composer.addPass(this.ao);this.composer.addPass(new OutputPass());this.composer.addPass(new SMAAPass());
-    this.controls=new OrbitControls(this.camera,this.renderer.domElement);this.controls.enableDamping=false;this.controls.enablePan=false;this.controls.minPolarAngle=.05;this.controls.maxPolarAngle=1.43;this.controls.minAzimuthAngle=-.48;this.controls.maxAzimuthAngle=2.02;this.controls.minZoom=.55;this.controls.maxZoom=2.4;this.controls.mouseButtons={LEFT:null as unknown as T.MOUSE,MIDDLE:T.MOUSE.DOLLY,RIGHT:T.MOUSE.ROTATE};
+    this.controls=new OrbitControls(this.camera,this.renderer.domElement);this.controls.enableDamping=false;this.controls.enablePan=false;this.controls.minPolarAngle=CAMERA_LIMITS.minPolar;this.controls.maxPolarAngle=CAMERA_LIMITS.maxPolar;this.controls.minAzimuthAngle=CAMERA_LIMITS.minAzimuth;this.controls.maxAzimuthAngle=CAMERA_LIMITS.maxAzimuth;this.controls.minZoom=CAMERA_LIMITS.minZoom;this.controls.maxZoom=CAMERA_LIMITS.maxZoom;this.controls.mouseButtons={LEFT:null as unknown as T.MOUSE,MIDDLE:T.MOUSE.DOLLY,RIGHT:T.MOUSE.ROTATE};
     this.controls.addEventListener('change',()=>{this.invalidate();this.positionSelectionLabel();this.cb.camera();});
     this.applyCamera(DEFAULT_CAMERA);
     const canvas=this.renderer.domElement;
@@ -78,7 +79,7 @@ export class StudyScene {
     }
     return null;
   }
-  zoom(delta:number){this.camera.zoom=T.MathUtils.clamp(this.camera.zoom+delta,.55,2.4);this.camera.updateProjectionMatrix();this.positionSelectionLabel();this.cb.camera();this.invalidate();}
+  zoom(delta:number){this.camera.zoom=T.MathUtils.clamp(this.camera.zoom+delta,CAMERA_LIMITS.minZoom,CAMERA_LIMITS.maxZoom);this.camera.updateProjectionMatrix();this.positionSelectionLabel();this.cb.camera();this.invalidate();}
   setMode(mode:'edit'|'orbit'){this.pointerUp();this.mode=mode;this.controls.mouseButtons.LEFT=mode==='orbit'?T.MOUSE.ROTATE:null as unknown as T.MOUSE;this.renderer.domElement.style.cursor=mode==='orbit'?'grab':'default';this.positionSelectionLabel();}
   sync(plan:Plan){
     this.plan=plan;
@@ -119,9 +120,10 @@ export class StudyScene {
     const p=group.position.clone();p.y+=CATALOG[item.kind].height+.14;p.project(this.camera);
     const w=this.host.clientWidth,h=this.host.clientHeight;
     this.selectionLabel.hidden=p.z>1||p.z< -1||Math.abs(p.x)>1.15||Math.abs(p.y)>1.15;
-    this.selectionLabel.textContent=CATALOG[item.kind].name+' · '+(this.drag?.moved?`X ${item.x.toFixed(2)} / Z ${item.z.toFixed(2)} m`:this.mode==='edit'?'拖动移动':'已选中');
+    this.selectionText.textContent=displayName(item,this.plan.objects)+' · '+(this.drag?.moved?`X ${item.x.toFixed(2)} / Z ${item.z.toFixed(2)} m`:this.mode==='edit'?'拖动移动':'已选中');
     this.selectionLabel.classList.toggle('is-dragging',!!this.drag?.moved);
-    this.selectionLabel.style.left=`${T.MathUtils.clamp((p.x+1)/2*w,Math.min(110,w/2),Math.max(w-110,w/2))}px`;
+    const halfLabel=this.selectionLabel.offsetWidth/2+12;
+    this.selectionLabel.style.left=`${T.MathUtils.clamp((p.x+1)/2*w,Math.min(halfLabel,w/2),Math.max(w-halfLabel,w/2))}px`;
     this.selectionLabel.style.top=`${T.MathUtils.clamp((1-p.y)/2*h,115,h-75)}px`;
   }
   private cast(e:PointerEvent){this.camera.updateMatrixWorld(true);for(const group of this.groups.values())group.updateMatrixWorld(true);const rect=this.renderer.domElement.getBoundingClientRect();this.pointer.set((e.clientX-rect.left)/rect.width*2-1,-(e.clientY-rect.top)/rect.height*2+1);this.ray.setFromCamera(this.pointer,this.camera);}

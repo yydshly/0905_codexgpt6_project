@@ -1,9 +1,10 @@
 export type Kind = 'desk' | 'chair' | 'monitor' | 'shelf' | 'taskLamp' | 'floorLamp' | 'plant' | 'rug';
 export type Mood = 'day' | 'dusk' | 'night';
-export interface Item { id: string; kind: Kind; x: number; z: number; rotation: number; material: string; parentId?: string; on?: boolean; brightness?: number }
+export interface Item { id: string; kind: Kind; x: number; z: number; rotation: number; material: string; label?: string; parentId?: string; on?: boolean; brightness?: number }
 export interface CameraState { position: number[]; target: number[]; zoom: number }
 export interface Plan { app: 'ideal-study'; version: 1; name: string; mood: Mood; objects: Item[]; selectedId: string | null; camera: CameraState }
 export const DEFAULT_CAMERA: CameraState = { position: [7.8, 6.5, 9], target: [0, .85, -.1], zoom: 1 };
+export const CAMERA_LIMITS={minZoom:.55,maxZoom:2.4,minPolar:.05,maxPolar:1.43,minAzimuth:-.48,maxAzimuth:2.02};
 export const CATALOG: Record<Kind, { name: string; en: string; category: string; width: number; depth: number; height: number; materials: string[]; icon: string }> = {
   desk: { name: '原木书桌', en: 'Oak writing desk', category: '家具', width: 1.95, depth: .85, height: .78, materials: ['oak','walnut','ivory'], icon: 'Table2' },
   chair: { name: '弧背工作椅', en: 'Arc lounge chair', category: '家具', width: .62, depth: .65, height: .9, materials: ['sage','linen','charcoal'], icon: 'Armchair' },
@@ -26,6 +27,11 @@ export const MATERIALS: Record<string, { name: string; color: string; detail: st
   clay: { name: '浅陶粉', color: '#c89b88', detail: '织物肌理 · 柔和暖调' },
 };
 export const clone = <T>(value: T): T => structuredClone(value);
+export function displayName(item:Item,objects:Item[]) {
+  if(item.label)return item.label;
+  const siblings=objects.filter(o=>o.kind===item.kind);
+  return CATALOG[item.kind].name+(siblings.length>1?' '+String(siblings.findIndex(o=>o.id===item.id)+1).padStart(2,'0'):'');
+}
 export function initialPlan(): Plan {
   return { app: 'ideal-study', version: 1, name: '林间 · 我的创作书房', mood: 'day', selectedId: null, camera: clone(DEFAULT_CAMERA), objects: [
     { id: 'rug-1', kind: 'rug', x: .25, z: .4, rotation: 0, material: 'linen' },
@@ -81,6 +87,11 @@ export function updateItem(plan: Plan, id: string, patch: Partial<Item>, snap = 
 export function createItem(plan: Plan, kind: Kind): Item {
   if(plan.objects.length>=40) throw new Error('当前方案最多容纳 40 件物件，请先移除一些物件。');
   const item: Item = { id: `${kind}-${crypto.randomUUID()}`, kind, x:0, z:.8, rotation:0,material:CATALOG[kind].materials[0] };
+  if(plan.objects.some(o=>o.kind===kind)) {
+    const names=new Set(plan.objects.map(o=>displayName(o,plan.objects)));let number=2;
+    while(names.has(`${CATALOG[kind].name} ${String(number).padStart(2,'0')}`))number++;
+    item.label=`${CATALOG[kind].name} ${String(number).padStart(2,'0')}`;
+  }
   if(kind==='taskLamp'||kind==='floorLamp') { item.on=true; item.brightness=70; }
   if(kind==='taskLamp'||kind==='monitor') {
     for(const desk of plan.objects.filter(o=>o.kind==='desk')) {
@@ -106,6 +117,7 @@ export function parsePlan(raw: unknown): Plan {
   for(const o of p.objects) {
     if(!o||typeof o!=='object'||typeof o.id!=='string'||!/^[A-Za-z0-9_-]{1,100}$/.test(o.id)||ids.has(o.id)||!Object.hasOwn(CATALOG,o.kind)||!finite(o.x)||!finite(o.z)||!finite(o.rotation)||Math.abs(o.rotation)>3600||!CATALOG[o.kind].materials.includes(o.material)) throw new Error('方案物件数据无效或存在重复编号，当前方案未更改。');
     ids.add(o.id);
+    if(o.label!==undefined&&(typeof o.label!=='string'||!o.label.trim()||o.label.length>24)) throw new Error('物件名称须为 1–24 个字符，当前方案未更改。');
     if(['taskLamp','floorLamp'].includes(o.kind)&&(typeof o.on!=='boolean'||!finite(o.brightness)||o.brightness!<0||o.brightness!>100)) throw new Error('方案的灯光数据无效。');
     if(o.parentId!==undefined && typeof o.parentId!=='string') throw new Error('方案的桌面关联无效。');
   }
@@ -115,6 +127,10 @@ export function parsePlan(raw: unknown): Plan {
     const c=constrain(o,p.objects,false);
     if(Math.abs(c.x-o.x)>.005||Math.abs(c.z-o.z)>.005) throw new Error('方案中有物件超出房间或桌面边界。');
   }
-  if(!p.camera||![p.camera.position,p.camera.target].every(v=>Array.isArray(v)&&v.length===3&&v.every(n=>finite(n)&&Math.abs(n)<100))||!finite(p.camera.zoom)||p.camera.zoom<.5||p.camera.zoom>2.5) throw new Error('方案镜头数据无效。');
-  return { app:'ideal-study', version:1,name:p.name.trim(),mood:p.mood,objects:p.objects.map(o=>({id:o.id,kind:o.kind,x:o.x,z:o.z,rotation:o.rotation,material:o.material,...(o.parentId?{parentId:o.parentId}:{}),...(['taskLamp','floorLamp'].includes(o.kind)?{on:o.on,brightness:o.brightness}:{})})),camera:clone(p.camera),selectedId:typeof p.selectedId==='string'&&ids.has(p.selectedId)?p.selectedId:null };
+  if(!p.camera||![p.camera.position,p.camera.target].every(v=>Array.isArray(v)&&v.length===3&&v.every(n=>finite(n)&&Math.abs(n)<100))||!finite(p.camera.zoom)||p.camera.zoom<CAMERA_LIMITS.minZoom||p.camera.zoom>CAMERA_LIMITS.maxZoom) throw new Error('方案镜头数据无效，当前方案未更改。');
+  const [tx,ty,tz]=p.camera.target,[dx,dy,dz]=p.camera.position.map((n,i)=>n-p.camera.target[i]),distance=Math.hypot(dx,dy,dz);
+  const polar=Math.acos(Math.max(-1,Math.min(1,dy/distance))),azimuth=Math.atan2(dx,dz),tolerance=.00002;
+  // Exported poses round to five decimal places; retain a small angular tolerance at orbit limits.
+  if(Math.abs(tx)>2.6||ty<0||ty>2.8||Math.abs(tz)>2.2||distance<1||distance>40||polar<CAMERA_LIMITS.minPolar-tolerance||polar>CAMERA_LIMITS.maxPolar+tolerance||azimuth<CAMERA_LIMITS.minAzimuth-tolerance||azimuth>CAMERA_LIMITS.maxAzimuth+tolerance) throw new Error('方案镜头超出可用观察范围，当前方案未更改。');
+  return { app:'ideal-study', version:1,name:p.name.trim(),mood:p.mood,objects:p.objects.map(o=>({id:o.id,kind:o.kind,x:o.x,z:o.z,rotation:o.rotation,material:o.material,...(o.label!==undefined?{label:o.label.trim()}:{}),...(o.parentId?{parentId:o.parentId}:{}),...(['taskLamp','floorLamp'].includes(o.kind)?{on:o.on,brightness:o.brightness}:{})})),camera:clone(p.camera),selectedId:typeof p.selectedId==='string'&&ids.has(p.selectedId)?p.selectedId:null };
 }

@@ -33,6 +33,8 @@ test('完整验收：添加、拖动、旋转、灯光、材质、历史、本�
   expect((await plan(page)).objects.find((o:any)=>o.id===lampId).brightness).toBe(99);
   await page.getByRole('switch',{name:'灯具开关'}).click();expect((await plan(page)).objects.find((o:any)=>o.id===lampId).on).toBe(false);await expect(range).toBeDisabled();
   await page.getByRole('switch',{name:'灯具开关'}).click();
+  await page.getByRole('textbox',{name:'物件名称',exact:true}).fill('桌边阅读灯');await page.getByRole('textbox',{name:'物件名称',exact:true}).press('Tab');
+  expect((await plan(page)).objects.find((o:any)=>o.id===lampId).label).toBe('桌边阅读灯');
   steps.push({step:'添加/拖动/旋转/调光',lamp:(await plan(page)).objects.find((o:any)=>o.id===lampId),oneDragOneHistory:true,cameraUnchanged:true});
   await choose(page,'desk-1');await page.getByRole('button',{name:'材质：深胡桃木',exact:true}).click();expect((await plan(page)).objects.find((o:any)=>o.id==='desk-1').material).toBe('walnut');
   await page.getByRole('button',{name:'深夜 10:00 PM',exact:true}).click();expect((await plan(page)).mood).toBe('night');
@@ -150,4 +152,30 @@ test('优化回归：合批键帽/毯穗仍可选中，材质、删除撤销和�
   await page.getByRole('button',{name:'关闭导出',exact:true}).click();await page.keyboard.press('Escape');await settle(page);
   await page.getByRole('button',{name:'导出',exact:true}).click();const cleanDownload=page.waitForEvent('download');await page.locator('#export-png').click();const cleanFile=await cleanDownload;const clean=await readFile((await cleanFile.path())!);expect(withSelection.equals(clean)).toBe(true);
   await page.getByRole('button',{name:'关闭导出',exact:true}).click();await page.getByRole('button',{name:'近景',exact:true}).click();await settle(page);const metrics=await page.evaluate(()=>(window as any).__study.metrics());expect(metrics.calls).toBeLessThan(700);expect(metrics.instanceBatches).toBeGreaterThan(5);
+});
+
+test('物件切换、重复编号、重命名、键盘保护及长名称布局',async({page})=>{
+  await ready(page);await page.getByRole('button',{name:'添加蘑菇台灯',exact:true}).click();const lampId=(await plan(page)).selectedId;
+  const picker=page.getByRole('combobox',{name:'切换当前物件'}),name=page.getByRole('textbox',{name:'物件名称',exact:true});
+  await expect(name).toHaveValue('蘑菇台灯 02');await expect(picker.locator('option',{hasText:'蘑菇台灯 01'})).toHaveCount(1);await expect(picker.locator('option',{hasText:'蘑菇台灯 02'})).toHaveCount(1);
+  const itemsBefore=(await plan(page)).objects;await picker.focus();await picker.press('Home');expect((await plan(page)).selectedId).toBeNull();await expect(picker).toBeFocused();
+  await picker.press('ArrowDown');expect((await plan(page)).selectedId).toBe('rug-1');expect((await plan(page)).objects).toEqual(itemsBefore);
+  await picker.selectOption(lampId);const h=await history(page);await name.fill('窗边阅读灯');await name.press('Tab');expect((await history(page)).past).toBe(h.past+1);await expect(page.locator('.object-label')).toContainText('窗边阅读灯');
+  await expect(picker.locator('option:checked')).toHaveText('窗边阅读灯');await page.getByRole('button',{name:'撤销',exact:true}).click();await expect(name).toHaveValue('蘑菇台灯 02');await page.getByRole('button',{name:'重做',exact:true}).click();await expect(name).toHaveValue('窗边阅读灯');
+  const beforeInvalid=await plan(page);await name.fill('');await name.press('Tab');await expect(page.locator('#toast')).toContainText('1–24');expect(await plan(page)).toEqual(beforeInvalid);
+  await name.fill('原木书桌');await name.press('Tab');await expect(page.locator('#toast')).toContainText('同名');expect(await plan(page)).toEqual(beforeInvalid);
+  const longName='窗边阅读灯与每一个安静创作夜晚的温暖陪伴';await name.fill(longName);await name.press('Tab');await page.setViewportSize({width:1280,height:800});await settle(page);
+  const label=await page.locator('.object-label').boundingBox(),host=await page.locator('#canvas-host').boundingBox(),remove=await page.locator('#delete-item').boundingBox();expect(label!.x).toBeGreaterThanOrEqual(host!.x);expect(label!.x+label!.width).toBeLessThanOrEqual(host!.x+host!.width);expect(remove!.y+remove!.height).toBeLessThanOrEqual(769);
+  await picker.selectOption('desk-1');await expect(page.getByRole('button',{name:'材质：自然橡木'})).toHaveAttribute('aria-pressed','true');await picker.selectOption(lampId);await expect(name).toHaveValue(longName);
+});
+
+test('异常镜头和物件名称导入保留方案，旧 v1 文件仍可编辑',async({page})=>{
+  await ready(page);await page.getByRole('button',{name:'保存方案',exact:true}).click();const before=await plan(page),h=await history(page),stored=await page.evaluate(()=>localStorage.getItem('ideal-study.plan.v1'));
+  await page.getByRole('button',{name:'导出',exact:true}).click();
+  const badCameras=[{position:[35,6,38],target:[30,1,30],zoom:1},{position:[0,1,0],target:[0,1,0],zoom:1},{position:[0,-5,5],target:[0,1,0],zoom:1},{...before.camera,zoom:.5},{position:[-8,5,-8],target:[0,1,0],zoom:1}];
+  const invalidPlans=[...badCameras.map(camera=>({...before,camera})),...[24,'', '名'.repeat(25)].map(label=>({...before,objects:before.objects.map((o:any,i:number)=>i===0?{...o,label}:o)}))];
+  for(const invalid of invalidPlans){await page.locator('#file-input').setInputFiles({name:'invalid.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(invalid))});await expect(page.locator('#toast')).toHaveClass(/error/);expect(await plan(page)).toEqual(before);expect(await history(page)).toEqual(h);expect(await page.evaluate(()=>localStorage.getItem('ideal-study.plan.v1'))).toBe(stored);}
+  const legacyPath=path.resolve('tests/fixtures/legacy-v1.json'),legacy=JSON.parse(await readFile(legacyPath,'utf8'));await page.locator('#file-input').setInputFiles(legacyPath);await expect(page.locator('#export-dialog')).not.toBeVisible();expect(compareCore(await plan(page))).toEqual(compareCore(legacy));
+  await page.getByRole('combobox',{name:'切换当前物件'}).selectOption('taskLamp-1');await page.getByRole('textbox',{name:'物件名称',exact:true}).fill('旧方案里的阅读灯');await page.getByRole('textbox',{name:'物件名称',exact:true}).press('Tab');await page.getByRole('button',{name:'保存方案',exact:true}).click();const saved=await plan(page);await page.reload();await expect(page.locator('html')).toHaveAttribute('data-ready','true');expect(compareCore(await plan(page))).toEqual(compareCore(saved));await expect(page.getByRole('textbox',{name:'物件名称',exact:true})).toHaveValue('旧方案里的阅读灯');
+  await writeFile(path.join(evidence,'usability.json'),JSON.stringify({timestamp:new Date().toISOString(),invalidImports:invalidPlans.length,planHistoryAndStoragePreserved:true,legacySource:'dafab5a:docs/evidence/verified-plan.json',legacyCoreExact:true,renamedLegacySavedAndRestored:true},null,2));
 });

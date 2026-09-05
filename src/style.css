@@ -21,3 +21,12 @@
 .stage[data-mood=night] .object-label{background:#edf4e7f5;border-color:#c4d2b8}
 .stage[data-mood=night] .object-label.is-dragging{background:#3d5e46;color:#fff;border-color:#3d5e46}
 @media(max-width:1320px){.object-label{font-size:10px;padding:7px 10px}}
+.object-picker-wrap{display:flex;align-items:center;flex:1;min-width:0;gap:7px;position:relative;margin-right:6px}
+.object-picker-wrap select{appearance:none;min-width:0;width:100%;padding:8px 21px 8px 2px;border:0;border-radius:4px;background:transparent;color:#526746;font:inherit;font-size:11px;text-overflow:ellipsis;cursor:pointer;outline-offset:2px}
+.object-picker-wrap select:hover{background:#edf2e6}.object-picker-wrap select:focus-visible{outline:2px solid #69916e}.object-picker-wrap>svg:last-child{position:absolute;right:4px;width:12px;height:12px;pointer-events:none}
+.object-name-label{display:flex;align-items:center;gap:7px;margin-bottom:5px;border-bottom:1px solid transparent}
+.object-name-label:hover,.object-name-label:focus-within{border-bottom-color:#d4dfca}.object-name-label>svg{height:12px;width:12px;color:#98a38e}
+#object-name{width:100%;min-width:0;padding:0 0 3px;border:0;background:transparent;color:#303b33;font-size:17px;font-weight:550;letter-spacing:.4px;outline-offset:2px}
+.scene-list button>span{overflow:hidden;text-overflow:ellipsis;min-width:0}.scene-list button>svg{flex-shrink:0}
+.object-label{display:flex;align-items:center;max-width:min(380px,calc(100% - 24px))}.object-label[hidden]{display:none}.object-label:before{flex-shrink:0}.object-label-text{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media(max-width:1320px){#object-name{font-size:16px}.object-picker-wrap select{font-size:10px}.object-picker-wrap{gap:4px}.properties .subtle-tag{display:none}}
