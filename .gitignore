@@ -5,3 +5,4 @@ dist-pages/
 test-results/
 playwright-report/
 *.log
+public/site-kit/

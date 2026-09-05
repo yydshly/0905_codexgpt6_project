@@ -7,7 +7,8 @@ import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { SMAAPass } from 'three/addons/postprocessing/SMAAPass.js';
 import { createFurniture, createRoom, thumbCamera } from './geometry';
 import { CATALOG, dimensions, DEFAULT_CAMERA, CAMERA_LIMITS, displayName, localPoint, type Plan, type Kind, type CameraState, type Item } from './model';
-import { sameTarget, type ContentTarget } from './portfolio-model';
+import { resolveContentTarget, type ContentTarget } from './portfolio-model';
+import { contentAnchor } from './content-anchor';
 
 const CAMERA_VIEWS={default:DEFAULT_CAMERA,top:{position:[.05,11,.12],target:[0,0,0],zoom:1.1},close:{position:[5.4,3.5,6.2],target:[.25,1.05,-.72],zoom:1.6}} satisfies Record<string,CameraState>;
 
@@ -153,7 +154,7 @@ export class StudyScene {
     this.cast({clientX,clientY});
     const hit=this.ray.intersectObjects([this.room,...this.groups.values()],true)[0];
     let node:T.Object3D|null=hit?.object??null,partId:ContentTarget['partId']|undefined;
-    while(node){if(node.userData.partId)partId=node.userData.partId;if(node.userData.itemId)return partId?{itemId:node.userData.itemId,partId}:null;node=node.parent;}
+    while(node){if(node.userData.partId)partId=node.userData.partId;if(node.userData.itemId)return resolveContentTarget(this.plan.portfolio,node.userData.itemId,partId);node=node.parent;}
     return null;
   }
   contentAnchors(){
@@ -161,12 +162,9 @@ export class StudyScene {
     this.camera.updateMatrixWorld(true);
     return this.plan.portfolio.bindings.flatMap(binding=>{
       const root=this.groups.get(binding.target.itemId);if(!root)return [];
-      root.updateMatrixWorld(true);let part:T.Object3D|undefined;
+      root.updateMatrixWorld(true);let part:T.Object3D|undefined=binding.target.partId==='object'?root:undefined;
       root.traverse(o=>{if(o.userData.partId===binding.target.partId)part=o;});if(!part)return [];
-      const p=new T.Box3().setFromObject(part).getCenter(new T.Vector3()).project(this.camera);
-      const x=(p.x+1)*rect.width/2,y=(1-p.y)*rect.height/2;
-      const hit=this.contentTargetAt(rect.left+x,rect.top+y);
-      return [{target:binding.target,x,y,visible:p.z>=-1&&p.z<=1&&x>18&&x<rect.width-18&&y>18&&y<rect.height-18&&!!hit&&sameTarget(hit,binding.target)}];
+      return [contentAnchor(binding.target,part,this.camera,rect,(x,y)=>this.contentTargetAt(x,y))];
     });
   }
   private pick(e:PointerEvent){this.cast(e);const hit=this.ray.intersectObjects([...this.groups.values()],true)[0];let root:T.Object3D|null=hit?.object||null;while(root&&!root.userData.itemId)root=root.parent;return root?.userData.itemId as string|undefined;}

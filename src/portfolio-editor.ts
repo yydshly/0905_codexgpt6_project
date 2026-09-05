@@ -1,13 +1,28 @@
 import type { Plan, Item } from './model';
-import { partFor, targetLabel, sameTarget, parsePortfolio, type Work, type Portfolio, type ContentTarget } from './portfolio-model';
+import { partFor, partsFor, targetLabel, sameTarget, parsePortfolio, type Work, type Portfolio, type ContentTarget } from './portfolio-model';
 import { readPhoto } from './photos';
 import './portfolio.css';
 
+const selectedParts=new Map<string,ContentTarget['partId']>();
 export function mountPortfolioEditor(parent:HTMLElement,item:Item,getPlan:()=>Plan,commit:(p:Portfolio)=>void){
-  const partId=partFor(item);if(!partId)return;
-  const target:ContentTarget={itemId:item.id,partId},p=getPlan().portfolio,binding=p.bindings.find(b=>sameTarget(b.target,target)),work=p.projects.find(w=>w.id===binding?.projectId);
+  const remembered=selectedParts.get(item.id),initial=remembered&&partsFor(item).includes(remembered)?remembered:getPlan().portfolio.bindings.find(b=>b.target.itemId===item.id)?.target.partId??partFor(item);
+  let target:ContentTarget={itemId:item.id,partId:initial};
+  const p=getPlan().portfolio;let binding=p.bindings.find(b=>sameTarget(b.target,target)),work=p.projects.find(w=>w.id===binding?.projectId);
   const section=document.createElement('section');section.className='portfolio-binding';section.innerHTML='<strong></strong><p></p><button type="button" id="configure-work"></button>';
   section.querySelector('strong')!.textContent=targetLabel(target)+' · 作品入口';section.querySelector('p')!.textContent=work?`已关联「${work.title}」`:'将这里变成你的作品入口。访客点击后可查看详情、访问项目。';section.querySelector('button')!.textContent=work?'编辑作品关联':'关联我的作品';parent.querySelector('.dimensions')!.after(section);
+  if(partsFor(item).length>1){
+    const label=document.createElement('label');label.textContent='关联部位';
+    const select=document.createElement('select');select.id='binding-part';select.setAttribute('aria-label','关联部位');
+    partsFor(item).forEach(partId=>select.add(new Option(targetLabel({itemId:item.id,partId}),partId)));
+    select.value=target.partId;label.append(select);section.querySelector('strong')!.after(label);
+    select.onchange=()=>{
+      target={itemId:item.id,partId:select.value as ContentTarget['partId']};selectedParts.set(item.id,target.partId);
+      binding=getPlan().portfolio.bindings.find(b=>sameTarget(b.target,target));work=getPlan().portfolio.projects.find(w=>w.id===binding?.projectId);
+      section.querySelector('strong')!.textContent=targetLabel(target)+' · 作品入口';
+      section.querySelector('p')!.textContent=work?`已关联「${work.title}」`:'点击这个部位可访问作品。具体部位的关联优先于整个物件。';
+      section.querySelector('button')!.textContent=work?'编辑作品关联':'关联我的作品';
+    };
+  }
   section.querySelector('button')!.onclick=()=>{
     const dialog=document.createElement('dialog');dialog.className='portfolio-config';dialog.setAttribute('aria-labelledby','config-title');
     dialog.innerHTML='<form><h2 id="config-title">让物件，讲述你的作品。</h2><p class="config-note"></p><label>选择作品<select id="work-choice" aria-label="选择作品"></select></label><label>项目名称<input id="work-name" required maxlength="60" /></label><label>项目简介<textarea id="work-description" maxlength="600" rows="3"></textarea></label><label>技术栈 / 标签<input id="work-tags" maxlength="120" placeholder="例如：Three.js / 交互设计" /></label><label>项目链接<input id="work-url" required type="url" maxlength="2048" placeholder="https://…" /></label><label>作品封面（可选）<input id="work-cover" type="file" accept="image/jpeg,image/png,image/webp" /></label><div class="config-cover"><img hidden alt="作品封面预览"/><button type="button" id="clear-work-cover" hidden>移除封面</button></div><p class="config-error" role="status" aria-live="polite"></p><div class="config-actions"><button type="button" id="unlink-work">取消关联</button><button type="button" id="cancel-work">返回</button><button type="submit" id="apply-work">应用关联</button></div></form>';

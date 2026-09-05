@@ -1,0 +1,11 @@
+import {build} from 'vite';
+import {mkdir,writeFile,readFile} from 'node:fs/promises';
+import path from 'node:path';
+const root=process.cwd(),out=path.resolve(root,'public/site-kit');
+if(!out.startsWith(path.resolve(root,'public')+path.sep))throw new Error('Invalid site kit output');
+await build({configFile:false,publicDir:false,base:'./',logLevel:'warn',build:{outDir:out,emptyOutDir:true,target:'es2022',minify:'esbuild',lib:{entry:path.resolve(root,'src/site-runtime.ts'),formats:['es'],fileName:()=> 'assets/site.js',cssFileName:'site'},rollupOptions:{output:{inlineDynamicImports:true,assetFileNames:'assets/[name][extname]'}}}});
+await mkdir(out,{recursive:true});
+await writeFile(path.join(out,'index.html'),'<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta name="description" content="探索我的 3D 创作空间与个人作品。"/><title>个人作品</title><link rel="stylesheet" href="./assets/site.css"/></head><body><div id="app"><p role="status">正在打开作品空间…</p></div><script type="module" src="./assets/site.js"></script></body></html>');
+await writeFile(path.join(out,'LICENSES.txt'),await readFile(path.join(root,'THIRD_PARTY_LICENSES.txt'),'utf8'));
+await writeFile(path.join(out,'manifest.json'),JSON.stringify({version:1,files:['index.html','assets/site.js','assets/site.css','LICENSES.txt']}));
+console.log('Standalone visitor runtime built in public/site-kit');
