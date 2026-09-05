@@ -1,6 +1,6 @@
 name: Publish study editor to GitHub Pages
 
-# Manual only: enabling Pages and granting deployment permissions need owner approval.
+# Manual release on main; all browser suites must pass before the verified artifact is deployed.
 on:
   workflow_dispatch:
 
@@ -15,7 +15,11 @@ jobs:
   build-and-verify:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [film-export, film-controls, room-reuse, portfolio, publish, projects]
     steps:
       - uses: actions/checkout@v7.0.1
       - uses: actions/setup-node@v7.0.0
@@ -25,16 +29,33 @@ jobs:
       - run: npm ci
       - run: npx playwright install --with-deps chromium
       - run: npm audit --audit-level=high
-      - name: Build and verify at the Pages subpath
-        run: npm run test:pages
+      - name: Film export at the Pages subpath
+        if: matrix.suite == 'film-export'
+        run: npx playwright test --config playwright.pages.config.ts tests/film.spec.ts --grep '短片完整验收'
+      - name: Film controls at the Pages subpath
+        if: matrix.suite == 'film-controls'
+        run: npx playwright test --config playwright.pages.config.ts tests/film.spec.ts --grep-invert '短片完整验收'
+      - name: Room editing and reusable assets at the Pages subpath
+        if: matrix.suite == 'room-reuse'
+        run: npx playwright test --config playwright.pages.config.ts tests/study.spec.ts tests/reuse.spec.ts
+      - name: Portfolio interactions at the Pages subpath
+        if: matrix.suite == 'portfolio'
+        run: npx playwright test --config playwright.pages.config.ts tests/portfolio.spec.ts
+      - name: Independent website publishing at the Pages subpath
+        if: matrix.suite == 'publish'
+        run: npx playwright test --config playwright.pages.config.ts tests/publish.spec.ts
+      - name: Projects and versions at the Pages subpath
+        if: matrix.suite == 'projects'
+        run: npx playwright test --config playwright.pages.config.ts tests/projects.spec.ts
       - name: Keep actual browser evidence
         if: always()
         uses: actions/upload-artifact@v7.0.1
         with:
-          name: pages-browser-evidence
+          name: pages-browser-evidence-${{ matrix.suite }}
           path: test-results/
           retention-days: 14
       - uses: actions/upload-pages-artifact@v5.0.0
+        if: matrix.suite == 'projects'
         with:
           path: dist-pages/
 

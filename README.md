@@ -1,20 +1,22 @@
 # 理想书房 · 布置、短片与个人作品集
 
-一间可编辑、可拍摄，也可作为作品入口的 3D 书房。复用原有家具、材质和灯光，新增桌面书籍与显示器屏幕的作品绑定。
+一间可编辑、可拍摄，也可作为个人作品主页的 3D 书房。支持 11 类物件、最多 3 段短片镜头、作品关联、多工程与保存版本，以及图片、视频、模型和独立网站导出。
 
-当前分支：[codex/project-library](https://github.com/yydshly/0905_codexgpt6_project/tree/codex/project-library)，从 `ffc03aa` 继续扩展。新增多工程库、真实缩略图、新建/复制/另存为、保存版本与恢复。11 类物件关联和独立网站 ZIP 导出继续保留。未覆盖线上站点，GitHub Pages 仍是[原版布置器](https://yydshly.github.io/0905_codexgpt6_project/)。
+主分支 `main` 汇总此前各阶段成果。当前发布包括工程库使用帮助、带备份与确认的工程删除，以及「不保存，返回工程库」。[本次发布总结与线上验收](docs/RELEASE-2026-09-05.md)。
+
+公开入口：[我的工程](https://yydshly.github.io/0905_codexgpt6_project/?workspace=projects) · [默认短片](https://yydshly.github.io/0905_codexgpt6_project/) · [作品展示示例](https://yydshly.github.io/0905_codexgpt6_project/?workspace=portfolio)。本机与线上存档分开，带走现有工程请在本机备份 JSON，再在线上导入。
 
 ## 启动与入口
 
 Node.js 22.12+，支持 WebGL 2 的桌面浏览器：
 
 ```bash
-git switch codex/project-library
+git switch main
 npm ci
 npm run dev
 ```
 
-- [我的工程](http://127.0.0.1:5173/?workspace=projects)：管理多套方案、复制、另存为、保存版本与恢复。
+- [我的工程](http://127.0.0.1:5173/?workspace=projects)：管理多套方案、复制、另存为、保存版本与恢复、删除与使用帮助。
 - [布置书房](http://127.0.0.1:5173/?workspace=room)：快速工作区。选中任意家具，在右侧「作品入口」配置作品。管理多套方案请从工程库进入。
 - [作品展示示例](http://127.0.0.1:5173/?workspace=portfolio)：直接点击书籍或屏幕、标记或作品列表，打开项目详情。
 - [短片工作台](http://127.0.0.1:5173/?workspace=film)：默认入口，已编排 10 秒作品，支持最多 3 段镜头与真实视频导出。
@@ -47,6 +49,9 @@ GLB 带走模型、材质和部位标识；JSON 带走房间、照片与作品�
 
 ## 文档与实际交付
 
+- [本次发布总结、线上地址与验证](docs/RELEASE-2026-09-05.md)
+- [工程删除与不保存返回](docs/PROJECT-ACTIONS.md)
+- [工程库使用帮助](docs/PROJECTS-HELP.md)
 - [多工程管理、版本恢复与限制](docs/PROJECTS.md)
 - [多工程实际截图、导出包与验证记录](docs/PROJECTS-VALIDATION.md)
 - [通用作品入口、个人网站发布与兼容边界](docs/PUBLISH.md)
@@ -65,21 +70,21 @@ GLB 带走模型、材质和部位标识；JSON 带走房间、照片与作品�
 
 ## GitHub Pages 部署
 
-原版已于 2026-09-05 在用户确认后启用公开站点并完成首次发布，当时十项子路径验收通过。[发布工作流](.github/workflows/pages.yml) 只接受 main 上的手动触发。此短片分支不会自行更新线上版本。
-
-线上地址：[https://yydshly.github.io/0905_codexgpt6_project/](https://yydshly.github.io/0905_codexgpt6_project/)。[首次发布成功记录](https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33944881617)；浏览器线上复验、更新步骤与权限说明见 [发布说明](docs/PAGES.md)。
+[发布工作流](.github/workflows/pages.yml)仅支持在 main 上手动触发。它在真实仓库子路径并行执行六组完整浏览器套件，全部通过后才发布构建产物。普通提交不会自动更新站点。
 
 ```bash
 npm run build:pages
 npm run preview:pages
-# 打开 http://127.0.0.1:4174/0905_codexgpt6_project/
+# http://127.0.0.1:4174/0905_codexgpt6_project/
+# 停止预览后，运行完整子路径验收：
+npm run test:pages
+# 已发布站点的完整 HTTPS 验收：
+npm run test:live
 ```
 
-停止上述预览后运行 `npm run test:pages`，可自动构建、启动并验收 Pages 子路径。构建产物在 `dist-pages/`，原编辑器证据在 `test-results/pages-evidence/`，短片测试文件仍写入 `test-results/film-evidence/`。本次只实际重跑了子路径下的短片完整流程（1/1），完整 16 项在根路径执行。
+测试使用独立浏览器上下文，不操作用户现有工程。线上存档仍仅在当前浏览器保存，没有账号或云同步。部署更新不会自动将本机方案传到线上；每套工程可通过 JSON 迁移，历史版本目前不包含在 JSON 中。
 
-运行 `npm run test:live` 可在真实线上 HTTPS 地址重跑十项验收，不启动本地服务器。它使用隔离的测试浏览器上下文，证据位于 `test-results/live-evidence/`，不会覆盖用户现有浏览器的存档。
-
-线上地址与本机开发地址的存档不互通；通过 JSON 导出、导入迁移。上线不会增加云同步，也不会上传访问者的方案。
+本次结果见[发布总结](docs/RELEASE-2026-09-05.md)；[首次上线记录](docs/PAGES.md)保留早期十项测试、原截图与历史测量。
 
 ## 原空间布置器的使用
 
