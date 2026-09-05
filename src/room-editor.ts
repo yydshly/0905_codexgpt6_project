@@ -1,4 +1,5 @@
 import './style.css';
+import { workspaceNav } from './workspace-nav';
 import { createIcons, Box, ChevronDown, ArrowUpRight, Undo2, Redo2, Download, Save, MousePointer2, Orbit, ZoomIn, ZoomOut, RotateCcw, Move, RotateCw, Trash2, X, Sun, Sunset, Moon, Check, Plus, SlidersHorizontal, Layers3, Grid2X2, Maximize, Focus, Upload, Image, FileJson, ArrowLeft, Lightbulb, LockKeyhole, Info, Command, CheckCheck, Leaf, PanelLeftClose, Table2, Armchair, Monitor, LibraryBig, LampDesk, LampFloor, Sprout, RectangleHorizontal, Pencil } from 'lucide';
 import { CATALOG, MATERIALS, CAMERA_LIMITS, displayName, clone, initialPlan, createItem, parsePlan, updateItem, type Plan, type Kind, type Mood } from './model';
 import { StudyScene } from './scene';
@@ -22,7 +23,8 @@ function signature(p:Plan){return JSON.stringify({...p,selectedId:null});}
 
 $('#app').innerHTML=`
   <header class="topbar">
-    <a class="brand" href="?workspace=film" aria-label="返回短片工作台"><span class="brand-mark">${icon('Box')}</span><span>理想书房<small>返回短片工作台 ↗</small></span></a>
+    <div class="brand"><span class="brand-mark">${icon('Box')}</span><span>理想书房<small>${filmRoom?'短片工程 · 房间布置':'独立书房方案'}</small></span></div>
+    ${workspaceNav('room',filmRoom)}
     <div class="project"><span class="project-tag">我的空间</span><span class="slash">/</span><input id="plan-name" aria-label="方案名称" maxlength="48" value="${escapeHTML(plan.name)}"/><span class="name-edit">${icon('SlidersHorizontal')}</span><span id="save-state" class="save-state"></span></div>
     <nav class="top-actions" aria-label="方案操作"><button class="icon-btn" id="undo" title="撤销 Ctrl+Z" aria-label="撤销">${icon('Undo2')}</button><button class="icon-btn" id="redo" title="重做 Ctrl+Shift+Z" aria-label="重做">${icon('Redo2')}</button><span class="divider"></span><button class="button save-btn" id="save">${icon('Save')}<span>保存方案</span></button><button class="button primary" id="export">${icon('Download')}<span>导出</span>${icon('ChevronDown')}</button></nav>
   </header>
@@ -95,11 +97,12 @@ function rotate(delta:number){const o=current();if(o)mutate(()=>updateItem(plan,
 function remove(){const o=current();if(!o)return;mutate(()=>{plan.objects=plan.objects.filter(item=>item.id!==o.id&&item.parentId!==o.id);plan.selectedId=null;});toast(`已移除${CATALOG[o.kind].name}，可撤销恢复`);}
 function undo(){finish();if(!past.length)return;future.push(clone(plan));plan=past.pop()!;scene?.applyCamera(plan.camera);$<HTMLInputElement>('#plan-name').value=plan.name;refresh();toast('已撤销上一步');}
 function redo(){finish();if(!future.length)return;past.push(clone(plan));plan=future.pop()!;scene?.applyCamera(plan.camera);$<HTMLInputElement>('#plan-name').value=plan.name;refresh();toast('已重做');}
-function save(){finish();if(scene)plan.camera=scene.getCamera();try{if(filmProject){filmProject.scene=clone(plan);storeFilmProject(filmProject);}else localStorage.setItem(STORAGE,JSON.stringify({plan,savedAt:new Date().toISOString()}));savedSignature=signature(plan);saveLabel='已保存到本地';refresh(false);toast(filmProject?'房间已保存到短片工程，可返回工作台继续。':'方案已保存到当前浏览器，刷新后可恢复');}catch{toast('本地保存失败，浏览器存储不可用或已满。请导出 JSON 备份。',true);}}
+function save(){finish();if(scene)plan.camera=scene.getCamera();try{if(filmProject){filmProject.scene=clone(plan);storeFilmProject(filmProject);}else localStorage.setItem(STORAGE,JSON.stringify({plan,savedAt:new Date().toISOString()}));savedSignature=signature(plan);saveLabel='已保存到本地';refresh(false);toast(filmProject?'房间已保存到短片工程，可返回工作台继续。':'方案已保存到当前浏览器，刷新后可恢复');return true;}catch{toast('本地保存失败，浏览器存储不可用或已满。请导出 JSON 备份。',true);return false;}}
 function download(blob:Blob,extension:string){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=(plan.name.replace(/[\\/:*?"<>|]/g,'-')||'理想书房')+'.'+extension;a.click();window.setTimeout(()=>URL.revokeObjectURL(url),10000);}
 function updateCameraUI(){if(!scene)return;const view=scene.getView();document.querySelectorAll<HTMLElement>('[data-view]').forEach(b=>{const active=b.dataset.view===view;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));});$('#zoom-in').toggleAttribute('disabled',scene.camera.zoom>=CAMERA_LIMITS.maxZoom);$('#zoom-out').toggleAttribute('disabled',scene.camera.zoom<=CAMERA_LIMITS.minZoom);}
 function setMode(mode:'edit'|'orbit'){scene?.setMode(mode);$('#edit-mode').setAttribute('aria-pressed',String(mode==='edit'));$('#orbit-mode').setAttribute('aria-pressed',String(mode==='orbit'));$('#edit-mode').classList.toggle('active',mode==='edit');$('#orbit-mode').classList.toggle('active',mode==='orbit');$('#stage-hint').innerHTML=mode==='edit'?`${icon('MousePointer2')}点击选择 · 拖动物件移动<span>右键拖动观察 · 滚轮缩放</span>`:`${icon('Orbit')}拖动旋转观察 · 滚轮缩放<span>切回「布置」即可编辑物件</span>`;icons();}
 $('#undo').onclick=undo;$('#redo').onclick=redo;$('#save').onclick=save;
+$('#workspace-film').onclick=()=>{if(save())location.href='?workspace=film';};
 $('#edit-mode').onclick=()=>setMode('edit');$('#orbit-mode').onclick=()=>setMode('orbit');
 $('#zoom-in').onclick=()=>scene?.zoom(.15);$('#zoom-out').onclick=()=>scene?.zoom(-.15);
 $('#reset-view').onclick=()=>{scene?.view('default');updateCameraUI();};

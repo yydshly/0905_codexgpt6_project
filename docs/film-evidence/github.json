@@ -3,13 +3,13 @@
   "baseline": "790c0ea",
   "featureCommit": "1d1db25",
   "run": {
-    "conclusion": "",
+    "conclusion": "failure",
     "createdAt": "2026-09-05T05:35:08Z",
     "headSha": "1d1db251333807b5193d5a257454c1f1fa5342cc",
-    "status": "in_progress",
-    "updatedAt": "2026-09-05T05:35:12Z",
+    "status": "completed",
+    "updatedAt": "2026-09-05T05:50:58Z",
     "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33947589290"
   },
-  "checkedAt": "2026-09-05T05:44:26.0792232Z",
-  "note": "Local Chrome: 16/16 passed. Local Pages subpath film journey: 1/1 passed. This branch has not been deployed."
+  "checkedAt": "2026-09-05T06:11:25.9548658Z",
+  "note": "Initial GitHub Chromium run: 13 passed, 3 failed (pause timing, cancel action timeout, VP9 export timeout at 249/300 frames). These CI issues remain open. Navigation repair is verified locally: 17/17 Chrome passed. No deployment."
 }

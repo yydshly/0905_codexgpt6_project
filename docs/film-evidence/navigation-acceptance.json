@@ -1,0 +1,73 @@
+{
+  "timestamp": "2026-09-05T06:11:24.6048365Z",
+  "baseline": "abbfaac",
+  "url": "http://127.0.0.1:4173/",
+  "browser": "Chrome 152.0.7977.82",
+  "stats": {
+    "startTime": "2026-09-05T06:07:37.604Z",
+    "duration": 94946.887,
+    "expected": 17,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "navigationCase": {
+    "title": "顶部工作区入口可见，保存房间并返回同一短片，失败时留在当前页",
+    "ok": true,
+    "tags": [],
+    "tests": [
+      {
+        "timeout": 90000,
+        "annotations": [],
+        "expectedStatus": "passed",
+        "projectId": "",
+        "projectName": "",
+        "results": [
+          {
+            "workerIndex": 0,
+            "parallelIndex": 0,
+            "status": "passed",
+            "duration": 5210,
+            "errors": [],
+            "stdout": [],
+            "stderr": [],
+            "retry": 0,
+            "startTime": "2026-09-05T06:08:18.653Z",
+            "annotations": [],
+            "attachments": []
+          }
+        ],
+        "status": "expected"
+      }
+    ],
+    "id": "9b9ca0f809d6d19dfde5-b28158244085a5940e78",
+    "file": "film.spec.ts",
+    "line": 86,
+    "column": 1
+  },
+  "sourceFiles": [
+    {
+      "file": "src/workspace-nav.ts",
+      "sha256": "76EBD884FE0FCAB5F55BB294D10662A076EB48FEDFB7227896BE0DF48F890BB9"
+    },
+    {
+      "file": "src/workspace-nav.css",
+      "sha256": "5F38139861D569B73573AF76D6F18E59916BEBAB175A724FB032BED8497E7C48"
+    },
+    {
+      "file": "src/studio.ts",
+      "sha256": "14A036FD8F55B9C5198F425CC4AF0CAD3C979B825F8D15089B0F4F5F86904B17"
+    },
+    {
+      "file": "src/room-editor.ts",
+      "sha256": "2872498490CAF0D685F295E4CFB5836C5F7E494474F3FEE03DEFDB9BA1117866"
+    }
+  ],
+  "desktopViewports": [
+    "1440x900",
+    "1280x800"
+  ],
+  "narrowViewport": "390x844",
+  "roomMaterialAndShotsPreserved": true,
+  "saveFailureStaysInRoom": true
+}

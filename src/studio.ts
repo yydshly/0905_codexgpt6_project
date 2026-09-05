@@ -1,5 +1,6 @@
 import './style.css';
 import './studio.css';
+import { workspaceNav } from './workspace-nav';
 import { createIcons, Box, Film, Play, Pause, SkipBack, SkipForward, Plus, ArrowUp, ArrowDown, Save, Download, Undo2, Redo2, Upload, FileJson, X, Check, Info, Camera, Focus, Move, Trash2, SlidersHorizontal, ArrowUpRight, CircleHelp, LockKeyhole, Image, CheckCheck } from 'lucide';
 import { clone } from './model';
 import { StudyScene } from './scene';
@@ -26,6 +27,7 @@ document.body.classList.add('film-app');
 $('#app').innerHTML = `
 <header class="film-header">
   <a class="brand film-brand" href="?workspace=film"><span class="brand-mark">${icon('Box')}</span><span>理想书房<small>THE CONSIDERED SPACE</small></span></a>
+  ${workspaceNav('film')}
   <div class="film-project"><span class="film-project-tag">短片工程</span><input id="film-name" aria-label="工程名称" maxlength="48" value="${esc(project.name)}"/><span id="film-save-state"></span></div>
   <div class="film-actions"><button id="film-undo" class="icon-btn" aria-label="撤销" title="撤销 Ctrl+Z">${icon('Undo2')}</button><button id="film-redo" class="icon-btn" aria-label="重做" title="重做 Ctrl+Shift+Z">${icon('Redo2')}</button><span class="divider"></span><button id="film-save" class="button">${icon('Save')}<span>保存工程</span></button><button id="film-export" class="button primary">${icon('Download')}导出视频</button></div>
 </header>
@@ -108,6 +110,7 @@ $('#shot-list').onclick = $('#timeline-clips').onclick = e => { const button = (
 $('#shot-add').onclick = () => { if (project.film.shots.length >= 3) return; mutate(() => { const shot = clone(selected()); shot.id = crypto.randomUUID(); shot.name = '新的观察'; project.film.shots.push(shot); project.selectedShotId = shot.id; }); };
 $('#film-undo').onclick = () => undo(); $('#film-redo').onclick = () => undo(true); $('#film-save').onclick = save;
 $('#edit-room').onclick = () => { if (save()) location.href = '?workspace=room&project=film'; };
+$('#workspace-room').onclick = $('#edit-room').onclick;
 $<HTMLInputElement>('#film-name').onchange = e => { const name = (e.target as HTMLInputElement).value.trim(); if (!name) { (e.target as HTMLInputElement).value = project.name; toast('请为工程取个名字。', true); return; } mutate(() => project.name = name); };
 $('#film-json').onclick = () => { pause(); finish(); download(new Blob([JSON.stringify(project, null, 2)], { type: 'application/json' }), 'json'); toast('v2 工程已交给浏览器下载，包含房间和全部镜头。'); };
 $('#film-import').onclick = () => { pause(); $<HTMLInputElement>('#film-file').click(); };
