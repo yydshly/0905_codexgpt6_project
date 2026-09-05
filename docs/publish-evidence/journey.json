@@ -1,0 +1,62 @@
+{
+  "timestamp": "2026-09-05T09:19:58.207Z",
+  "browser": "152.0.7977.82",
+  "siteURL": "http://127.0.0.1:50456",
+  "zipBytes": 296726,
+  "files": [
+    "project.json",
+    ".nojekyll",
+    "index.html",
+    "assets/site.css",
+    "LICENSES.txt",
+    "assets/site.js",
+    "部署说明.txt"
+  ],
+  "loadMs": 425,
+  "desktopMetrics": {
+    "renderTimes": [
+      111.39999997615814,
+      92.40000003576279,
+      6
+    ],
+    "renders": 3,
+    "calls": 349,
+    "triangles": 189891,
+    "meshes": 171,
+    "instanceBatches": 15,
+    "sceneTriangles": 94942,
+    "gpu": "ANGLE (Intel, Intel(R) UHD Graphics (0x0000A788) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "pixelRatio": 1,
+    "canvas": [
+      1200,
+      657
+    ]
+  },
+  "metrics": {
+    "renderTimes": [
+      92.89999997615814,
+      77.39999997615814,
+      4
+    ],
+    "renders": 3,
+    "calls": 349,
+    "triangles": 189891,
+    "meshes": 171,
+    "instanceBatches": 15,
+    "sceneTriangles": 94942,
+    "gpu": "ANGLE (Intel, Intel(R) UHD Graphics (0x0000A788) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "pixelRatio": 1,
+    "canvas": [
+      390,
+      454
+    ]
+  },
+  "visitorNoAuthorStorage": true,
+  "projectExact": true,
+  "wholeAndPartActualMeshClicked": true,
+  "independentGLB": true,
+  "iframe": true,
+  "allRuntimeRequestsLocal": true,
+  "downloadFailureRecovered": true,
+  "errors": []
+}

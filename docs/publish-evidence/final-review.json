@@ -1,0 +1,18 @@
+{
+  "timestamp": "2026-09-05T09:22:30.050Z",
+  "viewport": "1280x800",
+  "deleteBounds": {
+    "x": 1049,
+    "y": 709.1875,
+    "width": 213,
+    "height": 34
+  },
+  "brightnessBounds": {
+    "x": 1051,
+    "y": 629,
+    "width": 213,
+    "height": 4
+  },
+  "standalonePreview": "http://127.0.0.1:4180/",
+  "longTextContained": true
+}

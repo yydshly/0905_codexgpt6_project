@@ -1,0 +1,19 @@
+{
+  "timestamp": "2026-09-05T09:19:46.617Z",
+  "wholeObjectKinds": [
+    "desk",
+    "chair",
+    "monitor",
+    "shelf",
+    "taskLamp",
+    "floorLamp",
+    "plant",
+    "rug",
+    "sofa",
+    "bed",
+    "wallPhoto"
+  ],
+  "bindingsBeforeMigration": 13,
+  "historyAndRefresh": true,
+  "v1PortfolioMigrated": true
+}

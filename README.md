@@ -2,19 +2,19 @@
 
 一间可编辑、可拍摄，也可作为作品入口的 3D 书房。复用原有家具、材质和灯光，新增桌面书籍与显示器屏幕的作品绑定。
 
-当前分支：[codex/portfolio-interactions](https://github.com/yydshly/0905_codexgpt6_project/tree/codex/portfolio-interactions)，基线 `428cd19` 已保存在 [codex/reusable-study](https://github.com/yydshly/0905_codexgpt6_project/tree/codex/reusable-study)。新分支未合并或部署，GitHub Pages 仍是[原版布置器](https://yydshly.github.io/0905_codexgpt6_project/)。
+当前分支：[codex/publishable-portfolio](https://github.com/yydshly/0905_codexgpt6_project/tree/codex/publishable-portfolio)，从 `df582ac` 继续扩展。11 类可选物件都可关联作品；新增个人标题、介绍和独立网站 ZIP 导出。未覆盖线上站点，GitHub Pages 仍是[原版布置器](https://yydshly.github.io/0905_codexgpt6_project/)。
 
 ## 启动与入口
 
 Node.js 22.12+，支持 WebGL 2 的桌面浏览器：
 
 ```bash
-git switch codex/portfolio-interactions
+git switch codex/publishable-portfolio
 npm ci
 npm run dev
 ```
 
-- [布置书房](http://127.0.0.1:5173/?workspace=room)：选中书桌或显示器，在右侧「作品入口」配置名称、简介、技术栈、封面和链接。
+- [布置书房](http://127.0.0.1:5173/?workspace=room)：选中任意家具，在右侧「作品入口」配置作品。书桌和显示器另支持具体部位。
 - [作品展示示例](http://127.0.0.1:5173/?workspace=portfolio)：直接点击书籍或屏幕、标记或作品列表，打开项目详情。
 - [短片工作台](http://127.0.0.1:5173/?workspace=film)：默认入口，已编排 10 秒作品，支持最多 3 段镜头与真实视频导出。
 - [网页接入示例](http://127.0.0.1:5173/?workspace=integration)：宿主控制 iframe，接收作品点击事件并展示详情。
@@ -25,7 +25,8 @@ npm run dev
 ```bash
 npm run build
 npm run preview  # http://127.0.0.1:4173/
-npm test         # 26 项真实浏览器检查
+npm test         # 30 项真实浏览器检查
+npx playwright test tests/publish.spec.ts
 npx playwright test tests/portfolio.spec.ts
 npx playwright test --config playwright.pages.config.ts tests/portfolio.spec.ts
 ```
@@ -34,7 +35,9 @@ npx playwright test --config playwright.pages.config.ts tests/portfolio.spec.ts
 
 ## 保存与带走作品
 
-房间 v3、短片 v4、作品配置 v1；当前保存键为 `ideal-study.plan.v3` 与 `ideal-study.film.v4`。旧房间 v1/v2、短片 v2/v3 会迁移，原存档独立保留。保存仅在当前浏览器，刷新保留已保存方案，撤销历史不跨刷新。
+房间 v3、短片 v4、作品配置 v2；当前保存键为 `ideal-study.plan.v3` 与 `ideal-study.film.v4`。旧房间 v1/v2、短片 v2/v3、作品配置 v1 会迁移。保存仅在当前浏览器，刷新保留已保存方案，撤销历史不跨刷新。
+
+**发布个人主页：**布置并关联作品 → 顶部「3 作品展示」→「发布展示页」设置介绍 → 下载网站 ZIP → 解压部署。访客打开即能探索，不依赖作者存档。启动与构建命令自动生成发布模板。详见[使用与部署指南](docs/PUBLISH.md)。
 
 GLB 带走模型、材质和部位标识；JSON 带走房间、照片与作品绑定，短片工程另含镜头数据。配合当前播放器或独立 GLB 适配器接入自己的网页。视频为固定画面，不含可点击物件。
 
@@ -42,6 +45,8 @@ GLB 带走模型、材质和部位标识；JSON 带走房间、照片与作品�
 
 ## 文档与实际交付
 
+- [通用作品入口、个人网站发布与兼容边界](docs/PUBLISH.md)
+- [本轮真实截图、发布 ZIP 与验证记录](docs/PUBLISH-VALIDATION.md)
 - [作品配置、接入代码与兼容边界](docs/PORTFOLIO.md)
 - [本轮验证、性能和已知限制](docs/PORTFOLIO-VALIDATION.md)
 - [实际可导入工程](docs/portfolio-evidence/portfolio-room.json) · [对应 GLB](docs/portfolio-evidence/portfolio-room.glb)
@@ -50,7 +55,7 @@ GLB 带走模型、材质和部位标识；JSON 带走房间、照片与作品�
 
 ![实际运行的作品书房，1440×900](docs/portfolio-evidence/02-portfolio-1440x900.png)
 
-当前作品入口覆盖每张书桌现有的一本书、每台显示器的屏幕。封面显示在网页详情中；未实现任意物件绑定、屏幕内操作网站、云同步或自动发布。GLB 的独立渲染效果会有差异，未测试其他原生 3D 软件。更多边界及实际检查见验证记录。
+当前入口覆盖全部 11 类物件的整体，并保留书籍与屏幕的部位绑定。封面显示在网页详情中；未实现屏幕内操作网站、云同步或自动上传到托管平台。GLB 的独立渲染效果会有差异，未测试其他原生 3D 软件。
 
 以下保留原版的部署说明与历史编辑器记录，历史性能/截图不代替本轮证据。
 

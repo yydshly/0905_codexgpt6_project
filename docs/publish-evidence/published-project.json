@@ -1,0 +1,247 @@
+{
+  "app": "ideal-study-film",
+  "version": 4,
+  "name": "光落书房 · 十秒日常",
+  "scene": {
+    "app": "ideal-study",
+    "version": 3,
+    "portfolio": {
+      "version": 2,
+      "presentation": {
+        "name": "林间 · 创作者",
+        "headline": "把想法，\n做成可以体验的作品。",
+        "bio": "设计、代码与生活。\n欢迎来到我的创作空间。"
+      },
+      "projects": [
+        {
+          "id": "work-cd08abea-3f92-4a0a-912a-1fb81c2521b1",
+          "title": "墙上的摄影集",
+          "description": "这是我的创作项目，欢迎探索和体验。",
+          "tags": "",
+          "url": "https://github.com/yydshly/0905_codexgpt6_project"
+        },
+        {
+          "id": "work-52f4f161-4cef-4d46-a678-5204d94c0fc3",
+          "title": "我的工具产品",
+          "description": "这是我的创作项目，欢迎探索和体验。",
+          "tags": "",
+          "url": "https://github.com/yydshly/0905_codexgpt6_project"
+        },
+        {
+          "id": "work-cb363c5f-0d0c-400c-8a69-ca5f4023ec66",
+          "title": "创作笔记",
+          "description": "这是我的创作项目，欢迎探索和体验。",
+          "tags": "",
+          "url": "https://github.com/yydshly/0905_codexgpt6_project"
+        },
+        {
+          "id": "work-e2602f20-d98b-4821-bccc-70b5ea85b5f0",
+          "title": "开源作品集",
+          "description": "这是我的创作项目，欢迎探索和体验。",
+          "tags": "",
+          "url": "https://github.com/yydshly/0905_codexgpt6_project"
+        }
+      ],
+      "bindings": [
+        {
+          "target": {
+            "itemId": "wall-art",
+            "partId": "object"
+          },
+          "projectId": "work-cd08abea-3f92-4a0a-912a-1fb81c2521b1",
+          "action": "openProject"
+        },
+        {
+          "target": {
+            "itemId": "desk-1",
+            "partId": "object"
+          },
+          "projectId": "work-52f4f161-4cef-4d46-a678-5204d94c0fc3",
+          "action": "openProject"
+        },
+        {
+          "target": {
+            "itemId": "desk-1",
+            "partId": "book-1"
+          },
+          "projectId": "work-cb363c5f-0d0c-400c-8a69-ca5f4023ec66",
+          "action": "openProject"
+        },
+        {
+          "target": {
+            "itemId": "shelf-1",
+            "partId": "object"
+          },
+          "projectId": "work-e2602f20-d98b-4821-bccc-70b5ea85b5f0",
+          "action": "openProject"
+        }
+      ]
+    },
+    "name": "林间 · 我的创作书房",
+    "mood": "day",
+    "objects": [
+      {
+        "id": "rug-1",
+        "kind": "rug",
+        "x": 0.25,
+        "z": 0.4,
+        "rotation": 0,
+        "material": "linen"
+      },
+      {
+        "id": "desk-1",
+        "kind": "desk",
+        "x": 0.65,
+        "z": -1.12,
+        "rotation": 0,
+        "material": "oak"
+      },
+      {
+        "id": "chair-1",
+        "kind": "chair",
+        "x": 0.58,
+        "z": -0.02,
+        "rotation": -12,
+        "material": "sage"
+      },
+      {
+        "id": "monitor-1",
+        "kind": "monitor",
+        "x": 0.65,
+        "z": -1.27,
+        "rotation": 0,
+        "material": "charcoal",
+        "parentId": "desk-1"
+      },
+      {
+        "id": "shelf-1",
+        "kind": "shelf",
+        "x": -1.48,
+        "z": -1.87,
+        "rotation": 0,
+        "material": "oak"
+      },
+      {
+        "id": "taskLamp-1",
+        "kind": "taskLamp",
+        "x": -0.05,
+        "z": -1.18,
+        "rotation": 0,
+        "material": "sage",
+        "parentId": "desk-1",
+        "on": true,
+        "brightness": 65
+      },
+      {
+        "id": "floorLamp-1",
+        "kind": "floorLamp",
+        "x": 2.04,
+        "z": -1.5,
+        "rotation": 0,
+        "material": "linen",
+        "on": true,
+        "brightness": 70
+      },
+      {
+        "id": "plant-1",
+        "kind": "plant",
+        "x": -1.88,
+        "z": 0.91,
+        "rotation": 15,
+        "material": "ivory"
+      },
+      {
+        "id": "wall-art",
+        "kind": "wallPhoto",
+        "x": 0.6,
+        "z": -2.17,
+        "rotation": 0,
+        "material": "oak",
+        "y": 1.93,
+        "width": 1.15,
+        "height": 0.82
+      }
+    ],
+    "camera": {
+      "position": [
+        7.8,
+        6.5,
+        9
+      ],
+      "target": [
+        0,
+        0.85,
+        -0.1
+      ],
+      "zoom": 1
+    },
+    "selectedId": null
+  },
+  "film": {
+    "version": 1,
+    "shots": [
+      {
+        "id": "shot-1",
+        "name": "光落书房",
+        "duration": 3.4,
+        "start": {
+          "azimuth": 46,
+          "elevation": 34,
+          "zoom": 1.08
+        },
+        "end": {
+          "azimuth": 38,
+          "elevation": 31,
+          "zoom": 1.16
+        },
+        "target": [
+          0,
+          0.85,
+          -0.1
+        ]
+      },
+      {
+        "id": "shot-2",
+        "name": "桌边的灵感",
+        "duration": 3.6,
+        "start": {
+          "azimuth": 32,
+          "elevation": 27,
+          "zoom": 1.65
+        },
+        "end": {
+          "azimuth": 40,
+          "elevation": 30,
+          "zoom": 1.78
+        },
+        "target": [
+          0.5,
+          1.05,
+          -0.8
+        ]
+      },
+      {
+        "id": "shot-3",
+        "name": "为日常留白",
+        "duration": 3,
+        "start": {
+          "azimuth": 48,
+          "elevation": 43,
+          "zoom": 1.2
+        },
+        "end": {
+          "azimuth": 44,
+          "elevation": 39,
+          "zoom": 1.06
+        },
+        "target": [
+          0,
+          0.82,
+          -0.05
+        ]
+      }
+    ]
+  },
+  "selectedShotId": "shot-1",
+  "playhead": 0
+}

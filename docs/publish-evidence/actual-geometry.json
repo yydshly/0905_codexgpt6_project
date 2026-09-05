@@ -1,0 +1,18 @@
+{
+  "timestamp": "2026-09-05T09:20:02.215Z",
+  "actualMeshKinds": [
+    "rug",
+    "desk",
+    "chair",
+    "monitor",
+    "shelf",
+    "taskLamp",
+    "floorLamp",
+    "plant",
+    "wallPhoto",
+    "sofa",
+    "bed"
+  ],
+  "domMarkersHiddenDuringClick": true,
+  "fixture": "One isolated catalog object in real room, including required desk parent for desktop objects"
+}

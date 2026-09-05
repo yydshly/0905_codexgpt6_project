@@ -1,0 +1,151 @@
+{
+  "timestamp": "2026-09-05T09:24:45.439Z",
+  "baseline": "df582ac",
+  "codeCommit": "ad30c93707e8d0a1f3aa74ba2e4faef28f6aa8cf",
+  "branch": "codex/publishable-portfolio",
+  "local": {
+    "fullFirst": {
+      "startTime": "2026-09-05T09:10:17.753Z",
+      "duration": 160340.51200000002,
+      "expected": 27,
+      "skipped": 0,
+      "unexpected": 3,
+      "flaky": 0
+    },
+    "panelRepair": {
+      "startTime": "2026-09-05T09:17:45.359Z",
+      "duration": 12313.661,
+      "expected": 3,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "finalPublish": {
+      "startTime": "2026-09-05T09:19:38.978Z",
+      "duration": 23603.389,
+      "expected": 4,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "pages": {
+      "startTime": "2026-09-05T09:20:19.821Z",
+      "duration": 28834.685999999998,
+      "expected": 4,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  "github": {
+    "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33957682972",
+    "status": "in_progress",
+    "conclusion": "",
+    "verifiedAsComplete": false,
+    "jobs": [
+      {
+        "name": "browser-acceptance (film-export)",
+        "status": "completed",
+        "conclusion": "failure",
+        "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33957682972/job/101283869565"
+      },
+      {
+        "name": "browser-acceptance (room-reuse)",
+        "status": "in_progress",
+        "conclusion": "",
+        "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33957682972/job/101283869620"
+      },
+      {
+        "name": "browser-acceptance (portfolio)",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33957682972/job/101283869627"
+      },
+      {
+        "name": "browser-acceptance (film-controls)",
+        "status": "in_progress",
+        "conclusion": "",
+        "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33957682972/job/101283869628"
+      },
+      {
+        "name": "browser-acceptance (publish)",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33957682972/job/101283869670"
+      }
+    ]
+  },
+  "publicDeploymentPerformed": false,
+  "artifacts": [
+    {
+      "file": "01-all-object-author-1440x900.png",
+      "bytes": 274293,
+      "sha256": "1d3e918e6fb7aa8ba1b98d86431c1b0ef5745025ee161c19274e6ce6388f91d4"
+    },
+    {
+      "file": "02-publish-1440x900.png",
+      "bytes": 186769,
+      "sha256": "d9a319708dc15ba7307892648a574edc78fdd277d5e7e337c2c143d922378f05"
+    },
+    {
+      "file": "03-visitor-1440x900.png",
+      "bytes": 300090,
+      "sha256": "737a3e81b70093e6372e583f77c89231a6cd7f79a916db00f4af1eab7d966a85"
+    },
+    {
+      "file": "04-visitor-detail-1280x800.png",
+      "bytes": 136108,
+      "sha256": "68f9b9a5b5b8977510d642a077b8457fa17d23c463184bcb190ef87c2d94c3b2"
+    },
+    {
+      "file": "05-mobile-night-390x844.png",
+      "bytes": 68522,
+      "sha256": "5d185622f766feeb7ea3b15fed3b11bd988feccdf1bd0569d3671958e0d14a1b"
+    },
+    {
+      "file": "06-lamp-panel-1280x800.png",
+      "bytes": 367235,
+      "sha256": "370ba5242eede7b509a0c453ca5eb19bf05a5a29e4163a77d7b3af1f047cf69b"
+    },
+    {
+      "file": "actual-geometry.json",
+      "bytes": 370,
+      "sha256": "63d49071f3bc89491a7513305acaf16ab5d605269d98423a7baf5eb27fb9eb0b"
+    },
+    {
+      "file": "catalog.json",
+      "bytes": 316,
+      "sha256": "e5878a5f1a2681faca74686d716b92caf581c1dd6a19a9efb3392ac1ab068cb8"
+    },
+    {
+      "file": "film-regression.json",
+      "bytes": 739,
+      "sha256": "08106a49364aebabedd1c2ba39b044abe40c01e015c7b49c99c52caaa50d9205"
+    },
+    {
+      "file": "final-review.json",
+      "bytes": 335,
+      "sha256": "88fb9a621b2957e015fa64694990d614ee4a6d9128523106d240a9dec8304db7"
+    },
+    {
+      "file": "journey.json",
+      "bytes": 1357,
+      "sha256": "bc4639b514287c9c14301337acf4bef52b8814c54f08466f4d8dfa2b99c0b87b"
+    },
+    {
+      "file": "personal-homepage.zip",
+      "bytes": 296726,
+      "sha256": "6ed922b1cfde0809dc8513353f3ad5a1e42376f55045b796a15e4e66d65fe6bd"
+    },
+    {
+      "file": "personal-room.glb",
+      "bytes": 3780580,
+      "sha256": "53deaa4131c45ba49eeba843dddd3ad1945efe4bf5683f63aac9004876552546"
+    },
+    {
+      "file": "published-project.json",
+      "bytes": 5696,
+      "sha256": "b8221c5509c793f37071fc3f88a5932f31d96a58513b12f14d7093dce61b0d52"
+    }
+  ]
+}
