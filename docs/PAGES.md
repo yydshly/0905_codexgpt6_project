@@ -1,4 +1,6 @@
-# GitHub Pages 部署与线上验证
+# GitHub Pages 首次部署与线上验证
+
+本文件保留首次发布的历史结果。完整工作台本次更新见 [RELEASE-2026-09-05.md](RELEASE-2026-09-05.md)，当前启动和发布命令以 [README](../README.md) 为准。
 
 记录日期：2026-09-05。**状态：已上线；GitHub Pages 发布成功，真实 HTTPS 地址的十项浏览器验收全部通过。**
 

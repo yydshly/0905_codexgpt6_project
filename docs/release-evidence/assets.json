@@ -1,0 +1,325 @@
+{
+  "timestamp": "2026-09-05T11:28:27.312Z",
+  "sourceCommit": "b23d084959cd8c94621cf8eb1d8ccd48429cc889",
+  "releaseRun": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33962952807",
+  "base": "https://yydshly.github.io/0905_codexgpt6_project/",
+  "artifact": "github-pages/artifact.tar",
+  "allIdentical": true,
+  "files": [
+    {
+      "file": "assets/content-anchor-Br_MyPEE.js",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 569694,
+      "expectedSha256": "2dbc7af9b34d469fe1105ed561ebffb67691e393ad40620b8c204390bc5007aa",
+      "onlineSha256": "2dbc7af9b34d469fe1105ed561ebffb67691e393ad40620b8c204390bc5007aa",
+      "identical": true
+    },
+    {
+      "file": "assets/embed-CRzpzHfN.js",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 1792,
+      "expectedSha256": "97c864f77f335d7e18f6f037a87a84e38e234efd45354c3fe805bc537b9c3a51",
+      "onlineSha256": "97c864f77f335d7e18f6f037a87a84e38e234efd45354c3fe805bc537b9c3a51",
+      "identical": true
+    },
+    {
+      "file": "assets/film-model-DVjJXC-y.js",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 19887,
+      "expectedSha256": "275ddb60c2e69a0ca03f98d2f74ba6f6de957caf9f9e3c3093403f78be58d752",
+      "onlineSha256": "275ddb60c2e69a0ca03f98d2f74ba6f6de957caf9f9e3c3093403f78be58d752",
+      "identical": true
+    },
+    {
+      "file": "assets/glb-viewer-CWmVN3Wz.js",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 51515,
+      "expectedSha256": "bc86c57642361334301c7494c7121f21524d5175e996f1c25708ed8782f8e2b9",
+      "onlineSha256": "bc86c57642361334301c7494c7121f21524d5175e996f1c25708ed8782f8e2b9",
+      "identical": true
+    },
+    {
+      "file": "assets/hotspots-DS4A2Snn.js",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 2294,
+      "expectedSha256": "c790411a8de2a46da3d5c68b0be7097b8c6a42f0a0c7ad499ba9d8b7cf30c8c1",
+      "onlineSha256": "c790411a8de2a46da3d5c68b0be7097b8c6a42f0a0c7ad499ba9d8b7cf30c8c1",
+      "identical": true
+    },
+    {
+      "file": "assets/index-DJ_8F1-W.js",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 3709,
+      "expectedSha256": "03a1f5cc33f323620047ee43fd4d1a55357b4adbbd851366b714894b4cc3566e",
+      "onlineSha256": "03a1f5cc33f323620047ee43fd4d1a55357b4adbbd851366b714894b4cc3566e",
+      "identical": true
+    },
+    {
+      "file": "assets/index-DQKeRW4g.js",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 208859,
+      "expectedSha256": "5fbddaaa0f702fc9d73dab483dfccb1cf71e92209304b0862920462d8780d3ee",
+      "onlineSha256": "5fbddaaa0f702fc9d73dab483dfccb1cf71e92209304b0862920462d8780d3ee",
+      "identical": true
+    },
+    {
+      "file": "assets/integration-18Mop7QO.js",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 3948,
+      "expectedSha256": "07a41a2de6f37222eaac5d01ea55f12ed615944f550b7557b564e78488e97866",
+      "onlineSha256": "07a41a2de6f37222eaac5d01ea55f12ed615944f550b7557b564e78488e97866",
+      "identical": true
+    },
+    {
+      "file": "assets/lucide-B0iOcR8c.css",
+      "status": 200,
+      "type": "text/css; charset=utf-8",
+      "bytes": 32173,
+      "expectedSha256": "9e3b69f37b84b9ee78437c5b982ea534d9d2fa6a7bd2db57db072338ee471c73",
+      "onlineSha256": "9e3b69f37b84b9ee78437c5b982ea534d9d2fa6a7bd2db57db072338ee471c73",
+      "identical": true
+    },
+    {
+      "file": "assets/lucide-Bin0G5Sn.js",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 5916,
+      "expectedSha256": "98a10fa1ef2ce8a0da9401e2e1d9c43639506d2a32137d41e1b1274bcef9cfdf",
+      "onlineSha256": "98a10fa1ef2ce8a0da9401e2e1d9c43639506d2a32137d41e1b1274bcef9cfdf",
+      "identical": true
+    },
+    {
+      "file": "assets/model-export-BJRqhWvN.js",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 36858,
+      "expectedSha256": "87a345759482daaf5ad7465dc7e1b71293b385b68c49339319b93634187b7c24",
+      "onlineSha256": "87a345759482daaf5ad7465dc7e1b71293b385b68c49339319b93634187b7c24",
+      "identical": true
+    },
+    {
+      "file": "assets/photos-DNmPtbVq.js",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 1582,
+      "expectedSha256": "8cb5ebe2a4345aec9b30a61697748253b3c58eef19a7299ff764d509119113c8",
+      "onlineSha256": "8cb5ebe2a4345aec9b30a61697748253b3c58eef19a7299ff764d509119113c8",
+      "identical": true
+    },
+    {
+      "file": "assets/player-BxaOBWXp.js",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 2190,
+      "expectedSha256": "59bb07b8e009e896100487db492902c55bfd8b349b983bc4d52bfcfe237b5055",
+      "onlineSha256": "59bb07b8e009e896100487db492902c55bfd8b349b983bc4d52bfcfe237b5055",
+      "identical": true
+    },
+    {
+      "file": "assets/portfolio-D8V4xlw6.js",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 25153,
+      "expectedSha256": "406b3c5dba3708635db8031b934f7a0f26a27b7c175ec4104f813ee4fb71e6b8",
+      "onlineSha256": "406b3c5dba3708635db8031b934f7a0f26a27b7c175ec4104f813ee4fb71e6b8",
+      "identical": true
+    },
+    {
+      "file": "assets/portfolio-Dteycu2T.css",
+      "status": 200,
+      "type": "text/css; charset=utf-8",
+      "bytes": 13996,
+      "expectedSha256": "b0ec1349000450fd512e3de4e22ecab95096540d2f5aeca25fdf710163eee711",
+      "onlineSha256": "b0ec1349000450fd512e3de4e22ecab95096540d2f5aeca25fdf710163eee711",
+      "identical": true
+    },
+    {
+      "file": "assets/project-dialog-Cj0xrIer.js",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 1443,
+      "expectedSha256": "c178d63f75808796f7dc069acea8fd8102ed51deeb43f1be03a71afbf7dd977b",
+      "onlineSha256": "c178d63f75808796f7dc069acea8fd8102ed51deeb43f1be03a71afbf7dd977b",
+      "identical": true
+    },
+    {
+      "file": "assets/project-menu-CkxeNmV6.js",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 4434,
+      "expectedSha256": "0cf4972f05bb865633739f5b803881136353f87793e7af456efe7caefb641ec2",
+      "onlineSha256": "0cf4972f05bb865633739f5b803881136353f87793e7af456efe7caefb641ec2",
+      "identical": true
+    },
+    {
+      "file": "assets/project-thumbnail-mszMx0GN.js",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 1210,
+      "expectedSha256": "abf98a2c5ace681d1251c0be895f20796f4430b92c5425b61dab8d1a4675d069",
+      "onlineSha256": "abf98a2c5ace681d1251c0be895f20796f4430b92c5425b61dab8d1a4675d069",
+      "identical": true
+    },
+    {
+      "file": "assets/projects-BLBGn9Ne.css",
+      "status": 200,
+      "type": "text/css; charset=utf-8",
+      "bytes": 8375,
+      "expectedSha256": "9ee686e23558bbe68e54b3eb348927b6975559dd3c7b5ab288a40f4bc4b4e000",
+      "onlineSha256": "9ee686e23558bbe68e54b3eb348927b6975559dd3c7b5ab288a40f4bc4b4e000",
+      "identical": true
+    },
+    {
+      "file": "assets/projects-CXZP2TV5.js",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 21543,
+      "expectedSha256": "0f3b20f16f059562926897b50996093a2c24499c96a7bcb58f01eb7b125bd95e",
+      "onlineSha256": "0f3b20f16f059562926897b50996093a2c24499c96a7bcb58f01eb7b125bd95e",
+      "identical": true
+    },
+    {
+      "file": "assets/projects-DGGQu12z.css",
+      "status": 200,
+      "type": "text/css; charset=utf-8",
+      "bytes": 3269,
+      "expectedSha256": "c2e810bd03e23f128a8db065dbda51c5c2053f5fcce6db12c9a9316e1c9e32d8",
+      "onlineSha256": "c2e810bd03e23f128a8db065dbda51c5c2053f5fcce6db12c9a9316e1c9e32d8",
+      "identical": true
+    },
+    {
+      "file": "assets/projects-DndE7qHm.js",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 5548,
+      "expectedSha256": "06cd9ac5defd3e9f3111ca29f87de0db41d749781bfa8c484aac9131fbb5cf5d",
+      "onlineSha256": "06cd9ac5defd3e9f3111ca29f87de0db41d749781bfa8c484aac9131fbb5cf5d",
+      "identical": true
+    },
+    {
+      "file": "assets/room-editor-Bdx-ppxF.js",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 38765,
+      "expectedSha256": "b49ea25a0f539b2a207c4595fc824dd98eaefd3874b832baefaf84af0354050d",
+      "onlineSha256": "b49ea25a0f539b2a207c4595fc824dd98eaefd3874b832baefaf84af0354050d",
+      "identical": true
+    },
+    {
+      "file": "assets/scene-HVPbcXTG.js",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 118200,
+      "expectedSha256": "ddb46a7355fb4337747dd7129985a1cc152ca52a8ac36f27ad52ef6fbffb3c31",
+      "onlineSha256": "ddb46a7355fb4337747dd7129985a1cc152ca52a8ac36f27ad52ef6fbffb3c31",
+      "identical": true
+    },
+    {
+      "file": "assets/studio-DD20AYQK.js",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 27915,
+      "expectedSha256": "210fe5827748ef2bd6e0a1c5ebd01f3a0ff303503b8ad9bc4df45fa91d5d4585",
+      "onlineSha256": "210fe5827748ef2bd6e0a1c5ebd01f3a0ff303503b8ad9bc4df45fa91d5d4585",
+      "identical": true
+    },
+    {
+      "file": "assets/studio-dJAewKPy.css",
+      "status": 200,
+      "type": "text/css; charset=utf-8",
+      "bytes": 19765,
+      "expectedSha256": "64123cb4d57d587d8a604bf0b94670c6b484f0c814aa23413a0dc9dee7690d87",
+      "onlineSha256": "64123cb4d57d587d8a604bf0b94670c6b484f0c814aa23413a0dc9dee7690d87",
+      "identical": true
+    },
+    {
+      "file": "assets/viewer-bduF8WEg.css",
+      "status": 200,
+      "type": "text/css; charset=utf-8",
+      "bytes": 2462,
+      "expectedSha256": "e3f1f4590e675450883eb24f07389faa5aba16b1679141d2e59ef07001e4c80d",
+      "onlineSha256": "e3f1f4590e675450883eb24f07389faa5aba16b1679141d2e59ef07001e4c80d",
+      "identical": true
+    },
+    {
+      "file": "favicon.svg",
+      "status": 200,
+      "type": "image/svg+xml",
+      "bytes": 226,
+      "expectedSha256": "6e87fee56327af9223bf5c12f81478c547097688dc188e63596a15b0b04df73a",
+      "onlineSha256": "6e87fee56327af9223bf5c12f81478c547097688dc188e63596a15b0b04df73a",
+      "identical": true
+    },
+    {
+      "file": "index.html",
+      "status": 200,
+      "type": "text/html; charset=utf-8",
+      "bytes": 653,
+      "expectedSha256": "df222e58a222953eff84e83dfe5bf2a715752f342f6d914c0e90178ea4f45542",
+      "onlineSha256": "df222e58a222953eff84e83dfe5bf2a715752f342f6d914c0e90178ea4f45542",
+      "identical": true
+    },
+    {
+      "file": "site-kit/assets/site.css",
+      "status": 200,
+      "type": "text/css; charset=utf-8",
+      "bytes": 13962,
+      "expectedSha256": "a4d9eda77ddb11cf1382e451604315d19c3adac4e7c0faf84ce2bcd120fd6ac0",
+      "onlineSha256": "a4d9eda77ddb11cf1382e451604315d19c3adac4e7c0faf84ce2bcd120fd6ac0",
+      "identical": true
+    },
+    {
+      "file": "site-kit/assets/site.js",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 1118183,
+      "expectedSha256": "2a5fa28cc13c0e7b78c5419f8d88fd6da2d96c2b51815ce49e3580753a2568e3",
+      "onlineSha256": "2a5fa28cc13c0e7b78c5419f8d88fd6da2d96c2b51815ce49e3580753a2568e3",
+      "identical": true
+    },
+    {
+      "file": "site-kit/index.html",
+      "status": 200,
+      "type": "text/html; charset=utf-8",
+      "bytes": 442,
+      "expectedSha256": "7a35d08a64eb04e78d92007b2a494531fc8ba0953feaf0eef4591c0ffebf6869",
+      "onlineSha256": "7a35d08a64eb04e78d92007b2a494531fc8ba0953feaf0eef4591c0ffebf6869",
+      "identical": true
+    },
+    {
+      "file": "site-kit/LICENSES.txt",
+      "status": 200,
+      "type": "text/plain; charset=utf-8",
+      "bytes": 20112,
+      "expectedSha256": "464512c2ebe742ab8b75c65db3f3869138f4cb34c4432de2352a8a2d352af246",
+      "onlineSha256": "464512c2ebe742ab8b75c65db3f3869138f4cb34c4432de2352a8a2d352af246",
+      "identical": true
+    },
+    {
+      "file": "site-kit/manifest.json",
+      "status": 200,
+      "type": "application/json; charset=utf-8",
+      "bytes": 86,
+      "expectedSha256": "cdf100c1865ca75ca4e9ac8eeec32c116487eff4fa82f2a4b198c040853a5dd3",
+      "onlineSha256": "cdf100c1865ca75ca4e9ac8eeec32c116487eff4fa82f2a4b198c040853a5dd3",
+      "identical": true
+    },
+    {
+      "file": "THIRD_PARTY_LICENSES.txt",
+      "status": 200,
+      "type": "text/plain; charset=utf-8",
+      "bytes": 19004,
+      "expectedSha256": "27528d62e029f0d817a71b84be6d02858646afb40ea76dad49ce790d4b4eb7b7",
+      "onlineSha256": "27528d62e029f0d817a71b84be6d02858646afb40ea76dad49ce790d4b4eb7b7",
+      "identical": true
+    }
+  ]
+}
