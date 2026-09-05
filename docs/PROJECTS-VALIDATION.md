@@ -35,7 +35,7 @@ Windows 11 Home Chinese 26200，Node 22.15.0、Playwright 1.62.1、安装的 Chr
 
 TypeScript、生产构建、Pages 构建、`npm audit --audit-level=high` 通过，audit 0 漏洞。Three.js 大包构建提示仍保留，没有通过调高阈值隐藏它。
 
-GitHub 新增 projects 套件，与其他五个套件一同运行。[本轮云端记录](https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33959620002)，交付时状态见 [acceptance.json](projects-evidence/acceptance.json)，未完成的云端任务不计通过。
+GitHub 新增 projects 套件，与其他五个套件一同运行。[本轮云端记录](https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33959620002)已完成，film-controls、film-export、publish、projects、room-reuse、portfolio 六个套件全部通过，明细见 [acceptance.json](projects-evidence/acceptance.json)。这次云端结果对应工程库代码 a4296c2；后续新增帮助入口的本地浏览器验证另见 [PROJECTS-HELP.md](PROJECTS-HELP.md)。
 
 ## 真实截图与导出文件
 

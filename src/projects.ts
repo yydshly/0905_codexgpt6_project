@@ -3,6 +3,7 @@ import { initialPlan, MAX_JSON_BYTES } from './model';
 import { createProject, getProject, listProjects, listVersions, migrateLegacyProjects, projectURL, restoreVersion, setProjectThumbnail, type ProjectRecord } from './project-store';
 import { renderMissingThumbnails } from './project-thumbnail';
 import { preparePhotos } from './photos';
+import { mountProjectsHelp } from './projects-help';
 import './projects.css';
 
 document.body.className='projects-app';document.title='我的工程 · 理想书房';
@@ -32,6 +33,7 @@ async function historyDialog(id:string){
   }catch(error){dialog.querySelector('.project-feedback')!.textContent=(error as Error).message;}
 }
 $('#project-new').onclick=()=>nameDialog();$('#project-search').oninput=render;$('#project-import').onclick=()=>$<HTMLInputElement>('#projects-file').click();
+mountProjectsHelp($('.projects-header'),()=>$('#project-new').click(),()=>!$<HTMLButtonElement>('#project-new').disabled);
 $('#projects-grid').onclick=async e=>{const button=(e.target as HTMLElement).closest<HTMLButtonElement>('[data-action]'),id=button?.closest<HTMLElement>('[data-project]')?.dataset.project;if(!id||!button)return;try{const record=await getProject(id);if(button.dataset.action==='copy')nameDialog(record);else if(button.dataset.action==='history')await historyDialog(id);else download(record);}catch(error){report((error as Error).message,true);}};
 $<HTMLInputElement>('#projects-file').onchange=async e=>{const input=e.target as HTMLInputElement,file=input.files?.[0];input.value='';if(!file)return;try{if(file.size>MAX_JSON_BYTES)throw new Error('请选择 6 MB 以内的 JSON 工程。');const raw=JSON.parse(await file.text()),p=parseFilmProject(raw).project;if(raw.app==='ideal-study')p.name=p.scene.name;await preparePhotos(p.scene);await createProject(p,undefined,'导入 JSON');await reload();report('已导入为独立的新工程，已有工程没有更改。');}catch(error){report('导入失败：'+(error as Error).message,true);}};
 try{const notes=await migrateLegacyProjects();await reload();report(notes.join(' ')||'保存过的工程都在这里。未完成的灵感，也可以随时继续。');document.documentElement.dataset.ready='true';const id=new URLSearchParams(location.search).get('history');if(id)await historyDialog(id);void navigator.storage?.estimate().then(e=>{if(e.usage!==undefined)$('#projects-storage').textContent=`当前站点已用 ${(e.usage/1048576).toFixed(1)} MB · 版本持续保留`;}).catch(()=>{});}catch(error){report('工程库无法读取：'+(error as Error).message+' 原始存档保留，可返回快速工作区导出 JSON。',true);$('#project-new').setAttribute('disabled','');$('#project-import').setAttribute('disabled','');document.documentElement.dataset.ready='error';}
