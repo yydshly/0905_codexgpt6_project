@@ -4,7 +4,9 @@
 
 **可实际编辑的浏览器端产品**：8 类物件、3 种真实光照、物件与镜头操作、撤销重做、本地保存、PNG 与 JSON 导入导出。默认画面直接来自可编辑的场景数据。
 
-![实际运行：1440×900 白昼默认书房](docs/evidence/01-default-1440x900.png)
+**在线使用：[打开理想书房](https://yydshly.github.io/0905_codexgpt6_project/)** · GitHub Pages / HTTPS · 线上真实浏览器验收 10/10 通过。
+
+![实际线上运行：1440×900 白昼默认书房](docs/evidence/01-default-1440x900.png)
 
 ## 启动
 
@@ -28,11 +30,11 @@ npm run preview
 
 安装依赖需要网络；应用运行时不调用云服务、不下载外部模型或字体，不需要 API 密钥。请通过 HTTP 服务访问，不要直接双击 `index.html`。
 
-## GitHub Pages 发布准备
+## GitHub Pages 部署
 
-已提供仓库子路径构建、同一套 10 项浏览器验收，以及仅手动触发的 [发布工作流](.github/workflows/pages.yml)。**当前尚未启用 Pages、未触发发布、没有已上线的站点。** 启用公开站点及工作流发布权限须先由仓库所有者确认。
+已于 2026-09-05 在用户确认后启用公开站点并完成首次发布。[发布工作流](.github/workflows/pages.yml) 仅手动触发，在仓库子路径完成同一套 10 项浏览器验收后才部署。提交代码不会自行更新线上版本。
 
-预计地址：`https://yydshly.github.io/0905_codexgpt6_project/`。验证记录、启用步骤与权限说明见 [发布说明](docs/PAGES.md)。
+线上地址：[https://yydshly.github.io/0905_codexgpt6_project/](https://yydshly.github.io/0905_codexgpt6_project/)。[首次发布成功记录](https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33944881617)；浏览器线上复验、更新步骤与权限说明见 [发布说明](docs/PAGES.md)。
 
 ```bash
 npm run build:pages
@@ -41,6 +43,8 @@ npm run preview:pages
 ```
 
 停止上述预览后运行 `npm run test:pages`，可自动构建、启动并验收 Pages 子路径。发布产物在 `dist-pages/`，测试证据在 `test-results/pages-evidence/`。本地根路径开发和普通生产构建仍使用原命令。
+
+运行 `npm run test:live` 可在真实线上 HTTPS 地址重跑十项验收，不启动本地服务器。它使用隔离的测试浏览器上下文，证据位于 `test-results/live-evidence/`，不会覆盖用户现有浏览器的存档。
 
 线上地址与本机开发地址的存档不互通；通过 JSON 导出、导入迁移。上线不会增加云同步，也不会上传访问者的方案。
 
@@ -81,9 +85,9 @@ npm run preview:pages
 - [俯视 · 1280×800](docs/evidence/03-top-1280x800.png)
 - [深夜选中与灯光属性 · 1280×800](docs/evidence/04-night-selected-1280x800.png)
 - [窄屏物件库抽屉 · 390×844](docs/evidence/05-narrow-library-390x844.png)
-- [通过产品导出的 PNG](docs/evidence/06-exported-scene.png) / [通过产品导出的可编辑 JSON](docs/evidence/verified-plan.json)
+- [通过线上产品导出的 PNG](docs/evidence/06-exported-scene.png) / [通过线上产品导出的可编辑 JSON](docs/evidence/live-plan.json)
 
-上述均为真实运行截图或由应用实际导出的文件，不是设计稿。
+上述六张图片已更新为 GitHub Pages 线上复验的真实截图和实际导出文件，不是设计稿。第三轮本地性能和流程记录保留原始数据；本次线上数据与截图校验值见 [线上验证记录](docs/evidence/pages-live.json)。
 
 运行浏览器验收（本地默认使用已安装的 Google Chrome）：
 
