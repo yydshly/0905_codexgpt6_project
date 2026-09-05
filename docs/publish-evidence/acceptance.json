@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-05T09:31:06.468Z",
+  "timestamp": "2026-09-05T09:38:31.678Z",
   "baseline": "df582ac",
   "codeCommit": "ad30c93707e8d0a1f3aa74ba2e4faef28f6aa8cf",
   "finalTestCommit": "d169584800184ac89c4dc032535c6cad273f109b",
@@ -88,14 +88,14 @@
   "github": {
     "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33958022637",
     "headSha": "d169584800184ac89c4dc032535c6cad273f109b",
-    "status": "in_progress",
-    "conclusion": "",
-    "verifiedAsComplete": false,
+    "status": "completed",
+    "conclusion": "success",
+    "verifiedAsComplete": true,
     "jobs": [
       {
         "name": "browser-acceptance (room-reuse)",
-        "status": "in_progress",
-        "conclusion": "",
+        "status": "completed",
+        "conclusion": "success",
         "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33958022637/job/101284770905"
       },
       {
@@ -106,20 +106,20 @@
       },
       {
         "name": "browser-acceptance (film-export)",
-        "status": "in_progress",
-        "conclusion": "",
+        "status": "completed",
+        "conclusion": "success",
         "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33958022637/job/101284770951"
       },
       {
         "name": "browser-acceptance (film-controls)",
-        "status": "in_progress",
-        "conclusion": "",
+        "status": "completed",
+        "conclusion": "success",
         "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33958022637/job/101284771010"
       },
       {
         "name": "browser-acceptance (publish)",
-        "status": "in_progress",
-        "conclusion": "",
+        "status": "completed",
+        "conclusion": "success",
         "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33958022637/job/101284771063"
       }
     ]
