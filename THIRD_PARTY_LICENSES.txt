@@ -444,3 +444,20 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+QUATERNIUS — ADULT GUIDE CHARACTER ASSETS
+Universal Base Characters [Standard] and Universal Animation Library [Standard]
+Models, hairstyles, painted textures and base locomotion by Quaternius.
+License: CC0 1.0 Universal (Public Domain Dedication)
+https://creativecommons.org/publicdomain/zero/1.0/
+https://quaternius.com/packs/universalbasecharacters.html
+https://quaternius.itch.io/universal-base-characters
+https://quaternius.itch.io/universal-animation-library
+
+This project adapts the Superhero_Male_FullBody base, Eyebrows, Eyes and
+Hair_SimpleParted; uses Idle_Loop and Walk_Loop; adjusts proportions,
+wardrobe, shoes, eye joints, facial morphs and mesh/texture packaging.
+Reading, book handling, screen presentation and deterministic pose evaluation
+are implemented by this project. The original human modeling, texture and
+locomotion quality belongs to Quaternius, not this project's authors.
+See docs/ADULT-AVATAR.md and src/assets/guide/ for source and preparation details.

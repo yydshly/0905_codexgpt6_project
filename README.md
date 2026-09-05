@@ -2,7 +2,7 @@
 
 一间可编辑、可拍摄，也可作为个人作品主页的 3D 书房。支持 11 类物件、最多 3 段短片镜头、作品关联、多工程与保存版本，以及图片、视频、模型和独立网站导出。
 
-本分支 `codex/character-guide` 新增「小禾角色导览」可运行原型：原创风格化角色、绕开家具行走、阅读随身手册与屏幕介绍、两段时间轴、设置与历史、本地导览快照、JSON、真实视频和独立导览网站包。默认 16 秒，保留原有全部工作区。[原型说明与验证记录](docs/CHARACTER-GUIDE.md)。此分支尚未合并或部署到线上主站。
+本分支 `codex/character-guide` 新增「小禾角色导览」可运行原型：以 18 岁青年为基准的骨骼角色、绕开家具行走、阅读随身手册与屏幕介绍、两段时间轴、设置与历史、本地导览快照、JSON、真实视频和独立导览网站包。默认 16 秒，保留原有全部工作区。[青年角色升级与验收](docs/ADULT-AVATAR.md) · [上一版原型记录](docs/CHARACTER-GUIDE.md)。此分支尚未合并或部署到线上主站。
 
 主分支 `main` 汇总此前各阶段成果。当前发布包括工程库使用帮助、带备份与确认的工程删除，以及「不保存，返回工程库」。[本次发布总结与线上验收](docs/RELEASE-2026-09-05.md)。
 
@@ -38,7 +38,7 @@ npx playwright test tests/portfolio.spec.ts
 npx playwright test --config playwright.pages.config.ts tests/portfolio.spec.ts
 ```
 
-本机测试使用已安装的 Chrome，CI 使用 Chromium。运行时不需要账号、API 密钥或云服务，也不下载外部模型/字体。不要直接双击 HTML；请使用 HTTP 服务。
+本机测试使用已安装的 Chrome，CI 使用 Chromium。运行时不需要账号、API 密钥或云服务，模型文件随应用提供，不从第三方服务加载模型/字体。不要直接双击 HTML；请使用 HTTP 服务。
 
 ## 保存与带走作品
 

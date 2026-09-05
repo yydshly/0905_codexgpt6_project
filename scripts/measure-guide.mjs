@@ -2,14 +2,17 @@ import { chromium } from '@playwright/test';
 import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
-const destination = path.resolve(process.env.GUIDE_EVIDENCE_DIR ?? 'docs/guide-evidence');
+const destination = path.resolve(process.env.GUIDE_EVIDENCE_DIR ?? 'docs/adult-guide-evidence');
 const base = process.env.GUIDE_BASE_URL ?? 'http://127.0.0.1:5173/';
 await mkdir(destination, { recursive: true });
 const browser = await chromium.launch({ channel: process.env.CI ? 'chromium' : 'chrome', headless: true });
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
 const errors = []; page.on('pageerror', e => errors.push(e.message));
 try {
+  const loadStarted = Date.now();
   await page.goto(base + '?workspace=guide'); await page.waitForFunction(() => document.documentElement.dataset.ready === 'true');
+  const readyMs = Date.now() - loadStarted;
+  const avatar = await page.evaluate(() => { const a = window.__guide.avatar(); return { asset: a.asset, bones: a.bones, skinnedMeshes: a.skinnedMeshes, clips: a.clips, blinkMeshes: a.blinkMeshes }; });
   await page.locator('#guide-play').click(); await page.waitForTimeout(800);
   const measured = await page.evaluate(async () => {
     const start = performance.now(), renders = window.__guide.metrics().renders;
@@ -28,6 +31,10 @@ try {
   await page.screenshot({ path: path.join(destination, '08-room-overhead.png') });
   await page.locator('#guide-camera').click(); await page.mouse.move(box.x + box.width * .64, box.y + box.height * .6); await page.mouse.down(); await page.mouse.move(box.x + box.width * .74, box.y + box.height * .63, { steps: 16 }); await page.mouse.up(); await page.waitForTimeout(300);
   await page.screenshot({ path: path.join(destination, '09-room-alternate-angle.png') });
-  const result = { timestamp: new Date().toISOString(), browser: browser.version(), platform: process.platform, viewport: [1440, 900], headless: true, ...measured, idleRendersIn600Ms: idle, errors, note: 'Scene rendering is limited to the 30 fps guide sampler. Submission timings measure composer.render on the JS thread, not isolated GPU duration. This is one local machine; not a cross-device FPS guarantee.' };
+  await page.locator('#guide-scrub').fill('0'); await page.locator('#guide-character-close').click(); await page.waitForTimeout(250);
+  await page.screenshot({ path: path.join(destination, '11-adult-front.png') });
+  await page.mouse.move(box.x + box.width * .55, box.y + box.height * .58); await page.mouse.down(); await page.mouse.move(box.x + box.width * .40, box.y + box.height * .58, { steps: 24 }); await page.mouse.up(); await page.waitForTimeout(250);
+  await page.screenshot({ path: path.join(destination, '12-adult-side.png') });
+  const result = { timestamp: new Date().toISOString(), browser: browser.version(), platform: process.platform, viewport: [1440, 900], headless: true, readyMs, avatar, ...measured, idleRendersIn600Ms: idle, errors, note: 'Scene rendering is limited to the 30 fps guide sampler. Submission timings measure composer.render on the JS thread, not isolated GPU duration. Ready time is an unthrottled local-server cold browser context, not an Internet download guarantee. This is one local machine; not a cross-device FPS guarantee.' };
   await writeFile(path.join(destination, 'performance.json'), JSON.stringify(result, null, 2)); console.log(JSON.stringify(result));
 } finally { await browser.close(); }

@@ -1,0 +1,15 @@
+{
+  "asset": "creator-18-v1",
+  "bones": 67,
+  "skinnedMeshes": 17,
+  "clips": [
+    "Walk_Loop",
+    "Idle_Loop"
+  ],
+  "blinkMeshes": 2,
+  "samePoseOnRepeatSeek": true,
+  "nearCameraDoesNotChangeProject": true,
+  "v1MigrationPreservesRoomAndSettings": true,
+  "unknownAssetRejected": true,
+  "missingAssetPreservesJson": true
+}

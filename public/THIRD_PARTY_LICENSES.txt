@@ -421,3 +421,43 @@ Exhibit B - "Incompatible With Secondary Licenses" Notice
   This Source Code Form is "Incompatible With Secondary Licenses", as
   defined by the Mozilla Public License, v. 2.0.
 
+
+FFLATE 0.8.3 (website ZIP packaging)
+MIT License
+
+Copyright (c) 2026 Arjun Barrett
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+QUATERNIUS — ADULT GUIDE CHARACTER ASSETS
+Universal Base Characters [Standard] and Universal Animation Library [Standard]
+Models, hairstyles, painted textures and base locomotion by Quaternius.
+License: CC0 1.0 Universal (Public Domain Dedication)
+https://creativecommons.org/publicdomain/zero/1.0/
+https://quaternius.com/packs/universalbasecharacters.html
+https://quaternius.itch.io/universal-base-characters
+https://quaternius.itch.io/universal-animation-library
+
+This project adapts the Superhero_Male_FullBody base, Eyebrows, Eyes and
+Hair_SimpleParted; uses Idle_Loop and Walk_Loop; adjusts proportions,
+wardrobe, shoes, eye joints, facial morphs and mesh/texture packaging.
+Reading, book handling, screen presentation and deterministic pose evaluation
+are implemented by this project. The original human modeling, texture and
+locomotion quality belongs to Quaternius, not this project's authors.
+See docs/ADULT-AVATAR.md and src/assets/guide/ for source and preparation details.

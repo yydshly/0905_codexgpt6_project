@@ -105,3 +105,31 @@ test('作品展示把当前房间和作品传入导览，独立保存不覆盖�
   await page.locator('#guide-color').selectOption('blue'); await page.locator('#guide-save').click(); const saved = await project(page); await page.reload(); await expect(page.locator('html')).toHaveAttribute('data-ready', 'true'); expect(await project(page)).toEqual(saved);
   expect(await page.evaluate(key => JSON.parse(localStorage.getItem(key)!).guide.color, key)).toBe('blue'); expect(await page.evaluate(() => localStorage.getItem('ideal-study.film.v4'))).toBeNull();
 });
+
+test('青年骨骼、姿态重复采样、近景、旧角色迁移及模型加载失败保护', async ({ page }) => {
+  await ready(page);
+  const avatar = () => page.evaluate(() => (window as any).__guide.avatar());
+  expect((await avatar()).bones).toBeGreaterThanOrEqual(67);
+  expect((await avatar()).skinnedMeshes).toBeGreaterThan(5);
+  expect((await avatar()).clips.sort()).toEqual(['Idle_Loop', 'Walk_Loop']);
+  await scrub(page, 5.5); const pose = await avatar();
+  await scrub(page, 13); await scrub(page, 5.5); expect(await avatar()).toEqual(pose);
+  await scrub(page, 3);
+  for (let i = 0; i < 3; i++) await page.locator('#guide-scrub').press('ArrowRight');
+  expect((await avatar()).blink).toBeGreaterThan(.8);
+  await scrub(page, 5.5);
+  const before = await project(page), camera = await page.evaluate(() => (window as any).__guide.camera());
+  await page.locator('#guide-character-close').click(); expect(await page.evaluate(() => (window as any).__guide.camera())).not.toEqual(camera);
+  await capture(page, '10-adult-character-close.png');
+  await page.locator('#guide-camera').click(); expect(await page.evaluate(() => (window as any).__guide.camera())).toEqual(camera); expect(await project(page)).toEqual(before);
+  const legacy = structuredClone(before); legacy.guide.version = 1; delete legacy.guide.avatar;
+  await page.locator('#guide-file').setInputFiles({ name: 'guide-v1.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(legacy)) });
+  const migrated = await project(page); expect(migrated).toEqual(before); expect(migrated.guide.version).toBe(2); expect(migrated.guide.avatar).toBe('creator-18-v1');
+  const invalid = structuredClone(before); invalid.guide.avatar = 'unknown-avatar';
+  await page.locator('#guide-file').setInputFiles({ name: 'unknown-avatar.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(invalid)) }); await expect(page.locator('#guide-message')).toContainText('导入失败'); expect(await project(page)).toEqual(before);
+  await page.locator('#guide-save').click();
+  await page.route('**/*creator-18*.glb*', route => route.abort()); await page.reload();
+  await expect(page.locator('html')).toHaveAttribute('data-ready', 'error'); await expect(page.locator('#guide-play')).toBeDisabled(); await expect(page.locator('#guide-export')).toBeDisabled();
+  expect(await project(page)).toEqual(before); const downloaded = page.waitForEvent('download'); await page.locator('#guide-json').click(); expect((await downloaded).suggestedFilename()).toMatch(/guide.json$/);
+  await writeFile(path.join(evidence, 'adult-avatar.json'), JSON.stringify({ asset: pose.asset, bones: pose.bones, skinnedMeshes: pose.skinnedMeshes, clips: pose.clips, blinkMeshes: pose.blinkMeshes, samePoseOnRepeatSeek: true, nearCameraDoesNotChangeProject: true, v1MigrationPreservesRoomAndSettings: true, unknownAssetRejected: true, missingAssetPreservesJson: true }, null, 2));
+});

@@ -1,0 +1,14 @@
+{
+  "dateLocal": "2026-09-06",
+  "timezone": "Asia/Shanghai",
+  "branch": "codex/character-guide",
+  "baseline": "7de09b1",
+  "environment": { "os": "Windows 11", "browser": "Chrome 152.0.7977.82", "playwright": "1.62.1", "webgl": "Intel UHD via ANGLE D3D11", "viewports": [[1440,900],[1280,800]], "headlessAcceptance": true, "inAppBrowserInspected": true },
+  "finalGuide": { "command": "npx playwright test --config playwright.pages.config.ts tests/guide.spec.ts", "passed": 6, "failed": 0, "elapsedReported": "1.4m" },
+  "sharedPublish": { "command": "npx playwright test --config playwright.pages.config.ts tests/guide.spec.ts tests/publish.spec.ts", "publishPassed": 4, "publishFailed": 0, "note": "The first combined run passed all 4 publish and 5 guide cases; the new sixth guide case failed in the test's range fill setup. Its fractional range input was attempted twice, then replaced with actual keyboard frame stepping. All six guide cases subsequently passed together after final framing/color fixes." },
+  "notRerunThisRevision": "35 other original editor/film/reuse/portfolio/project cases; earlier results remain historical, not a current all-suite pass.",
+  "build": "TypeScript and Vite Pages production build passed; existing large engine chunk warning remains.",
+  "evidence": ["journey.json", "adult-avatar.json", "website.json", "performance.json", "verified-guide.json", "xiaohe-guide.mp4", "xiaohe-guide.website.zip"],
+  "assetSha256": "96c330f5fe50609c72525fc70c088af8fd6e253eea21f119e8f7567589c123f7",
+  "deployment": "Independent branch only. Public GitHub Pages site has not been updated. Remote CI is separate from this local verification."
+}

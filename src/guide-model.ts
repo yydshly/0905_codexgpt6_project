@@ -6,7 +6,7 @@ export type GuideAction = 'read' | 'point';
 export interface GuideStop { action: GuideAction; itemId: string; duration: number }
 export interface GuideProject {
   app: 'ideal-study-guide'; version: 1; name: string; project: FilmProject;
-  guide: { version: 1; name: string; color: 'sage' | 'clay' | 'blue'; stops: GuideStop[] };
+  guide: { version: 2; avatar: 'creator-18-v1'; name: string; color: 'sage' | 'clay' | 'blue'; stops: GuideStop[] };
   playhead: number; selected: number;
 }
 export interface Point { x: number; z: number }
@@ -25,14 +25,15 @@ export function createGuideProject(source?: FilmProject): GuideProject {
     const item = candidates.find(o => project.scene.portfolio.bindings.some(b => b.target.itemId === o.id && [action === 'read' ? 'book-1' : 'screen', 'object'].includes(b.target.partId))) ?? candidates[0];
     if (item) stops.push({ action, itemId: item.id, duration: 8 });
   }
-  return { app: 'ideal-study-guide', version: 1, name: '小禾的书房漫游', project, guide: { version: 1, name: '小禾', color: 'sage', stops }, playhead: 0, selected: 0 };
+  return { app: 'ideal-study-guide', version: 1, name: '小禾的书房漫游', project, guide: { version: 2, avatar: 'creator-18-v1', name: '小禾', color: 'sage', stops }, playhead: 0, selected: 0 };
 }
 export function parseGuideProject(raw: unknown): GuideProject {
   if (!raw || typeof raw !== 'object') throw new Error('不是有效的导览工程。');
   if ((raw as GuideProject).app !== 'ideal-study-guide') return createGuideProject(parseFilmProject(raw).project);
   const p = raw as GuideProject;
   const fail = (): never => { throw new Error('导览数据无效或版本不支持，当前工程未更改。'); };
-  if (p.version !== 1 || typeof p.name !== 'string' || !p.name.trim() || p.name.length > 48 || p.guide?.version !== 1 || typeof p.guide.name !== 'string' || !p.guide.name.trim() || p.guide.name.length > 12 || !['sage', 'clay', 'blue'].includes(p.guide.color) || !Array.isArray(p.guide.stops) || p.guide.stops.length > 2) return fail();
+  // Wrapper/storage key stay at v1. Guide v1 migrates to the adult avatar without touching its room or stops.
+  if (p.version !== 1 || typeof p.name !== 'string' || !p.name.trim() || p.name.length > 48 || ![1, 2].includes(p.guide?.version) || (p.guide.version === 2 && p.guide.avatar !== 'creator-18-v1') || typeof p.guide.name !== 'string' || !p.guide.name.trim() || p.guide.name.length > 12 || !['sage', 'clay', 'blue'].includes(p.guide.color) || !Array.isArray(p.guide.stops) || p.guide.stops.length > 2) return fail();
   const project = parseFilmProject(p.project).project;
   const actions = new Set<string>();
   const stops = p.guide.stops.map(s => {
@@ -41,7 +42,7 @@ export function parseGuideProject(raw: unknown): GuideProject {
   });
   if (!Number.isInteger(p.selected) || p.selected < 0 || p.selected >= Math.max(1, stops.length) || !Number.isFinite(p.playhead) || p.playhead < 0 || p.playhead > guideDuration(p)) return fail();
   project.scene.selectedId = null;
-  return { app: 'ideal-study-guide', version: 1, name: p.name.trim(), project, guide: { version: 1, name: p.guide.name.trim(), color: p.guide.color, stops }, selected: p.selected, playhead: Math.round(p.playhead * FPS) / FPS };
+  return { app: 'ideal-study-guide', version: 1, name: p.name.trim(), project, guide: { version: 2, avatar: 'creator-18-v1', name: p.guide.name.trim(), color: p.guide.color, stops }, selected: p.selected, playhead: Math.round(p.playhead * FPS) / FPS };
 }
 
 const distance = (a: Point, b: Point) => Math.hypot(a.x - b.x, a.z - b.z);
@@ -122,7 +123,9 @@ export function sampleGuide(p: GuideProject, route: GuideRoute, seconds: number)
   const previousTarget = last ? { x: (last.path.at(-1)!.x + last.target.x) / 2, y: .92, z: (last.path.at(-1)!.z + last.target.z) / 2 } : overview;
   const cameraT = index ? smooth(elapsed / walkTime) : focus;
   const target = [mix(previousTarget.x, currentTarget.x, cameraT), .92, mix(previousTarget.z, currentTarget.z, cameraT)];
-  const camera = cameraForPose({ azimuth: 27, elevation: mix(29, 26, focus), zoom: mix(1.35, 1.95, focus) }, target);
+  target[1] = mix(.96, 1.02, focus);
+  const azimuth = mix(index && p.guide.stops[index - 1]?.action === 'point' ? 18 : 27, stop?.action === 'point' ? 18 : 27, cameraT);
+  const camera = cameraForPose({ azimuth, elevation: mix(29, 21, focus), zoom: mix(1.35, 1.85, focus) }, target);
   const previousAction = p.guide.stops[index - 1]?.action, departure = smooth(elapsed / .65), oldYaw = .28;
   const movingYaw = direction + angleDelta * turn;
   const finalYaw = oldYaw + Math.atan2(Math.sin(movingYaw - oldYaw), Math.cos(movingYaw - oldYaw)) * departure;

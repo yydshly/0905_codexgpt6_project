@@ -1,7 +1,7 @@
 import { StudyScene } from './scene';
-import { createGuideCharacter } from './guide-character';
+import { createGuideCharacter } from './adult-character';
 import { compileGuide, guideDuration, guideSignature, guideStart, guideTarget, guideWork, parseGuideProject, sampleGuide, type GuideProject } from './guide-model';
-import { FPS } from './film-model';
+import { FPS, cameraForPose } from './film-model';
 import { MAX_JSON_BYTES, displayName } from './model';
 import { detectExportFormats, encodeSequence, type ExportFormat } from './film-export';
 import { preparePhotos } from './photos';
@@ -16,12 +16,12 @@ export async function mountGuide(initial: GuideProject, options: { visitor?: boo
   const visitor = !!options.visitor;
   document.body.className = 'guide-app'; document.title = project.name + ' · 角色导览';
   document.querySelector('#app')!.innerHTML = `<main class="guide-shell">
-    <header class="guide-header"><a class="guide-brand" href="${visitor ? '#' : '?workspace=projects'}"><span>◇</span> 理想书房 <small>/ 角色导览</small></a><span class="guide-edition">${visitor ? 'INTERACTIVE PORTFOLIO' : 'LAB 01 · 可运行原型'}</span><nav>${visitor ? '' : '<button id="guide-undo" aria-label="撤销">↶</button><button id="guide-redo" aria-label="重做">↷</button><button id="guide-save">保存导览</button><button id="guide-export" class="guide-primary">导出视频 ↗</button>'}</nav></header>
+    <header class="guide-header"><a class="guide-brand" href="${visitor ? '#' : '?workspace=projects'}"><span>◇</span> 理想书房 <small>/ 角色导览</small></a><span class="guide-edition">${visitor ? 'INTERACTIVE PORTFOLIO' : 'LAB 01 · 青年导览'}</span><nav>${visitor ? '' : '<button id="guide-undo" aria-label="撤销">↶</button><button id="guide-redo" aria-label="重做">↷</button><button id="guide-save">保存导览</button><button id="guide-export" class="guide-primary">导出视频 ↗</button>'}</nav></header>
     <div class="guide-main"><aside class="guide-sidebar"><div class="guide-intro"><span class="guide-eyebrow">A LITTLE COMPANY</span><h1>让作品，<br/>有人带你看。</h1><p><span id="guide-name-label"></span>会带你认识书房里的创作。<br/>点一件作品，开始一段小小的探索。</p></div>
       <div class="guide-section-title"><span>导览段落</span><small id="guide-total"></small></div><div id="guide-stops" class="guide-stops"></div>
       <section class="guide-current"><span class="guide-eyebrow" id="guide-action-title"></span><h2 id="guide-work-title"></h2><p id="guide-work-description"></p><button id="guide-open">直接查看作品 ↗</button><small>可跳过动作，直接打开作品详情。</small></section>
-      ${visitor ? '' : '<details class="guide-settings" open><summary>角色与段落设置</summary><label>导览名称<input id="guide-title" maxlength="48" aria-label="导览名称"/></label><div class="guide-field-row"><label>角色名字<input id="guide-name" maxlength="12" aria-label="角色名字"/></label><label>背带裤颜色<select id="guide-color" aria-label="背带裤颜色"><option value="sage">鼠尾草绿</option><option value="clay">陶土橘</option><option value="blue">雾蓝色</option></select></label></div><div class="guide-field-row"><label>当前段落时长<select id="guide-duration" aria-label="当前段落时长"></select></label><button id="guide-order">交换顺序 ⇅</button></div><p class="guide-setting-note">阅读段落翻阅随身手册；屏幕段落抬手介绍。房间与作品取自导入工程的快照。</p></details>'}
-    </aside><section class="guide-stage" aria-label="角色导览预览"><div class="guide-stage-top"><span><i></i> LIVE 3D <b id="guide-status">正在打开书房…</b></span><button id="guide-camera">恢复导览镜头</button></div><div class="guide-frame"><div id="guide-canvas"></div><div id="guide-loading">正在准备书房与小禾…</div></div><div class="guide-caption"><span id="guide-caption-index">01 / 02</span><div><strong id="guide-caption-title"></strong><p id="guide-caption-text"></p></div><span class="guide-character-tag">原创角色<br/><b>XIAOHE</b></span></div><div class="guide-stage-foot"><span>拖动旋转 · 滚轮缩放 · 点击标记探索作品</span><div>${['day','dusk','night'].map((m,i)=>`<button data-guide-mood="${m}">${['白昼','黄昏','深夜'][i]}</button>`).join('')}</div></div></section></div>
+      ${visitor ? '' : '<details class="guide-settings" open><summary>角色与段落设置</summary><label>导览名称<input id="guide-title" maxlength="48" aria-label="导览名称"/></label><div class="guide-field-row"><label>角色名字<input id="guide-name" maxlength="12" aria-label="角色名字"/></label><label>上衣颜色<select id="guide-color" aria-label="上衣颜色"><option value="sage">鼠尾草绿</option><option value="clay">陶土橘</option><option value="blue">雾蓝色</option></select></label></div><div class="guide-field-row"><label>当前段落时长<select id="guide-duration" aria-label="当前段落时长"></select></label><button id="guide-order">交换顺序 ⇅</button></div><p class="guide-setting-note">18 岁青年形象 · 长袖上衣、深色长裤。携带手册，阅读后介绍屏幕作品。房间与作品来自工程快照。</p></details>'}
+    </aside><section class="guide-stage" aria-label="角色导览预览"><div class="guide-stage-top"><span><i></i> LIVE 3D <b id="guide-status">正在打开书房…</b></span><div class="guide-camera-actions"><button id="guide-character-close">角色近景</button><button id="guide-camera">恢复导览镜头</button></div></div><div class="guide-frame"><div id="guide-canvas"></div><div id="guide-loading">正在加载书房与青年角色…</div></div><div class="guide-caption"><span id="guide-caption-index">01 / 02</span><div><strong id="guide-caption-title"></strong><p id="guide-caption-text"></p></div><span class="guide-character-tag">青年创作者<br/><b>XIAOHE · 18</b></span></div><div class="guide-stage-foot"><span>拖动旋转 · 滚轮缩放 · 点击标记探索作品</span><div>${['day','dusk','night'].map((m,i)=>`<button data-guide-mood="${m}">${['白昼','黄昏','深夜'][i]}</button>`).join('')}</div></div></section></div>
     <footer class="guide-timeline"><div class="guide-transport"><button id="guide-start" aria-label="回到开头">↤</button><button id="guide-play" class="guide-primary" aria-label="播放导览">▶ 播放导览</button><span id="guide-time">00.0 / 16.0 s</span></div><div class="guide-track"><div id="guide-track-labels"></div><input id="guide-scrub" type="range" min="0" step="0.03333333333333333" aria-label="导览播放头" /></div><div class="guide-timeline-end"><span id="guide-save-state">${visitor ? '点击物品，认识作品' : '独立导览 · 本地保存'}</span>${visitor ? '' : '<div><button id="guide-import">导入工程</button><button id="guide-json">JSON ↓</button><button id="guide-publish">网站包 ↓</button></div>'}</div></footer>
     <p id="guide-message" class="guide-message" role="status" aria-live="polite"></p><input type="file" id="guide-file" accept=".json,application/json" hidden />
   </main>`;
@@ -29,7 +29,7 @@ export async function mountGuide(initial: GuideProject, options: { visitor?: boo
   const report = (message: string, error = false) => { $('#guide-message').textContent = message; $('#guide-message').classList.toggle('error', error); };
   const download = (blob: Blob, suffix: string) => { const url = URL.createObjectURL(blob), a = document.createElement('a'); a.href = url; a.download = project.name.replace(/[\\/:*?"<>|]/g, '-') + suffix; a.click(); setTimeout(() => URL.revokeObjectURL(url), 15000); };
   const detail = createProjectDialog();
-  let scene: StudyScene | undefined, actor: ReturnType<typeof createGuideCharacter> | undefined, hotspots: ReturnType<typeof mountHotspots> | undefined;
+  let scene: StudyScene | undefined, actor: Awaited<ReturnType<typeof createGuideCharacter>> | undefined, hotspots: ReturnType<typeof mountHotspots> | undefined;
   const setButtons = () => { $('#guide-play').textContent = playing ? 'Ⅱ 暂停导览' : '▶ 播放导览'; $('#guide-play').setAttribute('aria-label', playing ? '暂停导览' : '播放导览'); if (!visitor) { $<HTMLButtonElement>('#guide-undo').disabled = !past.length || exporting; $<HTMLButtonElement>('#guide-redo').disabled = !future.length || exporting; } };
   function pause() { playing = false; cancelAnimationFrame(frame); setButtons(); scene?.setInteractionEnabled(!exporting); $('#guide-status').textContent = exporting ? '正在生成视频' : '已暂停 · 可自由观察'; }
   function renderSample(time: number, camera = true) {
@@ -71,17 +71,17 @@ export async function mountGuide(initial: GuideProject, options: { visitor?: boo
       const track = document.createElement('button'); track.dataset.track = String(i); track.style.flex = String(stop.duration); track.textContent = `${i + 1} / ${stop.action === 'read' ? '阅读手册' : '屏幕介绍'} · ${stop.duration}s`; track.onclick = () => selectStop(i, false); $('#guide-track-labels').append(track);
     });
     $<HTMLInputElement>('#guide-scrub').max = String(guideDuration(project));
-    if (!visitor) { $<HTMLInputElement>('#guide-title').value = project.name; $<HTMLInputElement>('#guide-name').value = project.guide.name; $<HTMLSelectElement>('#guide-color').value = project.guide.color; $<HTMLButtonElement>('#guide-order').disabled = project.guide.stops.length !== 2; }
+    if (!visitor) { $<HTMLInputElement>('#guide-title').value = project.name; $<HTMLInputElement>('#guide-name').value = project.guide.name; $<HTMLSelectElement>('#guide-color').value = project.guide.color; $<HTMLButtonElement>('#guide-order').disabled = project.guide.stops.length !== 2; $<HTMLButtonElement>('#guide-export').disabled = !scene || !actor || !!route.error || exporting; }
     document.querySelectorAll<HTMLElement>('[data-guide-mood]').forEach(b => b.classList.toggle('is-active', b.dataset.guideMood === project.project.scene.mood));
     updateSelection(); updatePlayback(); setButtons();
     $('#guide-save-state').textContent = visitor ? '点击物品，认识作品' : saved === guideSignature(project) ? '独立导览 · 本地保存' : '有未保存的修改';
-    $<HTMLButtonElement>('#guide-play').disabled = !scene || !!route.error || exporting;
+    $<HTMLButtonElement>('#guide-play').disabled = !scene || !actor || !!route.error || exporting;
     if (route.error) report(route.error, true);
   }
   function seek(time: number) { pause(); manualEnd = null; const s = renderSample(time); project.playhead = s.time; project.selected = s.index; updateSelection(); updatePlayback(); }
   function openCurrent() { pause(); manualEnd = null; const stop = project.guide.stops[project.selected], work = stop && guideWork(project, stop); if (work) detail.open(work); else report('此物件尚未关联作品，请在房间编辑器中配置。'); }
   function play() {
-    if (!scene || route.error || exporting) return;
+    if (!scene || !actor || route.error || exporting) return;
     if (project.playhead >= guideDuration(project)) seek(0);
     playing = true; startClock = performance.now(); startTime = project.playhead; setButtons();
     const tick = (now: number) => {
@@ -111,7 +111,13 @@ export async function mountGuide(initial: GuideProject, options: { visitor?: boo
   }
   $('#guide-play').onclick = () => { if (playing) pause(); else { manualEnd = null; play(); } };
   $('#guide-start').onclick = () => seek(0); $('#guide-open').onclick = openCurrent;
-  $('#guide-camera').onclick = () => { pause(); renderSample(project.playhead); updatePlayback(); };
+  $('#guide-camera').onclick = () => { if (exporting) return; pause(); renderSample(project.playhead); updatePlayback(); };
+  $('#guide-character-close').onclick = () => {
+    if (!scene || !actor || exporting) return;
+    pause(); const s = sampleGuide(project, route, project.playhead);
+    scene.applyCamera(cameraForPose({ azimuth: 22, elevation: 12, zoom: 3.8 }, [s.position.x, 1.30 + s.position.y, s.position.z]));
+    report('角色近景 · 可拖动观察。播放或恢复导览镜头可回到作品构图；视频使用导览镜头。');
+  };
   $<HTMLInputElement>('#guide-scrub').oninput = e => seek(Number((e.target as HTMLInputElement).value));
   document.querySelectorAll<HTMLButtonElement>('[data-guide-mood]').forEach(b => b.onclick = () => commit(next => { next.project.scene.mood = b.dataset.guideMood as 'day' | 'dusk' | 'night'; }));
   if (!visitor) {
@@ -134,7 +140,7 @@ export async function mountGuide(initial: GuideProject, options: { visitor?: boo
     $('#guide-publish').onclick = async () => { pause(); const button = $<HTMLButtonElement>('#guide-publish'); button.disabled = true; try { const { createGuideSitePackage } = await import('./guide-site-export'); const blob = await createGuideSitePackage(project); download(blob, '.website.zip'); report('独立导览网站包已交给浏览器下载；解压后可部署到 GitHub Pages。'); } catch (error) { report('网站包生成失败：' + (error as Error).message, true); } finally { button.disabled = false; } };
   }
   async function exportVideo() {
-    pause(); if (!scene || route.error) { report(route.error || '3D 预览尚未就绪。', true); return; }
+    pause(); if (!scene || !actor || route.error) { report(route.error || '3D 预览尚未就绪。', true); return; }
     const dialog = document.createElement('dialog'); dialog.className = 'guide-export-dialog'; dialog.setAttribute('aria-label', '导出角色导览视频');
     dialog.innerHTML = '<button id="guide-export-close" aria-label="关闭导览视频导出">×</button><span class="guide-eyebrow">TAKE THE STORY WITH YOU</span><h2>带走这段小小的探索。</h2><p>1280 × 720 · 30 fps · 无音轨<br/>使用当前导览的角色、动作、房间与镜头。</p><label>编码格式<select id="guide-codec" aria-label="导览视频编码"></select></label><p id="guide-codec-note">正在检测浏览器实际编码能力…</p><button id="guide-render" class="guide-primary" disabled>生成视频</button><button id="guide-cancel" hidden>取消生成</button><progress id="guide-progress" max="1" value="0" hidden></progress><p id="guide-export-message" role="status"></p><div id="guide-video-result" hidden><video id="guide-video" controls muted playsinline></video><a id="guide-video-download" class="guide-primary">下载视频 ↓</a></div>';
     document.body.append(dialog); dialog.showModal();
@@ -171,8 +177,10 @@ export async function mountGuide(initial: GuideProject, options: { visitor?: boo
   try {
     await preparePhotos(project.project.scene);
     scene = new StudyScene($('#guide-canvas'), { select() {}, begin() {}, move() {}, end() {}, camera() {}, error: message => report(message, true) });
-    scene.sync(project.project.scene); scene.setMode('orbit'); scene.setFraming(16 / 9);
-    actor = createGuideCharacter(); scene.scene.add(actor.root); scene.contentOccluders.push(actor.root); scene.renderer.domElement.setAttribute('aria-label', '角色导览三维预览'); renderSample(project.playhead);
+    scene.sync(project.project.scene); scene.setMode('orbit'); scene.setFraming(16 / 9); scene.controls.maxZoom = 4.2;
+    actor = await createGuideCharacter();
+    if (disposed) { actor.dispose(); return { destroy() {} }; }
+    scene.scene.add(actor.root); scene.contentOccluders.push(actor.root); scene.renderer.domElement.setAttribute('aria-label', '角色导览三维预览'); renderSample(project.playhead);
     scene.controls.addEventListener('start', () => { if (playing) { pause(); updatePlayback(); } });
     hotspots = mountHotspots($('#guide-canvas'), scene, () => project.project.scene.portfolio, event => {
       const index = project.guide.stops.findIndex(s => s.itemId === event.target.itemId && (guideTarget(s).partId === event.target.partId || event.target.partId === 'object'));
@@ -180,12 +188,12 @@ export async function mountGuide(initial: GuideProject, options: { visitor?: boo
       else { pause(); detail.open(event.project); }
     });
     $('#guide-loading').hidden = true; document.documentElement.dataset.ready = 'true'; refresh();
-  } catch (error) { $('#guide-loading').textContent = '3D 预览暂时无法打开。仍可保存 / 导出 JSON，换一个支持 WebGL 的浏览器继续。'; report((error as Error).message, true); document.documentElement.dataset.ready = 'error'; }
-  if (options.notice && !route.error) report(options.notice);
+  } catch (error) { $('#guide-loading').textContent = '书房或角色未能加载，请检查网络后重试。仍可保存 / 导出 JSON；浏览器需要支持 WebGL。'; report((error as Error).message, true); document.documentElement.dataset.ready = 'error'; refresh(); }
+  if (options.notice && !route.error && actor) report(options.notice);
   const visibility = () => { if (document.hidden) pause(); }; document.addEventListener('visibilitychange', visibility);
   const beforeUnload = (e: BeforeUnloadEvent) => { if (!visitor && guideSignature(project) !== saved) { e.preventDefault(); e.returnValue = ''; } }; window.addEventListener('beforeunload', beforeUnload);
   const destroy = () => { disposed = true; pause(); document.removeEventListener('visibilitychange', visibility); window.removeEventListener('beforeunload', beforeUnload); hotspots?.destroy(); detail.destroy(); actor?.dispose(); scene?.destroy(); };
   window.addEventListener('pagehide', destroy, { once: true });
-  Object.assign(window, { __guide: { project: () => structuredClone(project), sample: (time: number) => sampleGuide(project, route, time), state: () => ({ playing, exporting, routeError: route.error, past: past.length, future: future.length }), route: () => structuredClone(route), camera: () => scene?.getCamera(), metrics: () => scene?.getMetrics() } });
+  Object.assign(window, { __guide: { project: () => structuredClone(project), sample: (time: number) => sampleGuide(project, route, time), state: () => ({ playing, exporting, routeError: route.error, past: past.length, future: future.length }), route: () => structuredClone(route), camera: () => scene?.getCamera(), metrics: () => scene?.getMetrics(), avatar: () => actor?.metrics() } });
   return { destroy };
 }
