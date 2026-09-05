@@ -27,3 +27,6 @@
 - 镜头卡片缩略图：从工程当前镜头数据调用同一渲染器生成，随镜头编辑更新。
 - **Mediabunny 1.55.7**：Vanilagy 和贡献者提供的浏览器媒体工具库，负责调用 WebCodecs 与 MP4/WebM 封装；MPL-2.0，依赖源代码未经本项目修改。此能力归属于外部库和浏览器编码器，不是自行编写编码器。固定版本源代码见 [官方仓库](https://github.com/Vanilagy/mediabunny/tree/v1.55.7)，也随 `mediabunny@1.55.7` npm 包分发。完整许可证同时放入 `public/THIRD_PARTY_LICENSES.txt`，随构建发布。
 - 视频由真实工作台逐帧生成。FFmpeg / ffprobe 只用于交付文件检查，没有转码或替换浏览器生成的视频。截图由 Playwright 控制实际 Chrome 获取。
+
+## 2026-09-05 家具与复用增量
+沙发、床与可编辑相框均由本项目代码生成。测试照片 test-photo.png 是测试代码绘制的几何山景，不是外部摄影素材。用户上传的图片只作为画框的内容，不替代真实房间几何。GLB 导出与独立查看器复用已安装的 Three.js MIT 导出 / 加载模块，无新增外部模型。

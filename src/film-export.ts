@@ -30,9 +30,11 @@ export async function encodeFilm(scene: StudyScene, project: FilmProject, format
       signal.throwIfAborted();
       const sample = sampleFilm(project, frame / FPS);
       capture.render(sample.camera);
+      signal.throwIfAborted();
       await source.add(frame / FPS, 1 / FPS, { keyFrame: frame === 0 || sample.progress === 0 });
       progress(frame + 1, frames);
-      if (frame % 3 === 0) await new Promise<void>(r => setTimeout(r, 0));
+      // Yield every frame so cancel/input can run on slow software WebGL renderers.
+      await new Promise<void>(r => setTimeout(r, 0));
     }
     signal.throwIfAborted();
     await output.finalize();

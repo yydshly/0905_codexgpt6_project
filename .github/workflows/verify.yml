@@ -1,7 +1,7 @@
 name: Verify study and film workbench
 on:
   push:
-    branches: [main, 'codex/film-workbench']
+    branches: [main, 'codex/film-workbench', 'codex/reusable-study']
     paths-ignore: ['docs/**', 'README.md', 'THIRD_PARTY_LICENSES.txt']
   pull_request:
     paths-ignore: ['docs/**', 'README.md', 'THIRD_PARTY_LICENSES.txt']

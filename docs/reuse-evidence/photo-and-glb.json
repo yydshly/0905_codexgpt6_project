@@ -1,0 +1,55 @@
+{
+  "timestamp": "2026-09-05T06:43:50.694Z",
+  "browser": "152.0.7977.82",
+  "oldStoragePreserved": true,
+  "savedRestoreExact": true,
+  "freshPageJsonExact": true,
+  "invalidImagePreserved": true,
+  "exports": [
+    {
+      "file": "wall-photo.glb",
+      "bytes": 684800,
+      "name": "wall-photo.glb",
+      "meshes": 3,
+      "triangles": 602,
+      "textures": 2,
+      "bounds": [
+        1.2999999523162842,
+        1,
+        0.0410000002682209
+      ],
+      "nodes": [
+        "wall-art_1"
+      ]
+    },
+    {
+      "file": "study-room.glb",
+      "bytes": 3801428,
+      "name": "study-room.glb",
+      "meshes": 408,
+      "triangles": 95298,
+      "textures": 6,
+      "bounds": [
+        5.480000019073486,
+        3.040000002980232,
+        4.679999828338623
+      ],
+      "nodes": [
+        "room",
+        "rug-1",
+        "desk-1",
+        "chair-1",
+        "monitor-1",
+        "shelf-1",
+        "taskLamp-1",
+        "floorLamp-1",
+        "plant-1",
+        "taskLamp-78e8049d-6d62-4672-8896-1131208d9d1e",
+        "wall-art",
+        "scene-light",
+        "scene-light_2"
+      ]
+    }
+  ],
+  "errors": []
+}

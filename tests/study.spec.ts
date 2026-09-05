@@ -16,10 +16,10 @@ test.beforeEach(async({page})=>{page.on('dialog',dialog=>dialog.accept());});
 
 test('完整验收：添加、拖动、旋转、灯光、材质、历史、本地恢复、PNG、JSON',async({page,browser})=>{
   const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));const steps:any[]=[];
-  await ready(page);expect((await plan(page)).objects).toHaveLength(8);
-  await shot(page,'01-default-1440x900.png');steps.push({step:'打开默认书房',objects:8});
+  await ready(page);expect((await plan(page)).objects).toHaveLength(9);
+  await shot(page,'01-default-1440x900.png');steps.push({step:'打开默认书房',objects:9});
   await page.getByRole('button',{name:'添加蘑菇台灯',exact:true}).click();
-  let p=await plan(page);expect(p.objects).toHaveLength(9);const lampId=p.selectedId;expect(p.objects.find((o:any)=>o.id===lampId).parentId).toBe('desk-1');
+  let p=await plan(page);expect(p.objects).toHaveLength(10);const lampId=p.selectedId;expect(p.objects.find((o:any)=>o.id===lampId).parentId).toBe('desk-1');
   const h0=await history(page),cameraBefore=await page.evaluate(()=>(window as any).__study.getCamera());
   const point=await page.evaluate(id=>(window as any).__study.project(id),lampId);
   const beforeDrag=p.objects.find((o:any)=>o.id===lampId);
@@ -43,7 +43,7 @@ test('完整验收：添加、拖动、旋转、灯光、材质、历史、本�
   await page.getByRole('textbox',{name:'方案名称'}).fill('夜读 · 验收书房');await page.getByRole('textbox',{name:'方案名称'}).press('Tab');
   await page.getByRole('button',{name:'保存方案',exact:true}).click();await expect(page.locator('#save-state')).toHaveText('已保存到本地');const saved=await plan(page);
   await page.reload();await expect(page.locator('html')).toHaveAttribute('data-ready','true');await expect(page.locator('#save-state')).toHaveText('已恢复本地方案');expect(compareCore(await plan(page))).toEqual(compareCore(saved));
-  steps.push({step:'材质/深夜/撤销重做/保存刷新恢复',keyDataExact:true,storedBytes:await page.evaluate(()=>localStorage.getItem('ideal-study.plan.v1')!.length)});
+  steps.push({step:'材质/深夜/撤销重做/保存刷新恢复',keyDataExact:true,storedBytes:await page.evaluate(()=>localStorage.getItem('ideal-study.plan.v2')!.length)});
   await page.setViewportSize({width:1280,height:800});await choose(page,lampId);const deleteBox=await page.locator('#delete-item').boundingBox();expect(deleteBox!.y+deleteBox!.height).toBeLessThanOrEqual(769);await shot(page,'04-night-selected-1280x800.png');
   await page.getByRole('button',{name:'导出',exact:true}).click();
   const pngEvent=page.waitForEvent('download');await page.locator('#export-png').click();const png=await pngEvent;const pngPath=path.join(evidence,'06-exported-scene.png');await png.saveAs(pngPath);const bytes=await readFile(pngPath);expect(bytes.subarray(1,4).toString()).toBe('PNG');expect(bytes.byteLength).toBeGreaterThan(60000);const canvasBox=await page.locator('#canvas-host').boundingBox();expect(bytes.readUInt32BE(16)).toBe(canvasBox!.width*2);expect(bytes.readUInt32BE(20)).toBe(canvasBox!.height*2);
@@ -63,7 +63,7 @@ test('移动边界、桌面跟随、历史一致、选择删除、观察和缩�
   await ready(page);await choose(page,'plant-1');await changeNumber(page,'X 位置','99');const bound=(await plan(page)).objects.find((o:any)=>o.id==='plant-1');expect(bound.x).toBeLessThanOrEqual(2.25);await changeNumber(page,'Z 位置','-99');expect((await plan(page)).objects.find((o:any)=>o.id==='plant-1').z).toBeGreaterThanOrEqual(-1.85);
   await page.getByRole('button',{name:'撤销',exact:true}).click();await page.getByRole('button',{name:'撤销',exact:true}).click();
   await choose(page,'desk-1');const before=await plan(page);await changeNumber(page,'X 位置','1');await page.getByRole('button',{name:'向右旋转15度',exact:true}).click();const after=await plan(page);const children=after.objects.filter((o:any)=>o.parentId==='desk-1');expect(children).toHaveLength(2);expect(children[0].x).not.toBe(before.objects.find((o:any)=>o.id===children[0].id).x);
-  await page.getByRole('button',{name:'移除书桌及桌面物件',exact:true}).click();expect((await plan(page)).objects).toHaveLength(5);expect((await plan(page)).selectedId).toBeNull();
+  await page.getByRole('button',{name:'移除书桌及桌面物件',exact:true}).click();expect((await plan(page)).objects).toHaveLength(6);expect((await plan(page)).selectedId).toBeNull();
   await page.keyboard.press('Control+z');expect((await plan(page)).objects).toEqual(after.objects);expect((await plan(page)).selectedId).toBe('desk-1');
   await page.keyboard.press('r');expect((await plan(page)).objects.find((o:any)=>o.id==='desk-1').rotation).toBe(30);
   await page.keyboard.press('ArrowRight');await expect(page.getByRole('spinbutton',{name:'X 位置',exact:true})).toBeVisible();
@@ -146,7 +146,7 @@ test('优化回归：合批键帽/毯穗仍可选中，材质、删除撤销和�
   const key=await page.evaluate(()=>(window as any).__study.project('desk-1',[0,.807,.23]));await page.mouse.click(key.x,key.y);expect((await plan(page)).selectedId).toBe('desk-1');
   await page.getByRole('button',{name:'材质：深胡桃木',exact:true}).click();await page.keyboard.press('Escape');await page.mouse.click(key.x,key.y);expect((await plan(page)).selectedId).toBe('desk-1');
   const fringe=await page.evaluate(()=>(window as any).__study.project('rug-1',[1.28,.016,.01]));await page.mouse.click(fringe.x,fringe.y);expect((await plan(page)).selectedId).toBe('rug-1');
-  const before=await plan(page);await page.keyboard.press('Delete');expect((await plan(page)).objects).toHaveLength(7);await page.keyboard.press('Control+z');expect((await plan(page)).objects).toEqual(before.objects);expect((await plan(page)).selectedId).toBe('rug-1');
+  const before=await plan(page);await page.keyboard.press('Delete');expect((await plan(page)).objects).toHaveLength(8);await page.keyboard.press('Control+z');expect((await plan(page)).objects).toEqual(before.objects);expect((await plan(page)).selectedId).toBe('rug-1');
   await page.getByRole('button',{name:'恢复默认视角',exact:true}).click();await settle(page);
   const selectedDownload=page.waitForEvent('download');await page.getByRole('button',{name:'导出',exact:true}).click();await page.locator('#export-png').click();const selectedFile=await selectedDownload;const withSelection=await readFile((await selectedFile.path())!);
   await page.getByRole('button',{name:'关闭导出',exact:true}).click();await page.keyboard.press('Escape');await settle(page);
@@ -170,12 +170,12 @@ test('物件切换、重复编号、重命名、键盘保护及长名称布局',
 });
 
 test('异常镜头和物件名称导入保留方案，旧 v1 文件仍可编辑',async({page})=>{
-  await ready(page);await page.getByRole('button',{name:'保存方案',exact:true}).click();const before=await plan(page),h=await history(page),stored=await page.evaluate(()=>localStorage.getItem('ideal-study.plan.v1'));
+  await ready(page);await page.getByRole('button',{name:'保存方案',exact:true}).click();const before=await plan(page),h=await history(page),stored=await page.evaluate(()=>localStorage.getItem('ideal-study.plan.v2'));
   await page.getByRole('button',{name:'导出',exact:true}).click();
   const badCameras=[{position:[35,6,38],target:[30,1,30],zoom:1},{position:[0,1,0],target:[0,1,0],zoom:1},{position:[0,-5,5],target:[0,1,0],zoom:1},{...before.camera,zoom:.5},{position:[-8,5,-8],target:[0,1,0],zoom:1}];
   const invalidPlans=[...badCameras.map(camera=>({...before,camera})),...[24,'', '名'.repeat(25)].map(label=>({...before,objects:before.objects.map((o:any,i:number)=>i===0?{...o,label}:o)}))];
-  for(const invalid of invalidPlans){await page.locator('#file-input').setInputFiles({name:'invalid.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(invalid))});await expect(page.locator('#export-dialog #toast')).toBeVisible();await expect(page.locator('#toast')).toHaveClass(/in-dialog.*error/);expect(await plan(page)).toEqual(before);expect(await history(page)).toEqual(h);expect(await page.evaluate(()=>localStorage.getItem('ideal-study.plan.v1'))).toBe(stored);}
-  const legacyPath=path.resolve('tests/fixtures/legacy-v1.json'),legacy=JSON.parse(await readFile(legacyPath,'utf8'));await page.locator('#file-input').setInputFiles(legacyPath);await expect(page.locator('#export-dialog')).not.toBeVisible();expect(compareCore(await plan(page))).toEqual(compareCore(legacy));
+  for(const invalid of invalidPlans){await page.locator('#file-input').setInputFiles({name:'invalid.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(invalid))});await expect(page.locator('#export-dialog #toast')).toBeVisible();await expect(page.locator('#toast')).toHaveClass(/in-dialog.*error/);expect(await plan(page)).toEqual(before);expect(await history(page)).toEqual(h);expect(await page.evaluate(()=>localStorage.getItem('ideal-study.plan.v2'))).toBe(stored);}
+  const legacyPath=path.resolve('tests/fixtures/legacy-v1.json'),legacy=JSON.parse(await readFile(legacyPath,'utf8'));await page.locator('#file-input').setInputFiles(legacyPath);await expect(page.locator('#export-dialog')).not.toBeVisible();expect(compareCore({...await plan(page),objects:(await plan(page)).objects.filter((o:any)=>o.kind!=='wallPhoto')})).toEqual(compareCore(legacy));
   await page.getByRole('combobox',{name:'切换当前物件'}).selectOption('taskLamp-1');await page.getByRole('textbox',{name:'物件名称',exact:true}).fill('旧方案里的阅读灯');await page.getByRole('textbox',{name:'物件名称',exact:true}).press('Tab');await page.getByRole('button',{name:'保存方案',exact:true}).click();const saved=await plan(page);await page.reload();await expect(page.locator('html')).toHaveAttribute('data-ready','true');expect(compareCore(await plan(page))).toEqual(compareCore(saved));await expect(page.getByRole('textbox',{name:'物件名称',exact:true})).toHaveValue('旧方案里的阅读灯');
   await writeFile(path.join(evidence,'usability.json'),JSON.stringify({timestamp:new Date().toISOString(),invalidImports:invalidPlans.length,planHistoryAndStoragePreserved:true,legacySource:'dafab5a:docs/evidence/verified-plan.json',legacyCoreExact:true,renamedLegacySavedAndRestored:true},null,2));
 });

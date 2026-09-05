@@ -1,6 +1,7 @@
 import * as T from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import { CATALOG, MATERIALS, type Item, type Kind } from './model';
+import { photoImage } from './photos';
 
 const mats = new Map<string,T.MeshStandardMaterial>();
 const geos = new Map<string,T.BufferGeometry>();
@@ -15,7 +16,7 @@ function texture(type:'wood'|'fabric') {
 let wood:T.Texture, fabric:T.Texture;
 export function material(name:string,kind?:Kind):T.MeshStandardMaterial {
   const key=name+':'+(kind||'');if(mats.has(key))return mats.get(key)!;
-  const def=MATERIALS[name];const woodLike=name==='oak'||name==='walnut';const woven=kind==='rug'||kind==='chair'||(kind==='floorLamp'&&name==='linen');
+  const def=MATERIALS[name];const woodLike=name==='oak'||name==='walnut';const woven=kind==='rug'||kind==='chair'||kind==='sofa'||(kind==='bed'&&!woodLike)||(kind==='floorLamp'&&name==='linen');
   const m=new T.MeshStandardMaterial({color:def?.color||name,roughness:woodLike?.58:woven?.95:.7,metalness:name==='silver'?.65:name==='charcoal'?.22:0});
   if(woodLike) { wood ||= texture('wood');m.map=wood;m.bumpMap=wood;m.bumpScale=.0012; }
   if(woven) {fabric ||= texture('fabric');m.map=fabric;m.bumpMap=fabric;m.bumpScale=.009;}
@@ -96,6 +97,42 @@ export function createFurniture(item:Item,preview=false):T.Group {
     box(g,.55,.11,.5,m,0,.455,0,.075);
     mesh(g,chairBack(),m,0,.72,.235);
     for(const x of [-.24,.24]){rod(g,[x,.4,-.18],[x*1.15,.008,-.23],.021,metal);rod(g,[x,.4,.18],[x*1.15,.008,.28],.021,metal);rod(g,[x,.45,0],[x,.65,0],.015,metal);rod(g,[x*.85,.45,.18],[x*.85,.65,.18],.012,metal);box(g,.065,.035,.30,oak,x,.66,-.07,.017);}
+  }
+  if(item.kind==='sofa') {
+    const feet=material('walnut'),piping=material(item.material==='linen'?'#b4a68f':item.material==='sage'?'#626f5c':'#b1806f');
+    for(const x of [-.60,.60])for(const z of [-.27,.27])cylinder(g,.033,.028,.14,feet,x,.07,z);
+    box(g,1.46,.22,.74,m,0,.24,0,.065);
+    box(g,1.5,.44,.18,m,0,.56,-.30,.06);
+    for(const x of [-.66,.66])box(g,.18,.34,.71,m,x,.44,.015,.065);
+    for(const x of [-.30,.30]){box(g,.58,.13,.55,m,x,.395,.07,.055);box(g,.55,.015,.018,piping,x,.394,.343,.007);const cushion=box(g,.53,.34,.15,m,x,.585,-.18,.055);cushion.rotation.x=-.14;}
+    const pillow=box(g,.29,.28,.13,material('#d2baa0','sofa'),-.46,.57,.08,.065);pillow.rotation.set(-.25,0,-.18);
+  }
+  if(item.kind==='bed') {
+    for(const x of [-.50,.50])for(const z of [-.82,.82])box(g,.07,.22,.07,m,x,.11,z,.012);
+    box(g,1.25,.19,2,m,0,.235,0,.03);box(g,1.25,.67,.085,m,0,.525,-.955,.028);
+    box(g,1.16,.19,1.87,material('#e4ddd0','bed'),0,.417,.012,.055);
+    box(g,1.18,.075,1.36,material('#9aa58c','bed'),0,.54,.28,.065);
+    for(const x of [-.28,.28]){const pillow=box(g,.50,.12,.36,material('#ece5d7','bed'),x,.55,-.66,.06);pillow.rotation.y=x*.07;}
+    for(const z of [.60,.64,.68])box(g,1.15,.009,.012,material('#d5cbb5','bed'),0,.582,z,.003);
+  }
+  if(item.kind==='wallPhoto') {
+    const w=item.width??1.15,h=item.height??.82;
+    box(g,w,h,.026,m,0,0,0,.005);box(g,w-.05,h-.05,.01,material('#f0e9d9'),0,0,.02,.001);
+    if(item.photo) {
+      const image=photoImage(item.photo);
+      if(!image)throw new Error('照片尚未就绪，请重新导入工程。');
+      const tex=new T.Texture(image);tex.colorSpace=T.SRGBColorSpace;tex.needsUpdate=true;
+      const photoMat=new T.MeshStandardMaterial({map:tex,roughness:.85});photoMat.name='userPhoto';
+      const ratio=image.naturalWidth/image.naturalHeight,iw=w-.12,ih=h-.12;
+      const pw=Math.min(iw,ih*ratio),ph=pw/ratio;
+      const print=mesh(g,new T.PlaneGeometry(pw,ph),photoMat,0,0,.028);print.name='userPhoto';print.castShadow=false;
+    } else {
+      const art=new T.Group();g.add(art);art.scale.set(w/1.15,h/.82,1);
+      const arch=mesh(art,new T.CircleGeometry(.25,48,0,Math.PI),material('#85917c'),0,-.08,.027);arch.castShadow=false;
+      box(art,.5,.18,.007,material('#85917c'),0,-.17,.03,.001);
+      const sun=mesh(art,new T.CircleGeometry(.098,40),material('#c49a65'),.245,.195,.027);sun.castShadow=false;
+      for(let i=0;i<4;i++)box(art,.77,.009,.009,material('#e1cfac'),0,-.11+i*.07,.042,.001);
+    }
   }
   if(item.kind==='monitor') {
     box(g,.31,.018,.22,m,0,.011,.01,.03);box(g,.045,.22,.045,m,0,.13,-.04,.012);
@@ -183,16 +220,9 @@ export function createRoom(scene:T.Scene) {
   // Sheer curtain: narrow folded geometry keeps most of the window open.
   const curtain=material('#dedacf');for(let i=0;i<10;i++){const c=cylinder(room,.027,.03,1.92,curtain,-2.48+(i%2)*.014,1.32,.64+i*.022,12);c.scale.z=.8;}
   rod(room,[-2.49,2.42,-1.23],[-2.49,2.42,1.02],.016,metalTrim());
-  // Two framed geometric prints on the back wall.
-  const art=new T.Group();art.position.set(.6,1.93,-2.177);room.add(art);
-  box(art,1.15,.82,.026,woodMat,0,0,0,.005);box(art,1.10,.77,.01,material('#f0e9d9'),0,0,.02,.001);
-  const arch=mesh(art,new T.CircleGeometry(.25,48,0,Math.PI),material('#85917c'),0,-.08,.027);arch.castShadow=false;
-  box(art,.5,.18,.007,material('#85917c'),0,-.17,.03,.001);
-  const sun=mesh(art,new T.CircleGeometry(.098,40),material('#c49a65'),.245,.195,.027);sun.castShadow=false;
-  for(let i=0;i<4;i++)box(art,.77,.009,.009,material('#e1cfac'),0,-.11+i*.07,.042,.001);
   // Under-floor gallery plinth and an infinite neutral studio ground.
   const ground=mesh(scene,new T.PlaneGeometry(200,200),material('#edece5'),0,-.255,0);ground.rotation.x=-Math.PI/2;ground.castShadow=false;ground.receiveShadow=false;
   batchRepeatedMeshes(room);return room;
 }
 function metalTrim(){return material('#7b7767');}
-export function thumbCamera(kind:Kind) { const c=CATALOG[kind];const h=c.height;return {target:new T.Vector3(0,h*.43,0),size:Math.max(c.width,c.depth,h)*1.48}; }
+export function thumbCamera(kind:Kind) { const c=CATALOG[kind];const h=c.height;return {target:new T.Vector3(0,kind==='wallPhoto'?0:h*.43,0),size:Math.max(c.width,c.depth,h)*1.48}; }

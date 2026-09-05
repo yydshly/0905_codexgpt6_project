@@ -1,5 +1,6 @@
 import './style.css';
 import './studio.css';
+import {preparePhotos} from './photos';
 import { workspaceNav } from './workspace-nav';
 import { createIcons, Box, Film, Play, Pause, SkipBack, SkipForward, Plus, ArrowUp, ArrowDown, Save, Download, Undo2, Redo2, Upload, FileJson, X, Check, Info, Camera, Focus, Move, Trash2, SlidersHorizontal, ArrowUpRight, CircleHelp, LockKeyhole, Image, CheckCheck } from 'lucide';
 import { clone } from './model';
@@ -114,7 +115,7 @@ $('#workspace-room').onclick = $('#edit-room').onclick;
 $<HTMLInputElement>('#film-name').onchange = e => { const name = (e.target as HTMLInputElement).value.trim(); if (!name) { (e.target as HTMLInputElement).value = project.name; toast('请为工程取个名字。', true); return; } mutate(() => project.name = name); };
 $('#film-json').onclick = () => { pause(); finish(); download(new Blob([JSON.stringify(project, null, 2)], { type: 'application/json' }), 'json'); toast('v2 工程已交给浏览器下载，包含房间和全部镜头。'); };
 $('#film-import').onclick = () => { pause(); $<HTMLInputElement>('#film-file').click(); };
-$<HTMLInputElement>('#film-file').onchange = async e => { const input = e.target as HTMLInputElement, file = input.files?.[0]; if (!file) return; try { if (file.size > 2 * 1024 * 1024) throw new Error('请导入小于 2 MB 的 JSON 工程。'); const result = parseFilmProject(JSON.parse(await file.text())); mutate(() => project = result.project,false); $<HTMLInputElement>('#film-name').value = project.name; toast(result.migrated ? '旧版 v1 书房已迁移为 v2 短片工程，原文件与存档保持完整。' : '工程已导入，可继续编辑；保存后刷新可恢复。'); } catch (error) { toast(error instanceof SyntaxError ? 'JSON 格式错误，当前工程未更改。' : (error as Error).message, true); } finally { input.value = ''; } };
+$<HTMLInputElement>('#film-file').onchange = async e => { const input = e.target as HTMLInputElement, file = input.files?.[0]; if (!file) return; try { if (file.size > 6 * 1024 * 1024) throw new Error('请导入小于 6 MB 的 JSON 工程。'); const result = parseFilmProject(JSON.parse(await file.text())); await preparePhotos(result.project.scene); mutate(() => project = result.project,false); $<HTMLInputElement>('#film-name').value = project.name; toast(result.migrated ? '旧版工程已迁移为 v3 短片工程，原文件与存档保持完整。' : '工程已导入，可继续编辑；保存后刷新可恢复。'); } catch (error) { toast(error instanceof SyntaxError ? 'JSON 格式错误，当前工程未更改。' : (error as Error).message, true); } finally { input.value = ''; } };
 
 const dialog = $<HTMLDialogElement>('#film-export-dialog');
 function resetExportFeedback() { $('#export-progress-wrap').hidden = true; $('#export-progress-text').textContent = ''; $<HTMLProgressElement>('#film-progress').value = 0; }
@@ -155,8 +156,9 @@ document.addEventListener('visibilitychange', () => { if (document.hidden && pla
 window.addEventListener('beforeunload', e => { if (projectSignature(project) !== saved || exporting) e.preventDefault(); });
 renderShots(); renderProperties(); renderTimeline(); syncSave(); icons();
 void detectExportFormats().then(result => { formats = result; encoderReady = true; if(dialog.open){$('#film-codec').innerHTML=formats.map(f=>`<option value="${f.id}">${f.label}</option>`).join('');$('#film-render').toggleAttribute('disabled',!scene||!formats.length);$('#codec-note').textContent=formats.length?'已检测此浏览器的实际编码支持。MP4 便于分享，WebM 适合浏览器播放。':'此浏览器不支持所需编码；仍可导出工程 JSON。';} }).catch(() => { encoderReady = true; });
-requestAnimationFrame(() => setTimeout(() => {
+requestAnimationFrame(() => setTimeout(async () => {
   try {
+    await preparePhotos(project.scene);
     scene = new StudyScene($('#film-canvas-host'), { select: () => {}, begin: () => {}, move: () => {}, end: () => {}, camera: () => {
       if (!scene || sampling || !adjusting) return; begin(); selected()[endpoint] = poseFromCamera(scene.getCamera());
       for (const key of ['azimuth', 'elevation', 'zoom'] as const) { const input = $<HTMLInputElement>(`#pose-${key}`); if (input) input.value = selected()[endpoint][key].toFixed(key === 'zoom' ? 2 : 1); } syncSave();
