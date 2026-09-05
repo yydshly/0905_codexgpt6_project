@@ -24,9 +24,25 @@ npm run build
 npm run preview
 ```
 
-生产预览地址为 **http://127.0.0.1:4173/**。自动化浏览器验收运行于此生产构建地址。`dist/` 可部署到任意静态站点托管服务；本仓库未启用线上托管。
+生产预览地址为 **http://127.0.0.1:4173/**。自动化浏览器验收运行于此生产构建地址。`dist/` 可部署到静态站点托管服务。
 
 安装依赖需要网络；应用运行时不调用云服务、不下载外部模型或字体，不需要 API 密钥。请通过 HTTP 服务访问，不要直接双击 `index.html`。
+
+## GitHub Pages 发布准备
+
+已提供仓库子路径构建、同一套 10 项浏览器验收，以及仅手动触发的 [发布工作流](.github/workflows/pages.yml)。**当前尚未启用 Pages、未触发发布、没有已上线的站点。** 启用公开站点及工作流发布权限须先由仓库所有者确认。
+
+预计地址：`https://yydshly.github.io/0905_codexgpt6_project/`。验证记录、启用步骤与权限说明见 [发布说明](docs/PAGES.md)。
+
+```bash
+npm run build:pages
+npm run preview:pages
+# 打开 http://127.0.0.1:4174/0905_codexgpt6_project/
+```
+
+停止上述预览后运行 `npm run test:pages`，可自动构建、启动并验收 Pages 子路径。发布产物在 `dist-pages/`，测试证据在 `test-results/pages-evidence/`。本地根路径开发和普通生产构建仍使用原命令。
+
+线上地址与本机开发地址的存档不互通；通过 JSON 导出、导入迁移。上线不会增加云同步，也不会上传访问者的方案。
 
 ## 使用
 

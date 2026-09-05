@@ -2,16 +2,16 @@ import { test, expect, type Page } from '@playwright/test';
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import path from 'node:path';
 
-const evidence=path.resolve('docs/evidence');
+let evidence=path.resolve('docs/evidence');
 const plan=(page:Page)=>page.evaluate(()=> (window as any).__study.getPlan());
 const history=(page:Page)=>page.evaluate(()=> (window as any).__study.history());
-async function ready(page:Page){await page.goto('/');await expect(page.locator('html')).toHaveAttribute('data-ready','true');await settle(page);}
+async function ready(page:Page){await page.goto('./');await expect(page.locator('html')).toHaveAttribute('data-ready','true');await settle(page);}
 async function settle(page:Page){await page.evaluate(()=>new Promise<void>(r=>requestAnimationFrame(()=>requestAnimationFrame(()=>r()))));}
 async function choose(page:Page,id:string){await page.keyboard.press('Escape');await page.locator(`[data-select="${id}"]`).click();}
 async function changeNumber(page:Page,label:string,value:string){await page.getByRole('spinbutton',{name:label,exact:true}).fill(value);await page.getByRole('spinbutton',{name:label,exact:true}).press('Tab');}
 async function shot(page:Page,file:string){await settle(page);await page.screenshot({path:path.join(evidence,file)});}
 function compareCore(value:any){return {name:value.name,mood:value.mood,objects:value.objects,camera:value.camera};}
-test.beforeAll(async()=>{await mkdir(evidence,{recursive:true});});
+test.beforeAll(async({},testInfo)=>{evidence=path.resolve(testInfo.config.metadata.evidenceDir||'docs/evidence');await mkdir(evidence,{recursive:true});});
 test.beforeEach(async({page})=>{page.on('dialog',dialog=>dialog.accept());});
 
 test('完整验收：添加、拖动、旋转、灯光、材质、历史、本地恢复、PNG、JSON',async({page,browser})=>{
@@ -98,7 +98,7 @@ test('多视角、两种桌面尺寸、黄昏、键盘和真实帧时测量',asy
 
 test('无 WebGL 时保留 JSON 备份能力，并明确提示',async({page})=>{
   await page.addInitScript(()=>{const original=HTMLCanvasElement.prototype.getContext;HTMLCanvasElement.prototype.getContext=function(type:string,...args:any[]):any {if(type==='webgl'||type==='webgl2'||type==='experimental-webgl')return null;return original.apply(this,[type,...args] as any);};});
-  await page.goto('/');await expect(page.locator('html')).toHaveAttribute('data-ready','error');await expect(page.getByText('暂时无法打开 3D 空间')).toBeVisible();await page.getByRole('button',{name:'导出',exact:true}).click();const event=page.waitForEvent('download');await page.locator('#export-json').click();const downloaded=await event;expect(downloaded.suggestedFilename()).toMatch(/\.json$/);await page.locator('#export-png').click();await expect(page.locator('#toast')).toContainText('3D 渲染不可用');
+  await page.goto('./');await expect(page.locator('html')).toHaveAttribute('data-ready','error');await expect(page.getByText('暂时无法打开 3D 空间')).toBeVisible();await page.getByRole('button',{name:'导出',exact:true}).click();const event=page.waitForEvent('download');await page.locator('#export-json').click();const downloaded=await event;expect(downloaded.suggestedFilename()).toMatch(/\.json$/);await page.locator('#export-png').click();await expect(page.locator('#toast')).toContainText('3D 渲染不可用');
 });
 
 test('浏览器存储失败给出真实失败反馈，不伪报保存',async({page})=>{

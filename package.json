@@ -6,8 +6,11 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1 --port 5173 --strictPort",
     "build": "tsc --noEmit && vite build",
+    "build:pages": "tsc --noEmit && vite build --mode pages --outDir dist-pages",
     "preview": "vite preview --host 127.0.0.1 --port 4173 --strictPort",
-    "test": "playwright test"
+    "preview:pages": "vite preview --mode pages --outDir dist-pages --host 127.0.0.1 --port 4174 --strictPort",
+    "test": "playwright test",
+    "test:pages": "playwright test --config playwright.pages.config.ts"
   },
   "dependencies": {
     "lucide": "0.468.0",

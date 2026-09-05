@@ -1,5 +1,6 @@
 node_modules/
 dist/
+dist-pages/
 .scratch/
 test-results/
 playwright-report/
