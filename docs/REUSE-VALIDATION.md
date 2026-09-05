@@ -41,10 +41,10 @@
 
 ## 慢速环境修正与兼容边界
 
-前一分支的 GitHub Actions `33949187559` 已结束失败，不能用本机测试替代它。本轮修正：视频逐帧向事件循环让出执行权，使慢速 GPU 上的取消输入不再等待三个画面；暂停测试先回到开头，避免慢速点击跨过片尾；完整 10.2 秒主流程在 CI 中允许更长编码时间。额外 VP9 / VP8 格式探针在 CI 中通过真实编辑器改成 3 秒、90 帧，明确与本地默认 10 秒、300 帧分开命名。未改变产品导出的默认尺寸、帧率或采样器。
+前一分支的 GitHub Actions `33949187559` 已结束失败，不能用本机测试替代它。本轮修正：视频逐帧向事件循环让出执行权，使慢速 GPU 上的取消输入不再等待三个画面；暂停测试先回到开头，避免慢速点击跨过片尾；完整 10.2 秒主流程在 CI 中允许更长编码时间。本机另以真实 SwiftShader 软件 WebGL 启动 Chrome 152：取消用时 1,803 ms，工程逐字段不变，没有显示伪成功结果，见 reuse-evidence/software-cancel.json。额外 VP9 / VP8 格式探针在 CI 中通过真实编辑器改成 3 秒、90 帧，明确与本地默认 10 秒、300 帧分开命名。未改变产品导出的默认尺寸、帧率或采样器。
 
 GitHub Pages 子路径 http://127.0.0.1:4174/0905_codexgpt6_project/ 的 4 项复用与迁移测试通过，含整屋 / 单件 GLB、JSON 与 iframe 路由。命令：npx playwright test --config playwright.pages.config.ts tests/reuse.spec.ts。实际统计与产物哈希见 reuse-evidence/acceptance.json。
 
-本分支云端运行 https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33950790993 尚在执行，收尾时填入结论，不宣称已通过。
+首次串行云端运行 https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33950790993 被 25 分钟任务时限中止：18 项通过、取消按钮点击等待超时 1 项、最后 2 项未完成。完整 10.2 秒视频及全部 4 项新增复用流程已通过。随后为超过 100 ms 的帧增加 50 ms 输入窗口，取消在主指针按下时即响应，同时保留键盘 click；将同一批测试分为 3 个独立任务，保持全部验收覆盖和完整 10.2 秒主流程。新版云端结论在收尾时记录。
 
 已知限制：完整手机编辑、其他浏览器、真实跨域宿主、React / Vue 生产应用、原生 WebView、Blender / Unity / Unreal 均未在本轮实测。GLB 的照明、bump 与后期不能保证和网页一致；照片限制在背墙，最多 3 个；手动移动可造成家具相交，未增加物理 / CAD。浏览器配额不足时会提示失败，JSON 是备份途径。账号、云同步、付费发布、npm 包发布均未实施。

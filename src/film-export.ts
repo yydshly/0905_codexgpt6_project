@@ -28,13 +28,15 @@ export async function encodeFilm(scene: StudyScene, project: FilmProject, format
     await output.start();
     for (let frame = 0; frame < frames; frame++) {
       signal.throwIfAborted();
+      const frameStarted=performance.now();
       const sample = sampleFilm(project, frame / FPS);
       capture.render(sample.camera);
       signal.throwIfAborted();
       await source.add(frame / FPS, 1 / FPS, { keyFrame: frame === 0 || sample.progress === 0 });
       progress(frame + 1, frames);
-      // Yield every frame so cancel/input can run on slow software WebGL renderers.
-      await new Promise<void>(r => setTimeout(r, 0));
+      // A zero-delay task alone can starve browser input during software GPU readback.
+      // Slow frames leave a real input/paint window; timestamps and pixels stay unchanged.
+      await new Promise<void>(r => setTimeout(r, performance.now()-frameStarted>100?50:0));
     }
     signal.throwIfAborted();
     await output.finalize();

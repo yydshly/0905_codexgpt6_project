@@ -125,6 +125,7 @@ $('#film-close-export').onclick = () => { if (!exporting) dialog.close(); };
 dialog.addEventListener('cancel', e => { if (exporting) { e.preventDefault(); abort?.abort(); } });
 dialog.addEventListener('close', () => { $<HTMLVideoElement>('#film-video').pause(); $('#film-export').focus(); });
 $('#film-cancel').onclick = () => abort?.abort();
+$('#film-cancel').onpointerdown = e => { if(e.button===0)abort?.abort(); };
 $('#film-download').onclick = () => { if (videoBlob) download(videoBlob, videoExtension, $('#film-video').dataset.name); };
 $('#film-render').onclick = async () => {
   if (!scene || exporting) return; const format = formats.find(f => f.id === $<HTMLSelectElement>('#film-codec').value); if (!format) return;

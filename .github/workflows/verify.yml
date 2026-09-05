@@ -12,6 +12,10 @@ jobs:
   browser-acceptance:
     runs-on: ubuntu-latest
     timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [film-export, film-controls, room-reuse]
     steps:
       - uses: actions/checkout@v7.0.1
       - uses: actions/setup-node@v7.0.0
@@ -21,12 +25,20 @@ jobs:
       - run: npm ci
       - run: npx playwright install --with-deps chromium
       - run: npm audit --audit-level=high
-      - run: npm test
+      - name: Full ten-second film export and actual replay
+        if: matrix.suite == 'film-export'
+        run: npx playwright test tests/film.spec.ts --grep '短片完整验收'
+      - name: Film controls and additional codec probes
+        if: matrix.suite == 'film-controls'
+        run: npx playwright test tests/film.spec.ts --grep-invert '短片完整验收'
+      - name: Room editing and reusable assets
+        if: matrix.suite == 'room-reuse'
+        run: npx playwright test tests/study.spec.ts tests/reuse.spec.ts
       - name: Keep actual browser evidence
         if: always()
         uses: actions/upload-artifact@v7.0.1
         with:
-          name: browser-acceptance-evidence
+          name: browser-acceptance-${{ matrix.suite }}
           path: |
             test-results/
             docs/evidence/
