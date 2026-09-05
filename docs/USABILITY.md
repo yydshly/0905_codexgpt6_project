@@ -53,7 +53,7 @@ Windows 11、Chrome 152.0.7977.82 headless、Intel UHD / ANGLE D3D11、DPR 1；�
 
 开发服务曾返回未更新的 CSS，而磁盘源码与生产构建已是新版。启用 Windows 文件轮询后，实际 HTTP 响应及浏览器样式均与源码一致；此设置仅影响开发服务。
 
-GitHub 最终验证：[Actions 33943588111](https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33943588111)。最终代码 **10/10 通过**，测试约 **5.6 分钟**，完整工作流 **6 分 16 秒**，截图与测试记录已上传为 Actions artifact。CI 软件渲染数据与上述本地硬件数据分开。
+GitHub 最终验证：[Actions 33943588111](https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33943588111)。最终代码 **10/10 通过**，测试约 **5.7 分钟**，完整工作流 **6 分 16 秒**，截图与测试记录已上传为 Actions artifact。CI 软件渲染数据与上述本地硬件数据分开。
 
 ## 边界
 

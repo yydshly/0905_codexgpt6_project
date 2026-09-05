@@ -101,7 +101,7 @@ JSON 下载原件：[verified-plan.json](evidence/verified-plan.json)。测试�
 - 最终代码提交 `96cff0f`（包含异常 JSON 编号校验）再次完成 [GitHub Actions 第 33920893295 次运行](https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33920893295)：6/6 通过，完整工作流 4 分 19 秒。这是初轮通过记录；第二轮代码与结果另见 [优化报告](REFINEMENT.md)。
 - 第二轮最终源码 `9ccc492` 的 [GitHub Actions 第 33930945834 次运行](https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33930945834) **8/8 通过**，测试约 5.0 分钟、完整工作流 5 分 42 秒。这是第二轮记录；第三轮最终验证见 [使用体验优化报告](USABILITY.md)。
 
-- 第三轮最终源码 `498fc1b` 的 [GitHub Actions 第 33943588111 次运行](https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33943588111) **10/10 通过**，测试约 5.6 分钟、完整工作流 6 分 16 秒。后续提交只更新文档和证据。
+- 第三轮最终源码 `498fc1b` 的 [GitHub Actions 第 33943588111 次运行](https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33943588111) **10/10 通过**，测试约 5.7 分钟、完整工作流 6 分 16 秒。后续提交只更新文档和证据。
 
 ## 已知边界与未验证项
 
