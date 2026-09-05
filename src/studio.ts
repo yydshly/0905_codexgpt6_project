@@ -7,6 +7,9 @@ import { clone } from './model';
 import { StudyScene } from './scene';
 import { FPS, POSE_LIMITS, TARGET_LIMITS, cameraForPose, clamp, createFilmProject, loadFilmProject, parseFilmProject, poseFromCamera, projectSignature, sampleFilm, shotStart, storeFilmProject, totalDuration, type FilmProject, type Pose } from './film-model';
 import { detectExportFormats, encodeFilm, type ExportFormat } from './film-export';
+import { projectSession } from './project-session';
+import { mountProjectMenu } from './project-menu';
+import { captureThumbnail } from './project-thumbnail';
 
 const ICONS = { Box, Film, Play, Pause, SkipBack, SkipForward, Plus, ArrowUp, ArrowDown, Save, Download, Undo2, Redo2, Upload, FileJson, X, Check, Info, Camera, Focus, Move, Trash2, SlidersHorizontal, ArrowUpRight, CircleHelp, LockKeyhole, Image, CheckCheck };
 const icon = (name: string) => `<i data-lucide="${name.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()}" aria-hidden="true"></i>`;
@@ -14,7 +17,9 @@ const icons = () => createIcons({ icons: ICONS, attrs: { 'stroke-width': 1.6 } }
 const $ = <T extends HTMLElement = HTMLElement>(q: string) => document.querySelector<T>(q)!;
 const esc = (s: string) => s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[c]!));
 const timecode = (t: number) => `${String(Math.floor(t)).padStart(2, '0')}:${String(Math.round(t * FPS) % FPS).padStart(2, '0')}`;
-const loaded = loadFilmProject();
+const session=await projectSession();
+const loaded = session?{project:clone(session.record.project),restored:true,message:''}:loadFilmProject();
+let leaving=false,saving:Promise<boolean>|null=null;
 let project = loaded.project, saved = loaded.restored ? projectSignature(project) : '';
 let scene: StudyScene | undefined, playing = false, adjusting = false, sampling = false, exporting = false;
 let endpoint: 'start' | 'end' = 'start', frameHandle = 0, playOrigin = 0, playStart = 0;
@@ -102,7 +107,10 @@ function renderTimeline() {
   $<HTMLInputElement>('#film-scrub').max = String(Math.round(total * FPS));
 }
 function undo(redo = false) { pause(); setAdjust(false); finish(); const from = redo ? future : past, to = redo ? past : future; if (!from.length) return; to.push(clone(project)); project = from.pop()!; endpoint = 'start'; $('#film-name').setAttribute('value', project.name); $<HTMLInputElement>('#film-name').value = project.name; refresh(true); toast(redo ? '已重做' : '已撤销上一步'); }
-function save(): boolean { pause(); finish(); try { storeFilmProject(project); saved = projectSignature(project); syncSave(); $('#film-save-state').textContent = '已保存到本地'; toast('工程已保存到当前浏览器，刷新后可恢复。'); return true; } catch { toast('本地保存失败，请导出工程 JSON 备份。', true); return false; } }
+function save():Promise<boolean>{
+  if(saving)return saving;pause();setAdjust(false);finish();const snapshot=clone(project);
+  saving=(async()=>{try{if(session){snapshot.scene.name=snapshot.name;let thumbnail:string|undefined;try{thumbnail=captureThumbnail(scene);}catch{}await session.save(snapshot,thumbnail);project.scene.name=snapshot.scene.name;}else storeFilmProject(snapshot);saved=projectSignature(snapshot);syncSave();if(projectSignature(project)===saved)$('#film-save-state').textContent='已保存到本地';toast(session?`已保存到工程库 · 版本 ${session.record.revision}`:'工程已保存到当前浏览器，刷新后可恢复。');return true;}catch(error){toast('本地保存失败：'+(error as Error).message,true);return false;}})().finally(()=>{saving=null;});return saving;
+}
 function download(blob: Blob, extension: string, name = project.name) { const url = URL.createObjectURL(blob), a = document.createElement('a'); a.href = url; a.download = name.replace(/[\\/:*?"<>|]/g, '-') + '.' + extension; a.click(); setTimeout(() => URL.revokeObjectURL(url), 10000); }
 
 // A slow render can update transport descendants between down/up. Pause as soon
@@ -115,9 +123,10 @@ $<HTMLInputElement>('#film-scrub').oninput = e => seek(Number((e.target as HTMLI
 $('#shot-list').onclick = $('#timeline-clips').onclick = e => { const button = (e.target as HTMLElement).closest<HTMLElement>('[data-shot]'); if (button) choose(button.dataset.shot!); };
 $('#shot-add').onclick = () => { if (project.film.shots.length >= 3) return; mutate(() => { const shot = clone(selected()); shot.id = crypto.randomUUID(); shot.name = '新的观察'; project.film.shots.push(shot); project.selectedShotId = shot.id; }); };
 $('#film-undo').onclick = () => undo(); $('#film-redo').onclick = () => undo(true); $('#film-save').onclick = save;
-$('#edit-room').onclick = () => { if (save()) location.href = '?workspace=room&project=film'; };
+$('#edit-room').onclick = async () => { if (await save()) location.href = session?.url('room')??'?workspace=room&project=film'; };
 $('#workspace-room').onclick = $('#edit-room').onclick;
-$('#workspace-portfolio').onclick=()=>{if(save())location.href='?workspace=portfolio&project=film';};
+$('#workspace-portfolio').onclick=async()=>{if(await save())location.href=session?.url('portfolio')??'?workspace=portfolio&project=film';};
+mountProjectMenu({host:$('.film-header'),id:session?.record.id,workspace:'film',getProject:()=>clone(project),save,thumbnail:()=>captureThumbnail(scene),beforeOpen:()=>{pause();finish();},leave:()=>{leaving=true;}});
 $<HTMLInputElement>('#film-name').onchange = e => { const name = (e.target as HTMLInputElement).value.trim(); if (!name) { (e.target as HTMLInputElement).value = project.name; toast('请为工程取个名字。', true); return; } mutate(() => project.name = name); };
 $('#film-json').onclick = () => { pause(); finish(); download(new Blob([JSON.stringify(project, null, 2)], { type: 'application/json' }), 'json'); toast('v2 工程已交给浏览器下载，包含房间和全部镜头。'); };
 $('#film-import').onclick = () => { pause(); $<HTMLInputElement>('#film-file').click(); };
@@ -150,7 +159,7 @@ $('#film-render').onclick = async () => {
 };
 
 document.addEventListener('keydown', e => {
-  if (dialog.open || exporting) return; const editing = (e.target as HTMLElement).matches('input,select,textarea,[contenteditable]');
+  if (document.querySelector('dialog[open]') || exporting) return; const editing = (e.target as HTMLElement).matches('input,select,textarea,[contenteditable]');
   if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') { e.preventDefault(); if (editing) (e.target as HTMLElement).blur(); save(); return; }
   if (editing) return;
   if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') { e.preventDefault(); undo(e.shiftKey); return; }
@@ -160,7 +169,7 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape') { pause(); setAdjust(false); }
 });
 document.addEventListener('visibilitychange', () => { if (document.hidden && playing) pause(); });
-window.addEventListener('beforeunload', e => { if (projectSignature(project) !== saved || exporting) e.preventDefault(); });
+window.addEventListener('beforeunload', e => { if (!leaving&&(projectSignature(project) !== saved || exporting)) e.preventDefault(); });
 renderShots(); renderProperties(); renderTimeline(); syncSave(); icons();
 void detectExportFormats().then(result => { formats = result; encoderReady = true; if(dialog.open){$('#film-codec').innerHTML=formats.map(f=>`<option value="${f.id}">${f.label}</option>`).join('');$('#film-render').toggleAttribute('disabled',!scene||!formats.length);$('#codec-note').textContent=formats.length?'已检测此浏览器的实际编码支持。MP4 便于分享，WebM 适合浏览器播放。':'此浏览器不支持所需编码；仍可导出工程 JSON。';} }).catch(() => { encoderReady = true; });
 requestAnimationFrame(() => setTimeout(async () => {

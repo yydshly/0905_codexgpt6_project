@@ -7,7 +7,8 @@ const routes:Record<string,()=>Promise<unknown>>={
   embed:()=>import('./embed'),
   integration:()=>import('./integration'),
   portfolio:()=>import('./portfolio'),
+  projects:()=>import('./projects'),
 };
 void (Object.hasOwn(routes,workspace)?routes[workspace]:routes.film)().catch(error=>{
-  const app=document.querySelector('#app');if(app)app.textContent='页面加载失败，请刷新重试。';console.error(error);
+  const app=document.querySelector('#app');if(app){app.replaceChildren();const message=document.createElement('p'),link=document.createElement('a');message.textContent='页面无法打开：'+(error as Error).message;link.textContent='返回我的工程';link.href='?workspace=projects';app.append(message,link);}console.error(error);
 });

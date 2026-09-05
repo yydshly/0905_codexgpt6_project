@@ -7,6 +7,10 @@ import { StudyScene } from './scene';
 import { loadFilmProject, storeFilmProject } from './film-model';
 import { mountPortfolioEditor } from './portfolio-editor';
 import { removeMissingBindings, validateMediaBudget } from './portfolio-model';
+import { projectSession } from './project-session';
+import { mountProjectMenu } from './project-menu';
+import { captureThumbnail } from './project-thumbnail';
+import { createFilmProject } from './film-model';
 
 const ICONS={Box,ChevronDown,ArrowUpRight,Undo2,Redo2,Download,Save,MousePointer2,Orbit,ZoomIn,ZoomOut,RotateCcw,Move,RotateCw,Trash2,X,Sun,Sunset,Moon,Check,Plus,SlidersHorizontal,Layers3,Grid2X2,Maximize,Focus,Upload,Image,FileJson,ArrowLeft,Lightbulb,LockKeyhole,Info,Command,CheckCheck,Leaf,PanelLeftClose,Table2,Armchair,Monitor,LibraryBig,LampDesk,LampFloor,Sprout,RectangleHorizontal,Pencil,BedDouble};
 const icon=(name:string,cls='')=>`<i data-lucide="${name.replace(/([a-z0-9])([A-Z])/g,'$1-$2').toLowerCase()}" class="${cls}" aria-hidden="true"></i>`;
@@ -14,8 +18,10 @@ const icons=()=>createIcons({icons:ICONS,attrs:{'stroke-width':1.6}});
 const $=<T extends HTMLElement=HTMLElement>(selector:string)=>document.querySelector<T>(selector)!;
 const escapeHTML=(s:string)=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]!));
 const STORAGE=ROOM_STORAGE;
-const filmRoom=new URLSearchParams(location.search).get('project')==='film';
-const filmProject=filmRoom?loadFilmProject().project:null;
+const session=await projectSession();
+const filmRoom=!!session||new URLSearchParams(location.search).get('project')==='film';
+const filmProject=session?clone(session.record.project):filmRoom?loadFilmProject().project:null;
+let leaving=false,saving:Promise<boolean>|null=null;
 let plan=initialPlan(),savedSignature='',restored=false,loadError='';
 try{const raw=localStorage.getItem(STORAGE)??localStorage.getItem('ideal-study.plan.v2')??localStorage.getItem('ideal-study.plan.v1');if(raw){const stored=JSON.parse(raw);plan=parsePlan(stored.plan);savedSignature=signature(plan);restored=true;}}catch{loadError='本地方案无法读取，已安全打开默认书房。原始存档未被覆盖。';}
 if(filmProject){plan=clone(filmProject.scene);savedSignature=signature(plan);restored=true;}
@@ -104,13 +110,18 @@ function rotate(delta:number){const o=current();if(o&&o.kind!=='wallPhoto')mutat
 function remove(){const o=current();if(!o)return;mutate(()=>{plan.objects=plan.objects.filter(item=>item.id!==o.id&&item.parentId!==o.id);removeMissingBindings(plan);plan.selectedId=null;});toast(`已移除${CATALOG[o.kind].name}，可撤销恢复`);}
 function undo(){finish();if(!past.length)return;future.push(clone(plan));plan=past.pop()!;scene?.applyCamera(plan.camera);$<HTMLInputElement>('#plan-name').value=plan.name;refresh();toast('已撤销上一步');}
 function redo(){finish();if(!future.length)return;past.push(clone(plan));plan=future.pop()!;scene?.applyCamera(plan.camera);$<HTMLInputElement>('#plan-name').value=plan.name;refresh();toast('已重做');}
-function save(){finish();if(scene)plan.camera=scene.getCamera();try{if(filmProject){filmProject.scene=clone(plan);storeFilmProject(filmProject);}else localStorage.setItem(STORAGE,JSON.stringify({plan,savedAt:new Date().toISOString()}));savedSignature=signature(plan);saveLabel='已保存到本地';refresh(false);toast(filmProject?'房间已保存到短片工程，可返回工作台继续。':'方案已保存到当前浏览器，刷新后可恢复');return true;}catch{toast('本地保存失败，浏览器存储不可用或已满。请导出 JSON 备份。',true);return false;}}
+function currentProject(){const p=filmProject?clone(filmProject):createFilmProject(plan);p.scene=clone(plan);if(session||!filmProject)p.name=plan.name;return p;}
+function save():Promise<boolean>{
+  if(saving)return saving;finish();if(scene)plan.camera=scene.getCamera();const snapshot=clone(plan),project=currentProject();
+  saving=(async()=>{try{if(session){let thumbnail:string|undefined;try{thumbnail=captureThumbnail(scene);}catch{}await session.save(project,thumbnail);}else if(filmProject){filmProject.scene=snapshot;storeFilmProject(filmProject);}else localStorage.setItem(STORAGE,JSON.stringify({plan:snapshot,savedAt:new Date().toISOString()}));savedSignature=signature(snapshot);saveLabel='已保存到本地';refresh(false);toast(session?`已保存到工程库 · 版本 ${session.record.revision}`:filmProject?'房间已保存到短片工程，可返回工作台继续。':'方案已保存到当前浏览器，刷新后可恢复');return true;}catch(error){toast('本地保存失败：'+(error as Error).message,true);return false;}})().finally(()=>{saving=null;});return saving;
+}
 function download(blob:Blob,extension:string){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=(plan.name.replace(/[\\/:*?"<>|]/g,'-')||'理想书房')+'.'+extension;a.click();window.setTimeout(()=>URL.revokeObjectURL(url),10000);}
 function updateCameraUI(){if(!scene)return;const view=scene.getView();document.querySelectorAll<HTMLElement>('[data-view]').forEach(b=>{const active=b.dataset.view===view;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));});$('#zoom-in').toggleAttribute('disabled',scene.camera.zoom>=CAMERA_LIMITS.maxZoom);$('#zoom-out').toggleAttribute('disabled',scene.camera.zoom<=CAMERA_LIMITS.minZoom);}
 function setMode(mode:'edit'|'orbit'){scene?.setMode(mode);$('#edit-mode').setAttribute('aria-pressed',String(mode==='edit'));$('#orbit-mode').setAttribute('aria-pressed',String(mode==='orbit'));$('#edit-mode').classList.toggle('active',mode==='edit');$('#orbit-mode').classList.toggle('active',mode==='orbit');$('#stage-hint').innerHTML=mode==='edit'?`${icon('MousePointer2')}点击选择 · 拖动物件移动<span>右键拖动观察 · 滚轮缩放</span>`:`${icon('Orbit')}拖动旋转观察 · 滚轮缩放<span>切回「布置」即可编辑物件</span>`;icons();}
 $('#undo').onclick=undo;$('#redo').onclick=redo;$('#save').onclick=save;
-$('#workspace-film').onclick=()=>{if(save())location.href='?workspace=film';};
-$('#workspace-portfolio').onclick=()=>{if(save())location.href='?workspace=portfolio&project='+(filmRoom?'film':'room');};
+$('#workspace-film').onclick=async()=>{if(await save())location.href=session?.url('film')??'?workspace=film';};
+$('#workspace-portfolio').onclick=async()=>{if(await save())location.href=session?.url('portfolio')??'?workspace=portfolio&project='+(filmRoom?'film':'room');};
+mountProjectMenu({host:$('.topbar'),id:session?.record.id,workspace:'room',getProject:currentProject,save,thumbnail:()=>captureThumbnail(scene),beforeOpen:()=>finish(),leave:()=>{leaving=true;}});
 $('#edit-mode').onclick=()=>setMode('edit');$('#orbit-mode').onclick=()=>setMode('orbit');
 $('#zoom-in').onclick=()=>scene?.zoom(.15);$('#zoom-out').onclick=()=>scene?.zoom(-.15);
 $('#reset-view').onclick=()=>{scene?.view('default');updateCameraUI();};
@@ -133,7 +144,7 @@ $('#import-json').onclick=()=>$<HTMLInputElement>('#file-input').click();
 $<HTMLInputElement>('#file-input').onchange=async e=>{const input=e.target as HTMLInputElement,file=input.files?.[0];if(!file)return;try{if(file.size>MAX_JSON_BYTES)throw new Error('文件过大，请导入小于 6 MB 的 JSON 方案。');const imported=parsePlan(JSON.parse(await file.text()));await preparePhotos(imported);mutate(()=>{plan=imported;});scene?.applyCamera(plan.camera);$<HTMLInputElement>('#plan-name').value=plan.name;dialog.close();toast('方案已导入，可继续编辑；请保存以保留到本地');}catch(e){toast(e instanceof SyntaxError?'JSON 格式错误，当前方案未更改。':(e as Error).message,true);}finally{input.value='';}};
 $('#open-library').onclick=()=>document.body.classList.add('library-open');document.querySelectorAll<HTMLElement>('[data-close-panel]').forEach(b=>b.onclick=()=>document.body.classList.remove('library-open'));
 document.addEventListener('keydown',e=>{
-  if(document.querySelector('.portfolio-config[open]')){if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='s')e.preventDefault();return;}
+  if(document.querySelector('.portfolio-config[open],.project-manager-dialog[open]')){if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='s')e.preventDefault();return;}
   const editing=(e.target as HTMLElement).matches('input,textarea,select,[contenteditable]');
   if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='s'){e.preventDefault();if(editing)(e.target as HTMLElement).blur();save();return;}
   if(editing||document.querySelector('dialog[open]'))return;
@@ -145,7 +156,7 @@ document.addEventListener('keydown',e=>{
   if(e.key.toLowerCase()==='v')setMode('edit');if(e.key.toLowerCase()==='c')setMode('orbit');
   const o=current();if(o&&['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)){e.preventDefault();const d=e.shiftKey?.5:.1;mutate(()=>updateItem(plan,o.id,{x:o.x+(e.key==='ArrowLeft'?-d:e.key==='ArrowRight'?d:0),...(o.kind==='wallPhoto'?{y:o.y!+(e.key==='ArrowUp'?d:e.key==='ArrowDown'?-d:0)}:{z:o.z+(e.key==='ArrowUp'?-d:e.key==='ArrowDown'?d:0)})},true));}
 });
-window.addEventListener('beforeunload',e=>{if(signature(plan)!==savedSignature){e.preventDefault();}});
+window.addEventListener('beforeunload',e=>{if(!leaving&&signature(plan)!==savedSignature){e.preventDefault();}});
 
 renderCatalog();refresh();
 requestAnimationFrame(()=>{window.setTimeout(async()=>{
