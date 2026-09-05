@@ -2,6 +2,8 @@
 
 一间可编辑、可拍摄，也可作为个人作品主页的 3D 书房。支持 11 类物件、最多 3 段短片镜头、作品关联、多工程与保存版本，以及图片、视频、模型和独立网站导出。
 
+本分支 `codex/character-guide` 新增「小禾角色导览」可运行原型：原创风格化角色、绕开家具行走、阅读随身手册与屏幕介绍、两段时间轴、设置与历史、本地导览快照、JSON、真实视频和独立导览网站包。默认 16 秒，保留原有全部工作区。[原型说明与验证记录](docs/CHARACTER-GUIDE.md)。此分支尚未合并或部署到线上主站。
+
 主分支 `main` 汇总此前各阶段成果。当前发布包括工程库使用帮助、带备份与确认的工程删除，以及「不保存，返回工程库」。[本次发布总结与线上验收](docs/RELEASE-2026-09-05.md)。
 
 公开入口：[我的工程](https://yydshly.github.io/0905_codexgpt6_project/?workspace=projects) · [默认短片](https://yydshly.github.io/0905_codexgpt6_project/) · [作品展示示例](https://yydshly.github.io/0905_codexgpt6_project/?workspace=portfolio)。本机与线上存档分开，带走现有工程请在本机备份 JSON，再在线上导入。
@@ -11,12 +13,13 @@
 Node.js 22.12+，支持 WebGL 2 的桌面浏览器：
 
 ```bash
-git switch main
+git switch codex/character-guide  # 原版请使用 main
 npm ci
 npm run dev
 ```
 
 - [我的工程](http://127.0.0.1:5173/?workspace=projects)：管理多套方案、复制、另存为、保存版本与恢复、删除与使用帮助。
+- [角色导览原型](http://127.0.0.1:5173/?workspace=guide)：点击播放体验小禾的两段作品导览；从作品展示顶部进入会带上当前房间和作品关联，也可导入已有 JSON。
 - [布置书房](http://127.0.0.1:5173/?workspace=room)：快速工作区。选中任意家具，在右侧「作品入口」配置作品。管理多套方案请从工程库进入。
 - [作品展示示例](http://127.0.0.1:5173/?workspace=portfolio)：直接点击书籍或屏幕、标记或作品列表，打开项目详情。
 - [短片工作台](http://127.0.0.1:5173/?workspace=film)：默认入口，已编排 10 秒作品，支持最多 3 段镜头与真实视频导出。

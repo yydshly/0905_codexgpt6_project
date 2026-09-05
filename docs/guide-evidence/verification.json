@@ -1,0 +1,561 @@
+{
+  "recordedAt": "2026-09-05T16:06:26.700Z",
+  "baseCommit": "40954bc1d0df81c4f89b918a2304e6d35b6cf527",
+  "verifiedCases": 44,
+  "legacy": {
+    "command": "npm test",
+    "origin": "http://127.0.0.1:4173/",
+    "passed": 39,
+    "tests": [
+      {
+        "file": "film.spec.ts",
+        "title": "短片完整验收：修改第二镜头、播放、保存刷新、真实视频下载并打开检查",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 35974
+          }
+        ]
+      },
+      {
+        "file": "film.spec.ts",
+        "title": "镜头时序、排序、撤销重做、连续机位拖动与确定性拖动播放头",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 5062
+          }
+        ]
+      },
+      {
+        "file": "film.spec.ts",
+        "title": "v1 迁移、非法工程保护、工程内房间编辑及旧存档隔离",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 6020
+          }
+        ]
+      },
+      {
+        "file": "film.spec.ts",
+        "title": "视频取消恢复、无编码降级、低动态和窄屏预览",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 2748
+          }
+        ]
+      },
+      {
+        "file": "film.spec.ts",
+        "title": "无 WebGL 时仍能保存和导出工程，存储失败给出错误",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 894
+          }
+        ]
+      },
+      {
+        "file": "film.spec.ts",
+        "title": "顶部工作区入口可见，保存房间并返回同一短片，失败时留在当前页",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 9383
+          }
+        ]
+      },
+      {
+        "file": "film.spec.ts",
+        "title": "默认自动播放、性能测量与浏览器支持的 WebM 格式实际编码回放",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 34613
+          }
+        ]
+      },
+      {
+        "file": "portfolio.spec.ts",
+        "title": "作品闭环：配置、模型点击、移动材质历史、恢复、JSON、GLB 与宿主接入",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 21507
+          }
+        ]
+      },
+      {
+        "file": "portfolio.spec.ts",
+        "title": "作品错误、取消关联与历史、旧版房间和短片迁移",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 5906
+          }
+        ]
+      },
+      {
+        "file": "portfolio.spec.ts",
+        "title": "展示页窄屏、键盘焦点、夜间、无 WebGL 降级与空状态",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 2019
+          }
+        ]
+      },
+      {
+        "file": "portfolio.spec.ts",
+        "title": "展示性能、可见性遮挡与原始模型导出的部位标识",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 2516
+          }
+        ]
+      },
+      {
+        "file": "portfolio.spec.ts",
+        "title": "上一版 v2 房间和 v3 短片本地存档升级，保留原始字节",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 5214
+          }
+        ]
+      },
+      {
+        "file": "projects.spec.ts",
+        "title": "旧房间与短片分别迁入、内容不变、重开去重、后续快速存档保留为新工程",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 3106
+          }
+        ]
+      },
+      {
+        "file": "projects.spec.ts",
+        "title": "多工程完整闭环：新建、另存为、复制、跨视图、保存版本恢复与分别发布",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 17394
+          }
+        ]
+      },
+      {
+        "file": "projects.spec.ts",
+        "title": "并发保存冲突保留两边修改、失败后可另存为，未改动保存不增加版本",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 5208
+          }
+        ]
+      },
+      {
+        "file": "projects.spec.ts",
+        "title": "无效导入、数据库不可用、真实事务回滚和键盘焦点",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 4653
+          }
+        ]
+      },
+      {
+        "file": "projects.spec.ts",
+        "title": "缩略图不可用时仍能管理工程、配额错误回滚与工程库加载测量",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 4318
+          }
+        ]
+      },
+      {
+        "file": "projects.spec.ts",
+        "title": "删除工程：取消、备份、全部版本清理、其他工程完整与空状态",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 3156
+          }
+        ]
+      },
+      {
+        "file": "projects.spec.ts",
+        "title": "删除失败回滚、并发更新保护、被删工程旧标签页仍可另存为",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 4443
+          }
+        ]
+      },
+      {
+        "file": "projects.spec.ts",
+        "title": "删除迁入工程后刷新不复活原存档，快速存档原始字节保留",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 791
+          }
+        ]
+      },
+      {
+        "file": "projects.spec.ts",
+        "title": "不保存返回：三个工作页面、放弃与取消、存档版本不变、保存失败可离开",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 10010
+          }
+        ]
+      },
+      {
+        "file": "publish.spec.ts",
+        "title": "全部 11 类物件整体关联、双部位优先级、历史和旧配置迁移",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 7037
+          }
+        ]
+      },
+      {
+        "file": "publish.spec.ts",
+        "title": "个人主页闭环：物件绑定、设置保存、ZIP、独立访客与 GLB 宿主",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 18682
+          }
+        ]
+      },
+      {
+        "file": "publish.spec.ts",
+        "title": "访客缺失文件、无 WebGL、减少动态及键盘降级",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 1306
+          }
+        ]
+      },
+      {
+        "file": "publish.spec.ts",
+        "title": "每类物件真实几何均可点击，整体入口不依赖模型部位",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 7205
+          }
+        ]
+      },
+      {
+        "file": "reuse.spec.ts",
+        "title": "照片沿墙编辑、原档迁移、图片保存刷新及整屋/单件 GLB 独立打开",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 17582
+          }
+        ]
+      },
+      {
+        "file": "reuse.spec.ts",
+        "title": "沙发与床添加、移动旋转材质、双尺寸与多视角",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 6818
+          }
+        ]
+      },
+      {
+        "file": "reuse.spec.ts",
+        "title": "真实宿主网页驱动 iframe：材质、光照、定位、播放及工程导入",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 2619
+          }
+        ]
+      },
+      {
+        "file": "reuse.spec.ts",
+        "title": "旧短片 v2 升级到 v4：镜头保留、内嵌房间迁移、原存档不覆盖",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 3774
+          }
+        ]
+      },
+      {
+        "file": "study.spec.ts",
+        "title": "完整验收：添加、拖动、旋转、灯光、材质、历史、本地恢复、PNG、JSON",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 9818
+          }
+        ]
+      },
+      {
+        "file": "study.spec.ts",
+        "title": "移动边界、桌面跟随、历史一致、选择删除、观察和缩放",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 5231
+          }
+        ]
+      },
+      {
+        "file": "study.spec.ts",
+        "title": "多视角、两种桌面尺寸、黄昏、键盘和真实帧时测量",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 8793
+          }
+        ]
+      },
+      {
+        "file": "study.spec.ts",
+        "title": "无 WebGL 时保留 JSON 备份能力，并明确提示",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 914
+          }
+        ]
+      },
+      {
+        "file": "study.spec.ts",
+        "title": "浏览器存储失败给出真实失败反馈，不伪报保存",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 2609
+          }
+        ]
+      },
+      {
+        "file": "study.spec.ts",
+        "title": "八类物件可添加，材质预览同步，键盘焦点和连续调光历史正确",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 7272
+          }
+        ]
+      },
+      {
+        "file": "study.spec.ts",
+        "title": "优化回归：镜头预设状态、保存恢复与编辑模式提示",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 10511
+          }
+        ]
+      },
+      {
+        "file": "study.spec.ts",
+        "title": "优化回归：合批键帽/毯穗仍可选中，材质、删除撤销和导出无辅助标记",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 4727
+          }
+        ]
+      },
+      {
+        "file": "study.spec.ts",
+        "title": "物件切换、重复编号、重命名、键盘保护及长名称布局",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 3925
+          }
+        ]
+      },
+      {
+        "file": "study.spec.ts",
+        "title": "异常镜头和物件名称导入保留方案，旧 v1 文件仍可编辑",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 5724
+          }
+        ]
+      }
+    ]
+  },
+  "guide": {
+    "command": "npx playwright test --config playwright.pages.config.ts tests/guide.spec.ts",
+    "origin": "http://127.0.0.1:4174/0905_codexgpt6_project/",
+    "stats": {
+      "startTime": "2026-09-05T15:59:10.327Z",
+      "duration": 79696.743,
+      "expected": 5,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "tests": [
+      {
+        "file": "guide.spec.ts",
+        "title": "导览闭环：修改、历史、保存恢复、JSON、真实视频重新播放与同帧比对",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 47242
+          }
+        ]
+      },
+      {
+        "file": "guide.spec.ts",
+        "title": "真实点击入口、快速切换、跳过、动作完成、镜头冲突与路径保护",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 12714
+          }
+        ]
+      },
+      {
+        "file": "guide.spec.ts",
+        "title": "导览网站包离线于编辑器、子路径部署、作品关联与访客模式",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 3465
+          }
+        ]
+      },
+      {
+        "file": "guide.spec.ts",
+        "title": "减少动态、保存失败、导出取消、无编码与无 WebGL 降级",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 2019
+          }
+        ]
+      },
+      {
+        "file": "guide.spec.ts",
+        "title": "作品展示把当前房间和作品传入导览，独立保存不覆盖原工程",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "retry": 0,
+            "duration": 2075
+          }
+        ]
+      }
+    ]
+  },
+  "testDevelopmentNote": "The first full run reported 43 passes and one test-harness typo (__portfolio.project instead of getProject). That test was corrected; all five guide cases were then rerun successfully against the final Pages build. No browser operation is inferred from source inspection.",
+  "notVerified": [
+    "New branch not deployed to public GitHub Pages",
+    "Safari and Firefox video encoding",
+    "Physical mobile devices",
+    "Arbitrary heavily rearranged room layouts"
+  ]
+}

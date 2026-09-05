@@ -1,0 +1,241 @@
+{
+  "app": "ideal-study-guide",
+  "version": 1,
+  "name": "小禾 · 作品导览验收",
+  "project": {
+    "app": "ideal-study-film",
+    "version": 4,
+    "name": "光落书房 · 十秒日常",
+    "scene": {
+      "app": "ideal-study",
+      "version": 3,
+      "portfolio": {
+        "version": 2,
+        "presentation": {
+          "name": "我的创作书房",
+          "headline": "在日常里，\n遇见我的作品。",
+          "bio": "一个房间，许多创作。\n点击物品，认识我的作品。"
+        },
+        "projects": [
+          {
+            "id": "study-source",
+            "title": "理想书房 · 开源创作",
+            "description": "一间可布置、可保存、可带走的 3D 书房。此示例关联本项目的真实 GitHub 仓库；你可以将它替换为自己的作品。",
+            "tags": "Three.js / TypeScript / 空间设计",
+            "url": "https://github.com/yydshly/0905_codexgpt6_project"
+          },
+          {
+            "id": "study-live",
+            "title": "让空间，成为作品",
+            "description": "从一张书桌开始，布置属于自己的创作空间。此示例链接打开已发布的原版书房编辑器。",
+            "tags": "WebGL / 交互设计 / 在线体验",
+            "url": "https://yydshly.github.io/0905_codexgpt6_project/"
+          }
+        ],
+        "bindings": [
+          {
+            "target": {
+              "itemId": "desk-1",
+              "partId": "book-1"
+            },
+            "projectId": "study-source",
+            "action": "openProject"
+          },
+          {
+            "target": {
+              "itemId": "monitor-1",
+              "partId": "screen"
+            },
+            "projectId": "study-live",
+            "action": "openProject"
+          }
+        ]
+      },
+      "name": "林间 · 我的创作书房",
+      "mood": "day",
+      "objects": [
+        {
+          "id": "rug-1",
+          "kind": "rug",
+          "x": 0.25,
+          "z": 0.4,
+          "rotation": 0,
+          "material": "linen"
+        },
+        {
+          "id": "desk-1",
+          "kind": "desk",
+          "x": 0.65,
+          "z": -1.12,
+          "rotation": 0,
+          "material": "oak"
+        },
+        {
+          "id": "chair-1",
+          "kind": "chair",
+          "x": 0.58,
+          "z": -0.02,
+          "rotation": -12,
+          "material": "sage"
+        },
+        {
+          "id": "monitor-1",
+          "kind": "monitor",
+          "x": 0.65,
+          "z": -1.27,
+          "rotation": 0,
+          "material": "charcoal",
+          "parentId": "desk-1"
+        },
+        {
+          "id": "shelf-1",
+          "kind": "shelf",
+          "x": -1.48,
+          "z": -1.87,
+          "rotation": 0,
+          "material": "oak"
+        },
+        {
+          "id": "taskLamp-1",
+          "kind": "taskLamp",
+          "x": -0.05,
+          "z": -1.18,
+          "rotation": 0,
+          "material": "sage",
+          "parentId": "desk-1",
+          "on": true,
+          "brightness": 65
+        },
+        {
+          "id": "floorLamp-1",
+          "kind": "floorLamp",
+          "x": 2.04,
+          "z": -1.5,
+          "rotation": 0,
+          "material": "linen",
+          "on": true,
+          "brightness": 70
+        },
+        {
+          "id": "plant-1",
+          "kind": "plant",
+          "x": -1.88,
+          "z": 0.91,
+          "rotation": 15,
+          "material": "ivory"
+        },
+        {
+          "id": "wall-art",
+          "kind": "wallPhoto",
+          "x": 0.6,
+          "z": -2.17,
+          "rotation": 0,
+          "material": "oak",
+          "y": 1.93,
+          "width": 1.15,
+          "height": 0.82
+        }
+      ],
+      "camera": {
+        "position": [
+          7.8,
+          6.5,
+          9
+        ],
+        "target": [
+          0,
+          0.85,
+          -0.1
+        ],
+        "zoom": 1
+      },
+      "selectedId": null
+    },
+    "film": {
+      "version": 1,
+      "shots": [
+        {
+          "id": "shot-1",
+          "name": "光落书房",
+          "duration": 3.4,
+          "start": {
+            "azimuth": 46,
+            "elevation": 34,
+            "zoom": 1.08
+          },
+          "end": {
+            "azimuth": 38,
+            "elevation": 31,
+            "zoom": 1.16
+          },
+          "target": [
+            0,
+            0.85,
+            -0.1
+          ]
+        },
+        {
+          "id": "shot-2",
+          "name": "桌边的灵感",
+          "duration": 3.6,
+          "start": {
+            "azimuth": 32,
+            "elevation": 27,
+            "zoom": 1.65
+          },
+          "end": {
+            "azimuth": 40,
+            "elevation": 30,
+            "zoom": 1.78
+          },
+          "target": [
+            0.5,
+            1.05,
+            -0.8
+          ]
+        },
+        {
+          "id": "shot-3",
+          "name": "为日常留白",
+          "duration": 3,
+          "start": {
+            "azimuth": 48,
+            "elevation": 43,
+            "zoom": 1.2
+          },
+          "end": {
+            "azimuth": 44,
+            "elevation": 39,
+            "zoom": 1.06
+          },
+          "target": [
+            0,
+            0.82,
+            -0.05
+          ]
+        }
+      ]
+    },
+    "selectedShotId": "shot-1",
+    "playhead": 0
+  },
+  "guide": {
+    "version": 1,
+    "name": "小禾",
+    "color": "clay",
+    "stops": [
+      {
+        "action": "read",
+        "itemId": "desk-1",
+        "duration": 8
+      },
+      {
+        "action": "point",
+        "itemId": "monitor-1",
+        "duration": 6.5
+      }
+    ]
+  },
+  "selected": 1,
+  "playhead": 12.5
+}
