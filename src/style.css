@@ -30,3 +30,5 @@
 .scene-list button>span{overflow:hidden;text-overflow:ellipsis;min-width:0}.scene-list button>svg{flex-shrink:0}
 .object-label{display:flex;align-items:center;max-width:min(380px,calc(100% - 24px))}.object-label[hidden]{display:none}.object-label:before{flex-shrink:0}.object-label-text{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 @media(max-width:1320px){#object-name{font-size:16px}.object-picker-wrap select{font-size:10px}.object-picker-wrap{gap:4px}.properties .subtle-tag{display:none}}
+.toast.in-dialog{position:static;transform:none;opacity:1;max-width:none;margin-top:15px;padding:12px 13px;background:#edf3e8;color:#48683e;box-shadow:none;font-size:11px;line-height:1.7}
+.toast.in-dialog.error{background:#f6e9df;color:#855139}.toast.in-dialog:not(.visible){display:none}

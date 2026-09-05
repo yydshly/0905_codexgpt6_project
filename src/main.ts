@@ -43,7 +43,12 @@ $('#app').innerHTML=`
   <input type="file" id="file-input" accept=".json,application/json" hidden />
 `;
 
-function toast(message:string,error=false){const el=$('#toast');el.innerHTML=`${icon(error?'Info':'Check')}<span>${escapeHTML(message)}</span>`;el.className=`toast visible ${error?'error':''}`;icons();window.clearTimeout(toastTimer);toastTimer=window.setTimeout(()=>el.classList.remove('visible'),4400);}
+function toast(message:string,error=false){
+  const el=$('#toast'),modal=$<HTMLDialogElement>('#export-dialog'),inDialog=modal?.open;
+  (inDialog?modal:document.body).append(el);
+  el.innerHTML=`${icon(error?'Info':'Check')}<span>${escapeHTML(message)}</span>`;el.className=`toast visible ${inDialog?'in-dialog':''} ${error?'error':''}`;icons();window.clearTimeout(toastTimer);
+  if(!inDialog)toastTimer=window.setTimeout(()=>el.classList.remove('visible'),4400);
+}
 function current(){return plan.objects.find(o=>o.id===plan.selectedId);}
 function begin(){if(!transaction){if(scene)plan.camera=scene.getCamera();transaction=clone(plan);}}
 function finish(){if(!transaction)return;if(signature(transaction)!==signature(plan)){past.push(transaction);if(past.length>80)past.shift();future=[];}transaction=null;refresh(false);}
@@ -98,7 +103,7 @@ document.querySelectorAll<HTMLElement>('[data-view]').forEach(b=>b.onclick=()=>{
 document.querySelectorAll<HTMLElement>('[data-mood]').forEach(b=>b.onclick=()=>mutate(()=>{plan.mood=b.dataset.mood as Mood;},false));
 document.querySelectorAll<HTMLElement>('[data-category]').forEach(b=>b.onclick=()=>{category=b.dataset.category!;document.querySelectorAll('[data-category]').forEach(x=>x.classList.toggle('active',x===b));renderCatalog();});
 $<HTMLInputElement>('#plan-name').onchange=e=>{const input=e.target as HTMLInputElement,name=input.value.trim();if(!name){input.value=plan.name;toast('给这间书房取个名字吧。',true);return;}mutate(()=>{plan.name=name;},false);};
-const dialog=$<HTMLDialogElement>('#export-dialog');$('#export').onclick=()=>dialog.showModal();$('#close-dialog').onclick=()=>dialog.close();dialog.onclick=e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close();}};
+const dialog=$<HTMLDialogElement>('#export-dialog');$('#export').onclick=()=>{$('#toast').classList.remove('visible');dialog.showModal();};dialog.addEventListener('close',()=>{const el=$('#toast');if(el.parentElement===dialog){el.classList.remove('visible','in-dialog');document.body.append(el);}});$('#close-dialog').onclick=()=>dialog.close();dialog.onclick=e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close();}};
 $('#export-json').onclick=()=>{try{finish();if(scene)plan.camera=scene.getCamera();download(new Blob([JSON.stringify(plan,null,2)],{type:'application/json'}),'json');toast('JSON 方案已生成，已交给浏览器下载');}catch{toast('方案导出失败，请重试。',true);}};
 $('#export-png').onclick=async()=>{if(!scene){toast('3D 渲染不可用，暂时无法生成图片。',true);return;}const b=$<HTMLButtonElement>('#export-png');b.disabled=true;try{toast('正在生成高清空间图片…');const blob=await scene.exportPNG();download(blob,'png');toast('PNG 图片已生成，已交给浏览器下载');}catch(e){toast((e as Error).message,true);}finally{b.disabled=false;}};
 $('#import-json').onclick=()=>$<HTMLInputElement>('#file-input').click();
