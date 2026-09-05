@@ -105,7 +105,12 @@ function undo(redo = false) { pause(); setAdjust(false); finish(); const from = 
 function save(): boolean { pause(); finish(); try { storeFilmProject(project); saved = projectSignature(project); syncSave(); $('#film-save-state').textContent = '已保存到本地'; toast('工程已保存到当前浏览器，刷新后可恢复。'); return true; } catch { toast('本地保存失败，请导出工程 JSON 备份。', true); return false; } }
 function download(blob: Blob, extension: string, name = project.name) { const url = URL.createObjectURL(blob), a = document.createElement('a'); a.href = url; a.download = name.replace(/[\\/:*?"<>|]/g, '-') + '.' + extension; a.click(); setTimeout(() => URL.revokeObjectURL(url), 10000); }
 
-$('#film-play').onclick = play; $('#film-start').onclick = () => seek(0); $('#film-end').onclick = () => seek(totalDuration(project));
+// A slow render can update transport descendants between down/up. Pause as soon
+// as the primary press arrives, and consume its click so it cannot resume again.
+let pausedOnPress=false;
+$('#film-play').onpointerdown=e=>{pausedOnPress=false;if(e.button===0&&playing){pausedOnPress=true;pause();}};
+$('#film-play').onclick = e=>{if(e.detail>0&&pausedOnPress){pausedOnPress=false;return;}pausedOnPress=false;play();};
+$('#film-start').onclick = () => seek(0); $('#film-end').onclick = () => seek(totalDuration(project));
 $<HTMLInputElement>('#film-scrub').oninput = e => seek(Number((e.target as HTMLInputElement).value) / FPS);
 $('#shot-list').onclick = $('#timeline-clips').onclick = e => { const button = (e.target as HTMLElement).closest<HTMLElement>('[data-shot]'); if (button) choose(button.dataset.shot!); };
 $('#shot-add').onclick = () => { if (project.film.shots.length >= 3) return; mutate(() => { const shot = clone(selected()); shot.id = crypto.randomUUID(); shot.name = '新的观察'; project.film.shots.push(shot); project.selectedShotId = shot.id; }); };
