@@ -24,9 +24,14 @@ test('短片完整验收：修改第二镜头、播放、保存刷新、真实�
   await page.locator('#shot-list [data-shot="shot-2"]').click();await page.locator('[data-endpoint="end"]').click();await change(page,'景别缩放','1.83');await change(page,'水平角','44');await change(page,'观察目标 X','0.55');await change(page,'镜头时长','3.8');
   expect((await getProject(page)).selectedShotId).toBe('shot-2');expect((await getProject(page)).film.shots[1].end.zoom).toBe(1.83);
   await page.getByRole('textbox',{name:'镜头名称',exact:true}).fill('桌边 · 我的灵感');await page.getByRole('textbox',{name:'镜头名称',exact:true}).press('Tab');
-  await page.locator('#film-start').click();await page.getByRole('button',{name:'播放短片',exact:true}).click();await page.waitForTimeout(500);expect((await state(page)).playing).toBe(true);
-  const pauseButton=await page.getByRole('button',{name:'暂停短片',exact:true}).boundingBox();await page.mouse.move(pauseButton!.x+pauseButton!.width/2,pauseButton!.y+pauseButton!.height/2);await page.mouse.down();
-  expect((await state(page)).playing).toBe(false);const paused=(await getProject(page)).playhead;await page.waitForTimeout(180);expect((await getProject(page)).playhead).toBe(paused);await page.mouse.up();expect((await state(page)).playing).toBe(false);
+  await page.locator('#film-start').click();
+  // Locate and position before playback: slow software-rendered locator queries can
+  // otherwise finish after the 10.2 s film, when clicking legitimately starts it again.
+  const pauseButton=await page.locator('#film-play').boundingBox(),playX=pauseButton!.x+pauseButton!.width/2,playY=pauseButton!.y+pauseButton!.height/2;
+  await page.mouse.move(playX,playY);await page.mouse.click(playX,playY);await page.waitForTimeout(500);expect((await state(page)).playing).toBe(true);
+  await page.mouse.down();expect((await state(page)).playing).toBe(false);
+  const pausedProject=await getProject(page),paused=pausedProject.playhead;expect(paused).toBeGreaterThan(0);expect(paused).toBeLessThan(pausedProject.film.shots.reduce((sum:number,s:any)=>sum+s.duration,0));
+  await page.waitForTimeout(180);expect((await getProject(page)).playhead).toBe(paused);await page.mouse.up();expect((await state(page)).playing).toBe(false);
   await page.locator('#shot-list [data-shot="shot-2"]').click();await page.locator('[data-endpoint="end"]').click();await page.setViewportSize({width:1280,height:800});await shot(page,'02-film-second-1280x800.png');
   const propertyBottom=await page.locator('#shot-delete').boundingBox(),timeline=await page.locator('.film-timeline').boundingBox();expect(propertyBottom!.y+propertyBottom!.height).toBeLessThanOrEqual(timeline!.y+1);
   const roomLinkSmall=await page.locator('#edit-room').boundingBox();expect(roomLinkSmall!.y+roomLinkSmall!.height).toBeLessThanOrEqual(timeline!.y);
