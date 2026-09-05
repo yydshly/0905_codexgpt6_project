@@ -27,4 +27,3 @@ export async function createStudyPlayer(host:HTMLElement,initial:unknown=createF
     destroy(){if(disposed)return;pause();disposed=true;revision++;scene.destroy();},
   };
 }
-

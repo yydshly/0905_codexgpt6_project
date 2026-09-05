@@ -91,4 +91,3 @@ test('旧短片 v2 升级到 v3：镜头保留、内嵌房间迁移、原存档�
   expect(before.version).toBe(3);expect(before.scene.version).toBe(2);expect(before.film).toEqual(legacy.film);expect(before.playhead).toBe(legacy.playhead);expect(before.scene.objects.filter((o:any)=>o.kind!=='wallPhoto')).toEqual(legacy.scene.objects);
   await page.locator('#film-save').click();await page.reload();await expect(page.locator('html')).toHaveAttribute('data-ready','true');expect(await page.evaluate(()=>(window as any).__film.getProject())).toEqual(before);expect(await page.evaluate(()=>localStorage.getItem('ideal-study.film.v2'))).toBe(old);
 });
-
