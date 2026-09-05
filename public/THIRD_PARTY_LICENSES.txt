@@ -461,3 +461,17 @@ Reading, book handling, screen presentation and deterministic pose evaluation
 are implemented by this project. The original human modeling, texture and
 locomotion quality belongs to Quaternius, not this project's authors.
 See docs/ADULT-AVATAR.md and src/assets/guide/ for source and preparation details.
+
+
+PERSONAL IP SAMPLE 01 — INCREMENTAL ASSET AUTHORSHIP
+src/assets/guide/personal-creator-01.glb is derived from creator-18.glb.
+Retained CC0-derived components: Quaternius skeleton, Idle_Loop and Walk_Loop,
+hand anatomy, skin-weighted sleeve and trouser topology. Shoes and earlier
+wardrobe preparation are this project's previous modifications of that base.
+Newly authored in scripts/build-personal-avatar.py: parametric oval head and
+neck, facial surfaces, eyes, eyelids, brows and facial morphs, layered hair,
+tea-brown glasses, open overshirt cut, collar, cuffs, pocket and folded-page
+badge. These are actual 3D geometry, not baked character pictures. The IP
+concept image is separately AI-generated and is a visual reference, not a
+third-party human model. Existing Quaternius credits and CC0 notices remain.
+See docs/character-ip/INTEGRATION.md for scope, provenance and limitations.

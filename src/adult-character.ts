@@ -2,16 +2,20 @@ import * as T from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import bundledAvatarURL from './assets/guide/creator-18.glb?url';
+import personalAvatarURL from './assets/guide/personal-creator-01.glb?url';
+import { DEFAULT_GUIDE_AVATAR, guideAvatars, type GuideAvatarId } from './guide-avatars';
 import type { GuideProject, GuideSample } from './guide-model';
 
 /** CC0 base + locomotion: Quaternius. Wardrobe, preparation and guide poses: this project. */
-export async function createGuideCharacter() {
+export async function createGuideCharacter(avatar: GuideAvatarId = DEFAULT_GUIDE_AVATAR) {
   // The standalone kit references its adjacent file; the editor uses Vite's hashed asset.
-  const avatarURL = typeof __GUIDE_ASSET_URL__ === 'undefined' ? bundledAvatarURL : __GUIDE_ASSET_URL__;
+  const avatarURL = typeof __GUIDE_ASSET_BASE__ === 'undefined'
+    ? (avatar === 'creator-18-v1' ? bundledAvatarURL : personalAvatarURL)
+    : __GUIDE_ASSET_BASE__ + guideAvatars[avatar].file;
   const gltf = await new GLTFLoader().loadAsync(avatarURL);
-  const root = new T.Group(); root.name = 'Xiaohe-adult-creator'; root.add(gltf.scene);
+  const root = new T.Group(); root.name = avatar; root.add(gltf.scene);
   const resources = new Set<T.BufferGeometry | T.Material | T.Texture>();
-  const bones = new Map<string, T.Bone>(), blinkMeshes: T.Mesh[] = [], shoes: T.SkinnedMesh[] = [];
+  const bones = new Map<string, T.Bone>(), blinkMeshes: T.Mesh[] = [], smileMeshes: T.Mesh[] = [], shoes: T.SkinnedMesh[] = [];
   let cotton: T.MeshStandardMaterial | undefined, rib: T.MeshStandardMaterial | undefined;
   gltf.scene.traverse(o => {
     if (o instanceof T.Bone) bones.set(o.name, o);
@@ -26,6 +30,7 @@ export async function createGuideCharacter() {
       if (m.name.includes('Hair')) { (m as T.MeshStandardMaterial).color.set('#37271e'); (m as T.MeshStandardMaterial).roughness = .86; }
     }
     if (o.morphTargetDictionary?.Blink !== undefined) blinkMeshes.push(o);
+    if (o.morphTargetDictionary?.SoftSmile !== undefined) smileMeshes.push(o);
     if (o instanceof T.SkinnedMesh && o.name.startsWith('Sole_')) shoes.push(o);
   });
   const rest = new Map([...bones].map(([name, bone]) => [name, { q: bone.quaternion.clone(), p: bone.position.clone(), scale: bone.scale.clone() }]));
@@ -92,21 +97,21 @@ export async function createGuideCharacter() {
     const elbow = a.clone().addScaledVector(axis, along).addScaledVector(bend, Math.sqrt(Math.max(0, lengthA * lengthA - along * along)));
     aim(upper, lower, elbow, weight); aim(lower, hand, end, weight);
   }
-  function handPose(side: 'l' | 'r', weight: number) {
+  function handPose(side: 'l' | 'r', weight: number, carry = 0) {
     const sign = side === 'l' ? 1 : -1, hand = bones.get('hand_' + side)!;
-    const y = vector(-sign * .80, .12, .6).normalize(), z = vector(0, 1, 0), x = new T.Vector3().crossVectors(y, z).normalize(); z.crossVectors(x, y);
+    const y = vector(-sign * .80, .12, .6).lerp(vector(0, -.96, .28), carry).normalize(), z = vector(0, 1, 0).lerp(vector(sign, 0, 0), carry), x = new T.Vector3().crossVectors(y, z).normalize(); z.crossVectors(x, y);
     const rotation = new T.Quaternion().setFromRotationMatrix(new T.Matrix4().makeBasis(x, y, z));
     rotation.premultiply(root.getWorldQuaternion(new T.Quaternion()));
     rotation.premultiply(hand.parent!.getWorldQuaternion(new T.Quaternion()).invert()); hand.quaternion.slerp(rotation, weight);
     for (const finger of ['index', 'middle', 'ring', 'pinky']) for (let i = 1; i <= 3; i++) {
-      const bone = bones.get(`${finger}_0${i}_${side}`); if (bone) bone.rotateX(weight * (i === 1 ? .16 : .32));
+      const bone = bones.get(`${finger}_0${i}_${side}`); if (bone) bone.rotateX(weight * (i === 1 ? .16 + .25 * carry : .32 + .45 * carry));
     }
   }
   let lastFootCorrection = 0;
   return { root,
     apply(s: GuideSample, color: GuideProject['guide']['color']) {
-      cotton?.color.set({ sage: '#829c87', clay: '#b67956', blue: '#7895ae' }[color]);
-      rib?.color.set({ sage: '#657d68', clay: '#966247', blue: '#586f88' }[color]);
+      cotton?.color.set({ sage: avatar === 'creator-18-v1' ? '#829c87' : '#8b9876', clay: '#b67956', blue: '#7895ae' }[color]);
+      rib?.color.set({ sage: avatar === 'creator-18-v1' ? '#657d68' : '#748160', clay: '#966247', blue: '#586f88' }[color]);
       root.position.set(s.position.x, s.position.y, s.position.z); root.rotation.y = s.yaw;
       // Every evaluation starts at the same authored pose. Seeking never accumulates IK or morph state.
       const weight = Math.min(1, s.walkWeight * 2.2);
@@ -115,15 +120,22 @@ export async function createGuideCharacter() {
         const blend = (1 - weight) * (name.startsWith('spine') ? .72 : 1);
         bone.quaternion.slerp(rest.get(name)!.q, blend); bone.position.lerp(rest.get(name)!.p, blend);
       }
+      if (avatar === 'personal-creator-01-v1') for (const [name, bone] of bones) if (/^(thumb|index|middle|ring|pinky)_/.test(name)) bone.quaternion.slerp(rest.get(name)!.q, (1 - weight) * .85);
       root.updateMatrixWorld(true);
       const read = s.readWeight, breath = Math.sin(s.time * 1.7) * .0025;
-      book.position.copy(vector(.24, .91, .13).lerp(vector(0, 1.11 + breath, .32), read));
+      book.position.copy(vector(.24, avatar === 'personal-creator-01-v1' ? .83 : .91, .13).lerp(vector(0, 1.11 + breath, .32), read));
       book.rotation.set(-.12 * read, 0, (1 - read) * -.20);
       leaves.forEach((leaf, i) => { leaf.rotation.z = (i ? 1 : -1) * T.MathUtils.lerp(1.46, .16, read); });
       const flip = smooth((s.actionTime % 3.6 - 1.5) / .85); page.visible = read > .95 && flip > 0 && flip < 1; page.rotation.z = Math.PI * flip;
       arm('l', vector(.25, .93, .14).lerp(vector(.14, 1.10 + breath, .31), read), vector(.46, 1.05, .02), 1);
       arm('r', vector(-.14, 1.10 + breath, .31), vector(-.46, 1.05, .02), read);
-      handPose('l', .8 + .2 * read); handPose('r', read);
+      handPose('l', .8 + .2 * read, avatar === 'personal-creator-01-v1' ? 1 - read : 0); handPose('r', read);
+      if (avatar === 'personal-creator-01-v1' && read < 1) {
+        root.updateMatrixWorld(true);
+        // The folded book's center follows the actual palm after IK, not a wrist-level guess.
+        const grip = root.worldToLocal(worldPosition(bones.get('middle_01_l')!));
+        book.position.lerp(grip.add(vector(-.014, -.043, .013)), 1 - read);
+      }
       if (s.pointWeight > 0) {
         const localTarget = root.worldToLocal(vector(s.target.x, s.target.y, s.target.z));
         const presentation = vector(-.27, 1.24, .03).add(localTarget.clone().sub(vector(-.27, 1.24, .03)).normalize().multiplyScalar(.15));
@@ -149,7 +161,7 @@ export async function createGuideCharacter() {
       const blinkTime = (s.time + 1.27) % 4.3;
       const blink = smooth(blinkTime / .07) * (1 - smooth((blinkTime - .09) / .11));
       for (const m of blinkMeshes) m.morphTargetInfluences![m.morphTargetDictionary!.Blink] = blink;
-      for (const m of blinkMeshes) if (m.morphTargetDictionary!.SoftSmile !== undefined) m.morphTargetInfluences![m.morphTargetDictionary!.SoftSmile] = .6;
+      for (const m of smileMeshes) m.morphTargetInfluences![m.morphTargetDictionary!.SoftSmile] = .6;
       root.updateMatrixWorld(true);
       // Plant the lowest sole on the floor/rug while retaining the authored heel/toe roll.
       let lowest = Infinity;
@@ -160,9 +172,9 @@ export async function createGuideCharacter() {
       lastFootCorrection = Number.isFinite(lowest) ? s.position.y + .002 - lowest : 0;
       root.position.y += lastFootCorrection; root.updateMatrixWorld(true);
     },
-    metrics: () => ({ asset: 'creator-18-v1', bones: bones.size, skinnedMeshes: (() => { let n = 0; root.traverse(o => { if (o instanceof T.SkinnedMesh) n++; }); return n; })(), blinkMeshes: blinkMeshes.length, blink: blinkMeshes[0]?.morphTargetInfluences?.[blinkMeshes[0].morphTargetDictionary!.Blink], clips: gltf.animations.map(a => a.name), footCorrection: lastFootCorrection, pose: [...bones].map(([name, b]) => ({ name, position: b.position.toArray(), rotation: b.quaternion.toArray() })) }),
+    metrics: () => ({ asset: avatar, bones: bones.size, skinnedMeshes: (() => { let n = 0; root.traverse(o => { if (o instanceof T.SkinnedMesh) n++; }); return n; })(), blinkMeshes: blinkMeshes.length, blink: blinkMeshes[0]?.morphTargetInfluences?.[blinkMeshes[0].morphTargetDictionary!.Blink], clips: gltf.animations.map(a => a.name), footCorrection: lastFootCorrection, pose: [...bones].map(([name, b]) => ({ name, position: b.position.toArray(), rotation: b.quaternion.toArray() })) }),
     dispose() { root.removeFromParent(); resources.forEach(resource => resource.dispose()); },
   };
 }
 
-declare const __GUIDE_ASSET_URL__: string;
+declare const __GUIDE_ASSET_BASE__: string;
