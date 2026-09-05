@@ -21,6 +21,11 @@ export function safeProjectURL(value:string) {
   if(!['https:','http:'].includes(url.protocol)||url.username||url.password)throw new Error('项目链接须为不含登录凭据的 HTTP(S) 地址。');
   return url.href;
 }
+// Reserve room for JSON structure, text and film data below the 6 MB import ceiling.
+export function validateMediaBudget(objects:Item[],portfolio:Portfolio){
+  const bytes=objects.reduce((n,o)=>n+(o.photo?.length??0),0)+portfolio.projects.reduce((n,w)=>n+(w.cover?.length??0),0);
+  if(bytes>5*1024*1024)throw new Error('封面与墙面照片合计超过 5 MB，请精简图片后再应用，以便工程能完整导出和导入。');
+}
 export function parsePortfolio(raw:unknown,objects:Item[]):Portfolio {
   const p=raw as Portfolio,fail=()=>{throw new Error('作品配置无效，当前工程未更改。');};
   if(!p||p.version!==1||!Array.isArray(p.projects)||p.projects.length>12||!Array.isArray(p.bindings)||p.bindings.length>40)return fail();
@@ -35,7 +40,7 @@ export function parsePortfolio(raw:unknown,objects:Item[]):Portfolio {
     if(!item||!t||partFor(item)!==t.partId||!ids.has(b.projectId)||b.action!=='openProject'||targets.has(targetKey(t)))return fail();
     targets.add(targetKey(t));return {target:{itemId:t.itemId,partId:t.partId},projectId:b.projectId,action:'openProject' as const};
   });
-  return {version:1,projects,bindings};
+  const result:Portfolio={version:1,projects,bindings};validateMediaBudget(objects,result);return result;
 }
 export function removeMissingBindings(plan:Plan){plan.portfolio.bindings=plan.portfolio.bindings.filter(b=>plan.objects.some(o=>o.id===b.target.itemId&&partFor(o)===b.target.partId));}
 

@@ -6,7 +6,7 @@ import { preparePhotos, readPhoto } from './photos';
 import { StudyScene } from './scene';
 import { loadFilmProject, storeFilmProject } from './film-model';
 import { mountPortfolioEditor } from './portfolio-editor';
-import { removeMissingBindings } from './portfolio-model';
+import { removeMissingBindings, validateMediaBudget } from './portfolio-model';
 
 const ICONS={Box,ChevronDown,ArrowUpRight,Undo2,Redo2,Download,Save,MousePointer2,Orbit,ZoomIn,ZoomOut,RotateCcw,Move,RotateCw,Trash2,X,Sun,Sunset,Moon,Check,Plus,SlidersHorizontal,Layers3,Grid2X2,Maximize,Focus,Upload,Image,FileJson,ArrowLeft,Lightbulb,LockKeyhole,Info,Command,CheckCheck,Leaf,PanelLeftClose,Table2,Armchair,Monitor,LibraryBig,LampDesk,LampFloor,Sprout,RectangleHorizontal,Pencil,BedDouble};
 const icon=(name:string,cls='')=>`<i data-lucide="${name.replace(/([a-z0-9])([A-Z])/g,'$1-$2').toLowerCase()}" class="${cls}" aria-hidden="true"></i>`;
@@ -127,7 +127,7 @@ for(const [id,selected] of [['export-glb',false],['export-item-glb',true]] as co
 };
 $<HTMLInputElement>('#photo-input').onchange=async e=>{
   const input=e.target as HTMLInputElement,file=input.files?.[0],id=input.dataset.itemId;input.value='';if(!file||!id)return;
-  try{toast('正在处理照片…');const photo=await readPhoto(file);if(!plan.objects.some(o=>o.id===id))throw new Error('相框已移除，请重新选择。');mutate(()=>updateItem(plan,id,{photo}));toast('照片已更新；保存工程后，刷新也能恢复。');}catch(e){toast((e as Error).message,true);}
+  try{toast('正在处理照片…');const photo=await readPhoto(file);if(!plan.objects.some(o=>o.id===id))throw new Error('相框已移除，请重新选择。');validateMediaBudget(plan.objects.map(o=>o.id===id?{...o,photo}:o),plan.portfolio);mutate(()=>updateItem(plan,id,{photo}));toast('照片已更新；保存工程后，刷新也能恢复。');}catch(e){toast((e as Error).message,true);}
 };
 $('#import-json').onclick=()=>$<HTMLInputElement>('#file-input').click();
 $<HTMLInputElement>('#file-input').onchange=async e=>{const input=e.target as HTMLInputElement,file=input.files?.[0];if(!file)return;try{if(file.size>MAX_JSON_BYTES)throw new Error('文件过大，请导入小于 6 MB 的 JSON 方案。');const imported=parsePlan(JSON.parse(await file.text()));await preparePhotos(imported);mutate(()=>{plan=imported;});scene?.applyCamera(plan.camera);$<HTMLInputElement>('#plan-name').value=plan.name;dialog.close();toast('方案已导入，可继续编辑；请保存以保留到本地');}catch(e){toast(e instanceof SyntaxError?'JSON 格式错误，当前方案未更改。':(e as Error).message,true);}finally{input.value='';}};
