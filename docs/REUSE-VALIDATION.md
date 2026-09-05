@@ -45,6 +45,6 @@
 
 GitHub Pages 子路径 http://127.0.0.1:4174/0905_codexgpt6_project/ 的 4 项复用与迁移测试通过，含整屋 / 单件 GLB、JSON 与 iframe 路由。命令：npx playwright test --config playwright.pages.config.ts tests/reuse.spec.ts。实际统计与产物哈希见 reuse-evidence/acceptance.json。
 
-首次串行云端运行 https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33950790993 被 25 分钟任务时限中止：18 项通过、取消按钮点击等待超时 1 项、最后 2 项未完成。完整 10.2 秒视频及全部 4 项新增复用流程已通过。随后为超过 100 ms 的帧增加 50 ms 输入窗口，取消在主指针按下时即响应，同时保留键盘 click；将同一批测试分为 3 个独立任务，保持全部验收覆盖和完整 10.2 秒主流程。新版云端结论在收尾时记录。
+首次串行云端运行 https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33950790993 被 25 分钟任务时限中止：18 项通过、取消按钮点击等待超时 1 项、最后 2 项未完成。完整 10.2 秒视频及全部 4 项新增复用流程已通过。随后为超过 100 ms 的帧增加 50 ms 输入窗口，取消在主指针按下时即响应，同时保留键盘 click；将同一批测试分为 3 个独立任务，保持全部验收覆盖和完整 10.2 秒主流程。最终代码 d97be414d0a9a0e17459ae740f9dbe989389b367 的 GitHub Actions 已全部通过：[最终运行](https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33952203582)。三个任务合计 21/21：完整视频 1 项、短片控制 6 项、房间与复用 14 项；0 跳过、0 flaky。原来的取消点击问题已在实际 Ubuntu / Chromium 软件渲染环境中通过，25 分钟串行上限问题通过保留全部测试并分组执行解决。机器统计见 reuse-evidence/github-final.json，最终云端视频与画面比对见 reuse-evidence/cloud-final-film.json。
 
 已知限制：完整手机编辑、其他浏览器、真实跨域宿主、React / Vue 生产应用、原生 WebView、Blender / Unity / Unreal 均未在本轮实测。GLB 的照明、bump 与后期不能保证和网页一致；照片限制在背墙，最多 3 个；手动移动可造成家具相交，未增加物理 / CAD。浏览器配额不足时会提示失败，JSON 是备份途径。账号、云同步、付费发布、npm 包发布均未实施。

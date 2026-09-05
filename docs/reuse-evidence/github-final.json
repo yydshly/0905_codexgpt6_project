@@ -1,0 +1,480 @@
+{
+  "timestamp": "2026-09-05T07:30:39.745Z",
+  "conclusion": "success",
+  "headSha": "d97be414d0a9a0e17459ae740f9dbe989389b367",
+  "jobs": [
+    {
+      "completedAt": "2026-09-05T07:25:45Z",
+      "conclusion": "success",
+      "databaseId": 101268981940,
+      "name": "browser-acceptance (film-controls)",
+      "startedAt": "2026-09-05T07:18:58Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-09-05T07:18:59Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-09-05T07:18:59Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-05T07:19:02Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@v7.0.1",
+          "number": 2,
+          "startedAt": "2026-09-05T07:18:59Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-05T07:19:03Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-node@v7.0.0",
+          "number": 3,
+          "startedAt": "2026-09-05T07:19:02Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-05T07:19:06Z",
+          "conclusion": "success",
+          "name": "Run npm ci",
+          "number": 4,
+          "startedAt": "2026-09-05T07:19:03Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-05T07:19:27Z",
+          "conclusion": "success",
+          "name": "Run npx playwright install --with-deps chromium",
+          "number": 5,
+          "startedAt": "2026-09-05T07:19:06Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-05T07:19:27Z",
+          "conclusion": "success",
+          "name": "Run npm audit --audit-level=high",
+          "number": 6,
+          "startedAt": "2026-09-05T07:19:27Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-05T07:19:27Z",
+          "conclusion": "skipped",
+          "name": "Full ten-second film export and actual replay",
+          "number": 7,
+          "startedAt": "2026-09-05T07:19:27Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-05T07:25:40Z",
+          "conclusion": "success",
+          "name": "Film controls and additional codec probes",
+          "number": 8,
+          "startedAt": "2026-09-05T07:19:27Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-05T07:25:40Z",
+          "conclusion": "skipped",
+          "name": "Room editing and reusable assets",
+          "number": 9,
+          "startedAt": "2026-09-05T07:25:40Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-05T07:25:41Z",
+          "conclusion": "success",
+          "name": "Keep actual browser evidence",
+          "number": 10,
+          "startedAt": "2026-09-05T07:25:40Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-05T07:25:43Z",
+          "conclusion": "success",
+          "name": "Post Run actions/setup-node@v7.0.0",
+          "number": 19,
+          "startedAt": "2026-09-05T07:25:41Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-05T07:25:43Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v7.0.1",
+          "number": 20,
+          "startedAt": "2026-09-05T07:25:43Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-05T07:25:43Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 21,
+          "startedAt": "2026-09-05T07:25:43Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33952203582/job/101268981940"
+    },
+    {
+      "completedAt": "2026-09-05T07:27:31Z",
+      "conclusion": "success",
+      "databaseId": 101268981988,
+      "name": "browser-acceptance (room-reuse)",
+      "startedAt": "2026-09-05T07:18:57Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-09-05T07:18:59Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-09-05T07:18:58Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-05T07:19:00Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@v7.0.1",
+          "number": 2,
+          "startedAt": "2026-09-05T07:18:59Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-05T07:19:01Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-node@v7.0.0",
+          "number": 3,
+          "startedAt": "2026-09-05T07:19:00Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-05T07:19:04Z",
+          "conclusion": "success",
+          "name": "Run npm ci",
+          "number": 4,
+          "startedAt": "2026-09-05T07:19:01Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-05T07:19:25Z",
+          "conclusion": "success",
+          "name": "Run npx playwright install --with-deps chromium",
+          "number": 5,
+          "startedAt": "2026-09-05T07:19:04Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-05T07:19:25Z",
+          "conclusion": "success",
+          "name": "Run npm audit --audit-level=high",
+          "number": 6,
+          "startedAt": "2026-09-05T07:19:25Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-05T07:19:25Z",
+          "conclusion": "skipped",
+          "name": "Full ten-second film export and actual replay",
+          "number": 7,
+          "startedAt": "2026-09-05T07:19:25Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-05T07:19:25Z",
+          "conclusion": "skipped",
+          "name": "Film controls and additional codec probes",
+          "number": 8,
+          "startedAt": "2026-09-05T07:19:25Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-05T07:27:28Z",
+          "conclusion": "success",
+          "name": "Room editing and reusable assets",
+          "number": 9,
+          "startedAt": "2026-09-05T07:19:25Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-05T07:27:30Z",
+          "conclusion": "success",
+          "name": "Keep actual browser evidence",
+          "number": 10,
+          "startedAt": "2026-09-05T07:27:28Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-05T07:27:30Z",
+          "conclusion": "success",
+          "name": "Post Run actions/setup-node@v7.0.0",
+          "number": 19,
+          "startedAt": "2026-09-05T07:27:30Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-05T07:27:30Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v7.0.1",
+          "number": 20,
+          "startedAt": "2026-09-05T07:27:30Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-05T07:27:30Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 21,
+          "startedAt": "2026-09-05T07:27:30Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33952203582/job/101268981988"
+    },
+    {
+      "completedAt": "2026-09-05T07:28:11Z",
+      "conclusion": "success",
+      "databaseId": 101268982020,
+      "name": "browser-acceptance (film-export)",
+      "startedAt": "2026-09-05T07:18:57Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-09-05T07:18:59Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-09-05T07:18:58Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-05T07:19:00Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@v7.0.1",
+          "number": 2,
+          "startedAt": "2026-09-05T07:18:59Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-05T07:19:01Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-node@v7.0.0",
+          "number": 3,
+          "startedAt": "2026-09-05T07:19:00Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-05T07:19:04Z",
+          "conclusion": "success",
+          "name": "Run npm ci",
+          "number": 4,
+          "startedAt": "2026-09-05T07:19:01Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-05T07:19:26Z",
+          "conclusion": "success",
+          "name": "Run npx playwright install --with-deps chromium",
+          "number": 5,
+          "startedAt": "2026-09-05T07:19:04Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-05T07:19:26Z",
+          "conclusion": "success",
+          "name": "Run npm audit --audit-level=high",
+          "number": 6,
+          "startedAt": "2026-09-05T07:19:26Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-05T07:28:08Z",
+          "conclusion": "success",
+          "name": "Full ten-second film export and actual replay",
+          "number": 7,
+          "startedAt": "2026-09-05T07:19:26Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-05T07:28:08Z",
+          "conclusion": "skipped",
+          "name": "Film controls and additional codec probes",
+          "number": 8,
+          "startedAt": "2026-09-05T07:28:08Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-05T07:28:08Z",
+          "conclusion": "skipped",
+          "name": "Room editing and reusable assets",
+          "number": 9,
+          "startedAt": "2026-09-05T07:28:08Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-05T07:28:09Z",
+          "conclusion": "success",
+          "name": "Keep actual browser evidence",
+          "number": 10,
+          "startedAt": "2026-09-05T07:28:08Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-05T07:28:09Z",
+          "conclusion": "success",
+          "name": "Post Run actions/setup-node@v7.0.0",
+          "number": 19,
+          "startedAt": "2026-09-05T07:28:09Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-05T07:28:09Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v7.0.1",
+          "number": 20,
+          "startedAt": "2026-09-05T07:28:09Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-05T07:28:09Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 21,
+          "startedAt": "2026-09-05T07:28:09Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33952203582/job/101268982020"
+    }
+  ],
+  "status": "completed",
+  "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33952203582",
+  "passed": 21,
+  "suites": [
+    {
+      "name": "film-export",
+      "stats": {
+        "startTime": "2026-09-05T07:19:27.274Z",
+        "duration": 520794.695,
+        "expected": 1,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "tests": [
+        {
+          "title": "短片完整验收：修改第二镜头、播放、保存刷新、真实视频下载并打开检查",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "film-controls",
+      "stats": {
+        "startTime": "2026-09-05T07:19:28.530Z",
+        "duration": 371621.41199999995,
+        "expected": 6,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "tests": [
+        {
+          "title": "镜头时序、排序、撤销重做、连续机位拖动与确定性拖动播放头",
+          "passed": true
+        },
+        {
+          "title": "v1 迁移、非法工程保护、工程内房间编辑及旧存档隔离",
+          "passed": true
+        },
+        {
+          "title": "视频取消恢复、无编码降级、低动态和窄屏预览",
+          "passed": true
+        },
+        {
+          "title": "无 WebGL 时仍能保存和导出工程，存储失败给出错误",
+          "passed": true
+        },
+        {
+          "title": "顶部工作区入口可见，保存房间并返回同一短片，失败时留在当前页",
+          "passed": true
+        },
+        {
+          "title": "默认自动播放、性能测量与浏览器支持的 WebM 格式实际编码回放",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "room-reuse",
+      "stats": {
+        "startTime": "2026-09-05T07:19:26.848Z",
+        "duration": 482059.782,
+        "expected": 14,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "tests": [
+        {
+          "title": "照片沿墙编辑、原档迁移、图片保存刷新及整屋/单件 GLB 独立打开",
+          "passed": true
+        },
+        {
+          "title": "沙发与床添加、移动旋转材质、双尺寸与多视角",
+          "passed": true
+        },
+        {
+          "title": "真实宿主网页驱动 iframe：材质、光照、定位、播放及工程导入",
+          "passed": true
+        },
+        {
+          "title": "旧短片 v2 升级到 v3：镜头保留、内嵌房间迁移、原存档不覆盖",
+          "passed": true
+        },
+        {
+          "title": "完整验收：添加、拖动、旋转、灯光、材质、历史、本地恢复、PNG、JSON",
+          "passed": true
+        },
+        {
+          "title": "移动边界、桌面跟随、历史一致、选择删除、观察和缩放",
+          "passed": true
+        },
+        {
+          "title": "多视角、两种桌面尺寸、黄昏、键盘和真实帧时测量",
+          "passed": true
+        },
+        {
+          "title": "无 WebGL 时保留 JSON 备份能力，并明确提示",
+          "passed": true
+        },
+        {
+          "title": "浏览器存储失败给出真实失败反馈，不伪报保存",
+          "passed": true
+        },
+        {
+          "title": "八类物件可添加，材质预览同步，键盘焦点和连续调光历史正确",
+          "passed": true
+        },
+        {
+          "title": "优化回归：镜头预设状态、保存恢复与编辑模式提示",
+          "passed": true
+        },
+        {
+          "title": "优化回归：合批键帽/毯穗仍可选中，材质、删除撤销和导出无辅助标记",
+          "passed": true
+        },
+        {
+          "title": "物件切换、重复编号、重命名、键盘保护及长名称布局",
+          "passed": true
+        },
+        {
+          "title": "异常镜头和物件名称导入保留方案，旧 v1 文件仍可编辑",
+          "passed": true
+        }
+      ]
+    }
+  ]
+}

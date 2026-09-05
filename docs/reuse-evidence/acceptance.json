@@ -116,5 +116,23 @@
       "bytes": 684800,
       "sha256": "022fd4981088737060229a41b42bf820558cefc94278ea18cedabbb852f5617e"
     }
-  ]
+  ],
+  "finalCodeCommit": "d97be414d0a9a0e17459ae740f9dbe989389b367",
+  "github": {
+    "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33952203582",
+    "conclusion": "success",
+    "passed": 21
+  },
+  "softwareCancel": {
+    "timestamp": "2026-09-05T07:17:09.114Z",
+    "browser": "152.0.7977.82",
+    "gpu": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "cancelElapsedMs": 1803,
+    "projectPreserved": true,
+    "noFalseResult": true
+  }
 }

@@ -8,6 +8,8 @@
 
 本地可操作入口：[房间](http://127.0.0.1:5173/?workspace=room) · [网页驱动示例](http://127.0.0.1:5173/?workspace=integration) · [GLB 查看器](http://127.0.0.1:5173/?workspace=viewer)。房间的「导出」菜单也提供两个示例入口。
 
+本轮 GitHub Actions **21/21 通过**：[运行记录](https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33952203582)。本机完整流程、追加迁移、软件渲染取消及 Pages 子路径也已验证。
+
 二次开发：[接入指南与代码](docs/REUSE.md) · [本轮验证与限制](docs/REUSE-VALIDATION.md) · [实际整屋 GLB](docs/reuse-evidence/study-room.glb) · [带照片的工程](docs/reuse-evidence/reusable-film.json)。
 
 本分支保留已有 **最多 3 段镜头、起终机位与观察目标、时间轴、播放/暂停/拖动、时长与排序、撤销重做、v3 工程保存恢复，以及真实 MP4/WebM 视频导出**。预览、拖动播放头和逐帧编码使用同一套镜头数据。原八类物件、三种灯光、PNG/JSON 与家具编辑完整保留。
