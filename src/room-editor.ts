@@ -121,7 +121,7 @@ function setMode(mode:'edit'|'orbit'){scene?.setMode(mode);$('#edit-mode').setAt
 $('#undo').onclick=undo;$('#redo').onclick=redo;$('#save').onclick=save;
 $('#workspace-film').onclick=async()=>{if(await save())location.href=session?.url('film')??'?workspace=film';};
 $('#workspace-portfolio').onclick=async()=>{if(await save())location.href=session?.url('portfolio')??'?workspace=portfolio&project='+(filmRoom?'film':'room');};
-mountProjectMenu({host:$('.topbar'),id:session?.record.id,workspace:'room',getProject:currentProject,save,thumbnail:()=>captureThumbnail(scene),beforeOpen:()=>finish(),leave:()=>{leaving=true;}});
+mountProjectMenu({host:$('.topbar'),id:session?.record.id,workspace:'room',getProject:currentProject,hasUnsavedChanges:()=>signature(plan)!==savedSignature,save,thumbnail:()=>captureThumbnail(scene),beforeOpen:()=>finish(),leave:()=>{leaving=true;}});
 $('#edit-mode').onclick=()=>setMode('edit');$('#orbit-mode').onclick=()=>setMode('orbit');
 $('#zoom-in').onclick=()=>scene?.zoom(.15);$('#zoom-out').onclick=()=>scene?.zoom(-.15);
 $('#reset-view').onclick=()=>{scene?.view('default');updateCameraUI();};

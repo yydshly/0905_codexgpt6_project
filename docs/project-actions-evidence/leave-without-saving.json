@@ -1,0 +1,21 @@
+{
+  "timestamp": "2026-09-05T10:31:56.770Z",
+  "browser": "152.0.7977.82",
+  "cleanReturn": [
+    "room",
+    "film",
+    "portfolio"
+  ],
+  "discard": [
+    "room",
+    "film",
+    "portfolio import",
+    "quick room"
+  ],
+  "cancelPreservesEditing": true,
+  "savedRecordsAndVersionsUnchanged": true,
+  "quickStorageBytesPreserved": true,
+  "saveFailureCanLeave": true,
+  "nativeDialogs": [],
+  "errors": []
+}

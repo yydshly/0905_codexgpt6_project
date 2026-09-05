@@ -32,7 +32,7 @@ export async function saveProject(id:string,expectedRevision:number,project:Film
   const request=tx.objectStore('projects').get(id);
   request.onsuccess=()=>{
     const old=request.result as ProjectRecord|undefined;
-    if(!old||old.revision!==expectedRevision){conflict=new Error('这套工程已在另一个页面更新。请另存为新工程保留当前修改，或重新打开最新版本。');tx.abort();return;}
+    if(!old||old.revision!==expectedRevision){conflict=new Error(!old?'这套工程已被删除。请另存为新工程保留当前修改。':'这套工程已在另一个页面更新。请另存为新工程保留当前修改，或重新打开最新版本。');tx.abort();return;}
     const changed=projectSignature(old.project)!==projectSignature(value)||label.startsWith('恢复');
     saved={...old,project:value,thumbnail:thumb(thumbnail)??(JSON.stringify(old.project.scene)===JSON.stringify(value.scene)?old.thumbnail:undefined),...(changed?{revision:old.revision+1,updatedAt:new Date().toISOString()}:{})};
     tx.objectStore('projects').put(saved);if(changed)tx.objectStore('versions').add(version(saved,label));
@@ -44,6 +44,19 @@ export async function setProjectThumbnail(id:string,revision:number,thumbnail:st
   request.onsuccess=()=>{const record=request.result as ProjectRecord|undefined;if(record?.revision===revision&&!record.thumbnail)tx.objectStore('projects').put({...record,thumbnail});};await done;
 }
 export async function listVersions(id:string){const db=await database();return (await result<ProjectVersion[]>(db.transaction('versions').objectStore('versions').index('projectId').getAll(id))).sort((a,b)=>b.revision-a.revision);}
+export async function deleteProject(id:string,expectedRevision:number){
+  const db=await database(),tx=db.transaction(['projects','versions'],'readwrite'),done=complete(tx);let conflict:Error|undefined;
+  const request=tx.objectStore('projects').get(id);
+  request.onsuccess=()=>{
+    const record=request.result as ProjectRecord|undefined;
+    if(!record||record.revision!==expectedRevision){conflict=new Error(!record?'这套工程已被删除，请关闭弹窗并刷新工程库。':'工程已在另一个页面更新，尚未删除。请关闭弹窗，重新打开删除确认以检查最新版本。');tx.abort();return;}
+    tx.objectStore('projects').delete(id);
+    const cursor=tx.objectStore('versions').index('projectId').openCursor(IDBKeyRange.only(id));
+    cursor.onsuccess=()=>{const item=cursor.result;if(item){item.delete();item.continue();}};
+    // Keep legacy migration signatures: unchanged quick saves must not resurrect a deleted project.
+  };
+  try{await done;}catch(error){throw conflict??error;}
+}
 export async function restoreVersion(id:string,expectedRevision:number,revision:number){const db=await database(),old=await result<ProjectVersion|undefined>(db.transaction('versions').objectStore('versions').get([id,revision]));if(!old)throw new Error('这个保存版本不存在，当前工程未更改。');return saveProject(id,expectedRevision,old.project,old.thumbnail,`恢复版本 ${revision}`);}
 export async function migrateLegacyProjects(){
   const notes:string[]=[];

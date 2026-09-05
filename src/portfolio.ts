@@ -1,4 +1,4 @@
-import { createFilmProject, loadFilmProject, parseFilmProject, storeFilmProject } from './film-model';
+import { createFilmProject, loadFilmProject, parseFilmProject, projectSignature, storeFilmProject } from './film-model';
 import { initialPlan, ROOM_STORAGE, parsePlan, MAX_JSON_BYTES } from './model';
 import { demoPortfolio } from './portfolio-model';
 import { preparePhotos } from './photos';
@@ -19,6 +19,7 @@ try{
   }else project.scene.portfolio=demoPortfolio(project.scene.objects);
 }catch{message='本地工程无法读取。原存档保留，可导入 JSON 继续查看。';sample=false;imported=true;}
 const view=await mountPortfolioView(project,{notice:sample?'示例作品 / 可替换为你的项目':undefined});
+let savedSignature=projectSignature(project);
 const $=<T extends HTMLElement=HTMLElement>(s:string)=>document.querySelector<T>(s)!;
 $('.portfolio-top nav').innerHTML=`<a id="portfolio-edit" href="?workspace=room${source==='film'?'&project=film':''}">编辑房间</a><button id="portfolio-publish">发布展示页</button><button id="portfolio-import">导入工程</button><button id="portfolio-json">导出工程</button><a href="?workspace=integration">网页接入 ↗</a>`;
 if(session)$<HTMLAnchorElement>('#portfolio-edit').href=session.url('room');
@@ -26,8 +27,9 @@ async function saveCurrent(next=view.getProject()){
   if(session&&!imported)await session.save(next);
   else if(!sample&&!imported&&source==='room')localStorage.setItem(ROOM_STORAGE,JSON.stringify({plan:next.scene,savedAt:new Date().toISOString()}));
   else if(!sample&&!imported&&source==='film')storeFilmProject(next);
+  if(!sample&&!imported)savedSignature=projectSignature(next);
 }
-mountProjectMenu({host:$('.portfolio-top nav'),id:imported?undefined:session?.record.id,workspace:'portfolio',getProject:()=>view.getProject(),save:async()=>{try{if(sample||imported)throw new Error('示例或导入预览请先另存为新工程，避免丢失本次配置。');await saveCurrent();return true;}catch(error){view.report((error as Error).message,true);return false;}},thumbnail:()=>undefined,beforeOpen:()=>view.pause(),leave:()=>{}});
+mountProjectMenu({host:$('.portfolio-top nav'),id:imported?undefined:session?.record.id,workspace:'portfolio',getProject:()=>view.getProject(),hasUnsavedChanges:()=>sample||imported||projectSignature(view.getProject())!==savedSignature,save:async()=>{try{if(sample||imported)throw new Error('示例或导入预览请先另存为新工程，避免丢失本次配置。');await saveCurrent();return true;}catch(error){view.report((error as Error).message,true);return false;}},thumbnail:()=>undefined,beforeOpen:()=>view.pause(),leave:()=>{}});
 const file=document.createElement('input');file.id='portfolio-file';file.type='file';file.accept='.json,application/json';file.hidden=true;document.body.append(file);
 if(message)view.report(message,true);
 $('#portfolio-publish').onclick=()=>{view.pause();openPublishDialog(view.getProject(),async next=>{

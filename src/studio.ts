@@ -126,7 +126,7 @@ $('#film-undo').onclick = () => undo(); $('#film-redo').onclick = () => undo(tru
 $('#edit-room').onclick = async () => { if (await save()) location.href = session?.url('room')??'?workspace=room&project=film'; };
 $('#workspace-room').onclick = $('#edit-room').onclick;
 $('#workspace-portfolio').onclick=async()=>{if(await save())location.href=session?.url('portfolio')??'?workspace=portfolio&project=film';};
-mountProjectMenu({host:$('.film-header'),id:session?.record.id,workspace:'film',getProject:()=>clone(project),save,thumbnail:()=>captureThumbnail(scene),beforeOpen:()=>{pause();finish();},leave:()=>{leaving=true;}});
+mountProjectMenu({host:$('.film-header'),id:session?.record.id,workspace:'film',getProject:()=>clone(project),hasUnsavedChanges:()=>projectSignature(project)!==saved,save,thumbnail:()=>captureThumbnail(scene),beforeOpen:()=>{pause();finish();},leave:()=>{leaving=true;}});
 $<HTMLInputElement>('#film-name').onchange = e => { const name = (e.target as HTMLInputElement).value.trim(); if (!name) { (e.target as HTMLInputElement).value = project.name; toast('请为工程取个名字。', true); return; } mutate(() => project.name = name); };
 $('#film-json').onclick = () => { pause(); finish(); download(new Blob([JSON.stringify(project, null, 2)], { type: 'application/json' }), 'json'); toast('v2 工程已交给浏览器下载，包含房间和全部镜头。'); };
 $('#film-import').onclick = () => { pause(); $<HTMLInputElement>('#film-file').click(); };

@@ -1,0 +1,212 @@
+{
+  "timestamp": "2026-09-05T10:34:14.007345+00:00",
+  "baseline": "3552f75046594ee785bb8920f9fb0ee5ac6acd34",
+  "branch": "codex/project-library",
+  "browser": "Chrome 152.0.7977.82",
+  "platform": "Windows 11",
+  "viewports": [
+    "1440x900",
+    "1280x800",
+    "390x844"
+  ],
+  "root": {
+    "url": "http://127.0.0.1:4173/",
+    "stats": {
+      "startTime": "2026-09-05T10:31:16.379Z",
+      "duration": 40896.66,
+      "expected": 9,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "tests": [
+      {
+        "title": "旧房间与短片分别迁入、内容不变、重开去重、后续快速存档保留为新工程",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "durationMs": 4005
+          }
+        ]
+      },
+      {
+        "title": "多工程完整闭环：新建、另存为、复制、跨视图、保存版本恢复与分别发布",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "durationMs": 10794
+          }
+        ]
+      },
+      {
+        "title": "并发保存冲突保留两边修改、失败后可另存为，未改动保存不增加版本",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "durationMs": 3508
+          }
+        ]
+      },
+      {
+        "title": "无效导入、数据库不可用、真实事务回滚和键盘焦点",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "durationMs": 2837
+          }
+        ]
+      },
+      {
+        "title": "缩略图不可用时仍能管理工程、配额错误回滚与工程库加载测量",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "durationMs": 2786
+          }
+        ]
+      },
+      {
+        "title": "删除工程：取消、备份、全部版本清理、其他工程完整与空状态",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "durationMs": 2269
+          }
+        ]
+      },
+      {
+        "title": "删除失败回滚、并发更新保护、被删工程旧标签页仍可另存为",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "durationMs": 3877
+          }
+        ]
+      },
+      {
+        "title": "删除迁入工程后刷新不复活原存档，快速存档原始字节保留",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "durationMs": 703
+          }
+        ]
+      },
+      {
+        "title": "不保存返回：三个工作页面、放弃与取消、存档版本不变、保存失败可离开",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "durationMs": 8702
+          }
+        ]
+      }
+    ]
+  },
+  "pages": {
+    "url": "http://127.0.0.1:4174/0905_codexgpt6_project/",
+    "stats": {
+      "startTime": "2026-09-05T10:32:20.972Z",
+      "duration": 25656.243,
+      "expected": 4,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "tests": [
+      {
+        "title": "删除工程：取消、备份、全部版本清理、其他工程完整与空状态",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "durationMs": 3894
+          }
+        ]
+      },
+      {
+        "title": "删除失败回滚、并发更新保护、被删工程旧标签页仍可另存为",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "durationMs": 3747
+          }
+        ]
+      },
+      {
+        "title": "删除迁入工程后刷新不复活原存档，快速存档原始字节保留",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "durationMs": 730
+          }
+        ]
+      },
+      {
+        "title": "不保存返回：三个工作页面、放弃与取消、存档版本不变、保存失败可离开",
+        "ok": true,
+        "results": [
+          {
+            "status": "passed",
+            "durationMs": 8895
+          }
+        ]
+      }
+    ]
+  },
+  "userDataTouched": false,
+  "publicDeploymentPerformed": false,
+  "artifacts": [
+    {
+      "file": "07-delete-entry-1440x900.png",
+      "bytes": 208868,
+      "sha256": "b2b9b78e3d68e2fbdce64c84e5df92e9a418b861eab21cf9ce4456de1c4f7836"
+    },
+    {
+      "file": "08-delete-confirm-1280x800.png",
+      "bytes": 171357,
+      "sha256": "938bc854d7ea75b3c1876656fe3d74d599f43af86b6ea231d9058a1fc9b62380"
+    },
+    {
+      "file": "09-delete-mobile-390x844.png",
+      "bytes": 66442,
+      "sha256": "9bf1faff36f5de818ae8434f1154efe6fe71351038b41a7835335cf584bfa83e"
+    },
+    {
+      "file": "10-return-choices-1440x900.png",
+      "bytes": 287936,
+      "sha256": "1817008c170f87634237c0c07be081b78858d152fc7abd6e536419c6f214b8e2"
+    },
+    {
+      "file": "11-discard-confirm-1280x800.png",
+      "bytes": 251392,
+      "sha256": "53dca6df21914ea898a76b6288488acc4bd7913ef7fcff0fb9a9632935ad24f1"
+    },
+    {
+      "file": "deleted-project-backup.json",
+      "bytes": 3611,
+      "sha256": "5cf954069b5fedbe87dcab9302f39f187ce710268a871f84f2ecc4d4f0877bea"
+    },
+    {
+      "file": "deletion.json",
+      "bytes": 308,
+      "sha256": "c3ebba6f9e3b593d886bf131be6aa896487383e8d98762a70e7cf29ad48da276"
+    },
+    {
+      "file": "leave-without-saving.json",
+      "bytes": 410,
+      "sha256": "f852fc7a684c266d1a62fdddd0d7973faa697daa076af0a79b75091f95253a95"
+    }
+  ]
+}
