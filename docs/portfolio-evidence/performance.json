@@ -1,0 +1,33 @@
+{
+  "timestamp": "2026-09-05T08:09:44.761Z",
+  "browser": "152.0.7977.82",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "loadMs": 378,
+  "rafMean": 4.152282157824741,
+  "rafP95": 4.300000000000011,
+  "idleRenders": 0,
+  "metrics": {
+    "renderTimes": [
+      102.89999997615814,
+      82.10000002384186,
+      4.099999964237213
+    ],
+    "renders": 3,
+    "calls": 349,
+    "triangles": 189891,
+    "meshes": 171,
+    "instanceBatches": 15,
+    "sceneTriangles": 94942,
+    "gpu": "ANGLE (Intel, Intel(R) UHD Graphics (0x0000A788) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "pixelRatio": 1,
+    "canvas": [
+      1200,
+      657
+    ]
+  },
+  "occludedScreenHidden": true
+}

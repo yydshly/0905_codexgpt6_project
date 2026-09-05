@@ -1,0 +1,44 @@
+{
+  "timestamp": "2026-09-05T08:09:37.060Z",
+  "browser": "152.0.7977.82",
+  "savedRestoreExact": true,
+  "jsonRoundTripExact": true,
+  "materialAndMoveRetainedBindings": true,
+  "deleteUndoExact": true,
+  "actualMeshClicked": true,
+  "dragDidNotActivate": true,
+  "externalLinkOpened": true,
+  "independentGLBClicked": true,
+  "iframeParentReceived": true,
+  "glbBytes": 3780852,
+  "glbInfo": {
+    "name": "portfolio-room.glb",
+    "meshes": 410,
+    "triangles": 94940,
+    "textures": 5,
+    "bounds": [
+      5.480000019073486,
+      3.040000002980232,
+      4.679999828338623
+    ],
+    "nodes": [
+      "room",
+      "rug-1",
+      "desk-1",
+      "chair-1",
+      "monitor-1",
+      "shelf-1",
+      "taskLamp-1",
+      "floorLamp-1",
+      "plant-1",
+      "wall-art",
+      "scene-light",
+      "scene-light_2"
+    ],
+    "parts": [
+      "book-1",
+      "screen"
+    ]
+  },
+  "errors": []
+}

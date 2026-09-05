@@ -1,76 +1,58 @@
-# 理想书房 · 家具、短片与 3D 复用
+# 理想书房 · 布置、短片与个人作品集
 
-打开一段已经编排好的十秒日常，再拍出自己的版本。
+一间可编辑、可拍摄，也可作为作品入口的 3D 书房。复用原有家具、材质和灯光，新增桌面书籍与显示器屏幕的作品绑定。
 
-本次增量：**沙发、床、可上传照片的墙面相框、整屋 / 单件 GLB、独立模型查看器和可由其他网页控制的播放器**。默认保留原书房构图。新数据为房间 v2 / 短片 v3，读取旧存档后保存到新键，保留原数据。
+当前分支：[codex/portfolio-interactions](https://github.com/yydshly/0905_codexgpt6_project/tree/codex/portfolio-interactions)，基线 `428cd19` 已保存在 [codex/reusable-study](https://github.com/yydshly/0905_codexgpt6_project/tree/codex/reusable-study)。新分支未合并或部署，GitHub Pages 仍是[原版布置器](https://yydshly.github.io/0905_codexgpt6_project/)。
 
-当前分支：[codex/reusable-study](https://github.com/yydshly/0905_codexgpt6_project/tree/codex/reusable-study)，基于 `b360242`；本分支尚未部署。以下原短片交付记录中的 v2 格式仍可迁移打开。
+## 启动与入口
 
-本地可操作入口：[房间](http://127.0.0.1:5173/?workspace=room) · [网页驱动示例](http://127.0.0.1:5173/?workspace=integration) · [GLB 查看器](http://127.0.0.1:5173/?workspace=viewer)。房间的「导出」菜单也提供两个示例入口。
-
-本轮 GitHub Actions **21/21 通过**：[运行记录](https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33952203582)。本机完整流程、追加迁移、软件渲染取消及 Pages 子路径也已验证。
-
-二次开发：[接入指南与代码](docs/REUSE.md) · [本轮验证与限制](docs/REUSE-VALIDATION.md) · [实际整屋 GLB](docs/reuse-evidence/study-room.glb) · [带照片的工程](docs/reuse-evidence/reusable-film.json)。
-
-本分支保留已有 **最多 3 段镜头、起终机位与观察目标、时间轴、播放/暂停/拖动、时长与排序、撤销重做、v3 工程保存恢复，以及真实 MP4/WebM 视频导出**。预览、拖动播放头和逐帧编码使用同一套镜头数据。原八类物件、三种灯光、PNG/JSON 与家具编辑完整保留。
-
-**历史短片基线：[codex/film-workbench](https://github.com/yydshly/0905_codexgpt6_project/tree/codex/film-workbench)**，从 `790c0ea` 开始；当前 GitHub Pages 仍是 [原空间布置器](https://yydshly.github.io/0905_codexgpt6_project/)，此短片版本尚未合并或部署。请按下方说明在本地打开新工作台。
-
-![实际运行：1440×900 的短片工作台](docs/film-evidence/01-film-default-1440x900.png)
-
-交付原件：[默认 10 秒 WebM](docs/film-evidence/default-vp9.webm) · [修改后 10.2 秒 MP4](docs/film-evidence/ideal-study-film.mp4) · [对应可编辑工程](docs/film-evidence/verified-film-project.json) · [短片验收与已知限制](docs/FILM-WORKBENCH.md)。GitHub 文件页可通过 **Download raw file** 下载视频。
-
-## 启动
-
-需要 **Node.js 22.12+**（本地验证为 22.15.0），以及支持 WebGL 2 的桌面浏览器。进入本仓库目录后运行：
+Node.js 22.12+，支持 WebGL 2 的桌面浏览器：
 
 ```bash
-git switch codex/reusable-study
+git switch codex/portfolio-interactions
 npm ci
 npm run dev
 ```
 
-打开 **http://127.0.0.1:5173/**。端口固定且不自动跳号；如端口被占用，先停止已有的同端口服务。
+- [布置书房](http://127.0.0.1:5173/?workspace=room)：选中书桌或显示器，在右侧「作品入口」配置名称、简介、技术栈、封面和链接。
+- [作品展示示例](http://127.0.0.1:5173/?workspace=portfolio)：直接点击书籍或屏幕、标记或作品列表，打开项目详情。
+- [短片工作台](http://127.0.0.1:5173/?workspace=film)：默认入口，已编排 10 秒作品，支持最多 3 段镜头与真实视频导出。
+- [网页接入示例](http://127.0.0.1:5173/?workspace=integration)：宿主控制 iframe，接收作品点击事件并展示详情。
+- [独立 GLB 查看器](http://127.0.0.1:5173/?workspace=viewer)：打开导出的 GLB 和对应 JSON，继续点击作品入口。
 
-默认入口是短片工作台；`/?workspace=room` 是支持旧方案迁移的 v2 空间布置器。两页顶部都有工作区导航：短片页点击「1 布置书房」，即可编辑当前短片的房间；书房页点击「2 返回短片工作台」，会先保存房间，再返回原镜头工程。绿色标签表示当前位置。保存失败会留在原页提示，不丢弃改动。原左下「保存并布置房间」入口也保留。
-
-视频导出需要安全上下文（HTTPS 或 localhost/127.0.0.1）及浏览器实际支持的 WebCodecs 编码。应用会检测 H.264 / VP9 / VP8，只提供支持的格式。导出固定为无音轨 1280×720、30 fps，逐帧生成，不要求电脑能实时跑到 30 fps。
-
-## 拍摄自己的版本
-
-1. 首次打开自动播放 10 秒作品一次；已保存工程恢复时暂停，系统低动态偏好下也不自动播放。
-2. 选择左侧第二个镜头，切换「起点 A / 终点 B」，修改水平角、俯角与景别；点击「在画面中调整」后可拖动/缩放机位。观察目标 X/Y/Z 同时约束该段的起点与终点。
-3. 修改时长（每段 1–10 秒）与前移/后移顺序。时间轴同步更新；上方刻度区可拖动播放头，段落本身可选择镜头。时间码为 **秒:帧**。
-4. 空格播放/暂停，方向键逐帧定位，Shift + 方向键移动一秒；Ctrl/⌘ + Z 撤销，Ctrl/⌘ + Shift + Z 或 Ctrl + Y 重做。
-5. 命名并「保存工程」，刷新恢复；Ctrl/⌘ + S 也可保存。保存仅在当前浏览器，未添加云同步。
-6. 「导出视频」→ 选择当前浏览器支持的格式 →「生成视频」→ 在弹窗播放检查 →「下载视频」。生成可取消；真实编码、元数据与首帧解码成功后才提供下载结果。
-
-v3 工程包含 scene v2 和镜头数据，保存键为 `ideal-study.film.v3`；原 `ideal-study.film.v2` 与 `ideal-study.plan.v1` 存档独立保留。旧短片 v2、房间 JSON v1/v2 均可导入，房间方案自动加上默认镜头；首次打开时也可读取已有旧存档。非法文件先校验再处理，不改当前工程或存档。撤销历史保留当前会话最近 80 次编辑，连续机位拖动计一次，刷新不保留历史。
-
-## 本分支验收
-
-上一轮入口修复后，本地生产构建 **17/17** 真实浏览器用例通过，其中短片 7 项、原编辑器 10 项。覆盖顶部工作区切换、保存返回、第二镜头修改、保存刷新、工程往返、三种格式编码、文件回放、预览/视频画面比较、旧方案迁移、错误与取消状态。环境、性能、六张实际截图及视频检测报告见 [短片交付记录](docs/FILM-WORKBENCH.md)。GitHub 首次 Chromium 验收为 13/16，三个慢速环境下的问题另行记录，未冒充全平台通过。
-
-```bash
-npm test          # 全部 17 项；自动构建、启动 4173 端口并测试
-npm run test:film # 7 项短片验收
-npm run test:room # 10 项原编辑器回归
-```
-
-本地默认使用已安装的 Google Chrome；测试证据在 `test-results/film-evidence/` 与 `test-results/room-evidence/`，交付选片在 `docs/film-evidence/`。GitHub Actions 会在此分支提交时使用 Chromium 执行相同验收，运行记录见 [Actions](https://github.com/yydshly/0905_codexgpt6_project/actions)。
-
-以下为原编辑器的部署、操作和历史验收说明；其旧版线上数据与本次短片本地验证分别记录。
-
-生产构建与本地预览：
+房间与短片顶部均有「3 作品展示」，先保存对应工程再预览。独立房间与已有短片保留各自存档，进入当前短片的房间请用「1 布置书房」。示例展示页不写入个人存档。
 
 ```bash
 npm run build
-npm run preview
+npm run preview  # http://127.0.0.1:4173/
+npm test         # 26 项真实浏览器检查
+npx playwright test tests/portfolio.spec.ts
+npx playwright test --config playwright.pages.config.ts tests/portfolio.spec.ts
 ```
 
-生产预览地址为 **http://127.0.0.1:4173/**。自动化浏览器验收运行于此生产构建地址。`dist/` 可部署到静态站点托管服务。
+本机测试使用已安装的 Chrome，CI 使用 Chromium。运行时不需要账号、API 密钥或云服务，也不下载外部模型/字体。不要直接双击 HTML；请使用 HTTP 服务。
 
-安装依赖需要网络；应用运行时不调用云服务、不下载外部模型或字体，不需要 API 密钥。请通过 HTTP 服务访问，不要直接双击 `index.html`。
+## 保存与带走作品
+
+房间 v3、短片 v4、作品配置 v1；当前保存键为 `ideal-study.plan.v3` 与 `ideal-study.film.v4`。旧房间 v1/v2、短片 v2/v3 会迁移，原存档独立保留。保存仅在当前浏览器，刷新保留已保存方案，撤销历史不跨刷新。
+
+GLB 带走模型、材质和部位标识；JSON 带走房间、照片与作品绑定，短片工程另含镜头数据。配合当前播放器或独立 GLB 适配器接入自己的网页。视频为固定画面，不含可点击物件。
+
+视频导出保留原能力：实际检测 H.264/VP9/VP8，生成 MP4/WebM，无音轨 1280×720、30fps。预览、拖动时间轴和逐帧编码共享镜头数据；真实编码和浏览器解码验证完成后才提供下载。需要 HTTPS 或 localhost/127.0.0.1 安全上下文。
+
+## 文档与实际交付
+
+- [作品配置、接入代码与兼容边界](docs/PORTFOLIO.md)
+- [本轮验证、性能和已知限制](docs/PORTFOLIO-VALIDATION.md)
+- [实际可导入工程](docs/portfolio-evidence/portfolio-room.json) · [对应 GLB](docs/portfolio-evidence/portfolio-room.glb)
+- [原播放器/iframe 接口](docs/REUSE.md) · [资产来源](docs/ASSETS.md) · [第三方许可](THIRD_PARTY_LICENSES.txt)
+- 历史记录：[家具与复用验收](docs/REUSE-VALIDATION.md) · [短片验收及视频](docs/FILM-WORKBENCH.md)
+
+![实际运行的作品书房，1440×900](docs/portfolio-evidence/02-portfolio-1440x900.png)
+
+当前作品入口覆盖每张书桌现有的一本书、每台显示器的屏幕。封面显示在网页详情中；未实现任意物件绑定、屏幕内操作网站、云同步或自动发布。GLB 的独立渲染效果会有差异，未测试其他原生 3D 软件。更多边界及实际检查见验证记录。
+
+以下保留原版的部署说明与历史编辑器记录，历史性能/截图不代替本轮证据。
 
 ## GitHub Pages 部署
 

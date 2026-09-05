@@ -1,11 +1,11 @@
 # 把理想书房用于其他网页或产品
 
-当前实现位于 `codex/reusable-study`，基于短片分支 `b360242`。运行 `npm ci`、`npm run dev`，默认仍是原短片工作台。此分支尚未部署到 GitHub Pages。
+当前实现位于 `codex/portfolio-interactions`；本指南保留原复用接口，新增作品点击与独立 GLB 适配器见 [PORTFOLIO.md](PORTFOLIO.md)。运行 `npm ci`、`npm run dev`，默认仍是原短片工作台。此分支尚未部署到 GitHub Pages。
 
 | 要做什么 | 使用什么 | 已实现入口 |
 |---|---|---|
 | 展示固定画面 / 视频 | PNG、MP4 / WebM | 房间「导出」、短片「导出视频」 |
-| 保留家具、灯光、照片与镜头的编辑能力 | 房间 v2 / 短片 v3 JSON + 当前渲染源码 | `/?workspace=room`、`/?workspace=film` |
+| 保留家具、灯光、照片与镜头的编辑能力 | 房间 v3 / 短片 v4 JSON + 当前渲染源码 | `/?workspace=room`、`/?workspace=film` |
 | 在自己的网页中用按钮控制场景 | `createStudyPlayer` 或 iframe 消息接口 | `/?workspace=integration` 为真实宿主示例 |
 | 放进另一个 3D 项目 / 软件 | 整屋、选中物件 GLB | 房间「导出」；`/?workspace=viewer` 独立检查 |
 
@@ -55,7 +55,7 @@ command('play');
 
 ## 深度接入：直接使用源码 API
 
-适合已有 React、Vue 或其他 Vite / TypeScript 项目，希望自己设计全部界面的情况。复制 `src/player.ts`、`scene.ts`、`model.ts`、`geometry.ts`、`photos.ts`、`film-model.ts` 到同一模块目录，保持相对导入。若保留 `StudyScene.exportGLB`，同时复制 `model-export.ts`。
+适合已有 React、Vue 或其他 Vite / TypeScript 项目，希望自己设计全部界面的情况。复制 `src/player.ts`、`scene.ts`、`model.ts`、`geometry.ts`、`photos.ts`、`film-model.ts`、`portfolio-model.ts`、`hotspots.ts` 和 `portfolio.css` 到同一模块目录，保持相对导入。若保留 `StudyScene.exportGLB`，同时复制 `model-export.ts`。新增作品事件接口见 [PORTFOLIO.md](PORTFOLIO.md)。
 
 本次验证依赖 `three@0.180.0` 与开发类型 `@types/three@0.180.0`。单独播放器不依赖 Lucide 或 Mediabunny；集成视频编码功能才需要后者。保留仓库中的第三方许可说明。
 
@@ -101,7 +101,9 @@ scene.add(asset.scene); // scene、camera、renderer 与照明由你的产品创
 
 GLB 不携带本应用的撤销历史、编辑器、时间轴逻辑、SSAO、阴影配置或色调映射；本版本也不将短片编译成 glTF 相机动画。木纹 / 织物的 bump 细节没有导出。目标引擎需设置灯光、相机与渲染方式，因此无法保证跨软件逐像素一致。希望保持当前视觉风格与镜头节奏时，优先复用源码播放器和工程 JSON。
 
-## 本次家具与数据变更
+## 历史家具版本的数据变更（v2 房间 / v3 短片）
+
+以下记录上一轮迁移；当前作品版本升级为房间 v3 / 短片 v4，新增部位标识、作品内容与绑定，保存键和迁移规则以 [PORTFOLIO.md](PORTFOLIO.md) 为准。
 
 - 11 类可选物件，默认 9 件：原 8 件家具配饰与从固定装饰迁移出的相框。沙发与床按需添加，添加位置避开现有家具；手工移动沿用房间边界限制，不提供完整家具碰撞求解。
 - 墙面相框只支持背墙，最多 3 个。宽 0.4–1.8 m、高 0.3–1.2 m，水平位置与中心高度受墙面限制。上传 JPG / PNG / WebP ≤8 MB、边长≤8192，规范化为最长边≤1024 的 JPEG，每张编码字符串≤450,000 字符，保留照片比例并留白。照片存于工程内，换浏览器导入无需另找原图。当前不支持透明 PNG 保留透明度、裁剪工具或墙体编辑。

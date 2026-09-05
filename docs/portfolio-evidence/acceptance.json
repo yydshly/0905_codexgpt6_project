@@ -1,0 +1,125 @@
+{
+  "timestamp": "2026-09-05T08:19:27.051Z",
+  "baseline": "428cd19",
+  "featureCodeCommit": "78e9382ad649f49053a6f2b8b56a79bc6ae4a7a4",
+  "finalCodeCommit": "4b6b936129fee2a3e1f25002b3a7a20917929aab",
+  "branch": "codex/portfolio-interactions",
+  "local": {
+    "regression": {
+      "startTime": "2026-09-05T08:03:30.464Z",
+      "duration": 114366.715,
+      "expected": 21,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "portfolio": {
+      "startTime": "2026-09-05T08:09:24.749Z",
+      "duration": 23619.174000000003,
+      "expected": 5,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "mediaBudget": {
+      "startTime": "2026-09-05T08:15:30.443Z",
+      "duration": 6555.176,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "pages": {
+      "startTime": "2026-09-05T08:13:18.126Z",
+      "duration": 29833.321,
+      "expected": 5,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0,
+      "codeCommit": "78e9382"
+    },
+    "pauseRepair": {
+      "startTime": "2026-09-05T08:22:34.244Z",
+      "duration": 28318.341,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  "github": {
+    "status": "in_progress",
+    "finalRun": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33955146891",
+    "verifiedAsComplete": false,
+    "firstRun": {
+      "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33954590071",
+      "codeCommit": "78e9382",
+      "status": "success",
+      "passed": 26
+    },
+    "secondRun": {
+      "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33954823081",
+      "codeCommit": "8397179",
+      "portfolioPassed": 5,
+      "filmExport": "failed at pause stability",
+      "fixedBy": "4b6b936"
+    }
+  },
+  "artifacts": [
+    {
+      "file": "01-author-1440x900.png",
+      "bytes": 273391,
+      "sha256": "20688418e8d95150959881a021b7e2021f415898fdfe30866dee61da0afe3fe4"
+    },
+    {
+      "file": "02-portfolio-1440x900.png",
+      "bytes": 318275,
+      "sha256": "3a2282f88b9454b20787c0485961a082976ea84e29b73a331128d7c0bf2588bf"
+    },
+    {
+      "file": "03-project-detail-1280x800.png",
+      "bytes": 146007,
+      "sha256": "ca570346370899279bb0a31d56a1d97cf7a5fb69270229e535557738f7ad3589"
+    },
+    {
+      "file": "04-independent-glb-1280x800.png",
+      "bytes": 116220,
+      "sha256": "29b6940933df6a5cc511ac6e3ffafb7af60e07f80369529b72f12a1cbf6c7d53"
+    },
+    {
+      "file": "05-mobile-detail-390x844.png",
+      "bytes": 63669,
+      "sha256": "4f849497188681fd764cee5aca98dc3c12b48e1319ccf3971e5683f96dc4b9d6"
+    },
+    {
+      "file": "film-regression.json",
+      "bytes": 738,
+      "sha256": "72be70a6b3b2a6fd44f3bc3bba1e1c5db00dcebd94e34d6f933f4511b9077110"
+    },
+    {
+      "file": "journey.json",
+      "bytes": 901,
+      "sha256": "33c382b71e46166141e1db74801d0fdfe566b0a09d892f7c221925404d5370e5"
+    },
+    {
+      "file": "performance.json",
+      "bytes": 823,
+      "sha256": "fa0fcc441751bcf0f582d2808ec46806b70cd1ac2c3c85dafbe1b596355cf414"
+    },
+    {
+      "file": "portfolio-room.glb",
+      "bytes": 3780852,
+      "sha256": "d8d76972e78f19c1633d8efc1e822b5695b04725cef4723ebeca5ef295803047"
+    },
+    {
+      "file": "portfolio-room.json",
+      "bytes": 16996,
+      "sha256": "4707fa3bf5fb12d12762e9641756c7a76a7ab7d38ed3704a685706637dd2e423"
+    },
+    {
+      "file": "states.json",
+      "bytes": 197,
+      "sha256": "022a4749f192d65b6e35a5489edac05f3bc019c51727ba39c71696030a6b1be5"
+    }
+  ]
+}
