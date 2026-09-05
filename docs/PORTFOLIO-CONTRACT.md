@@ -21,4 +21,4 @@
 | JSON/GLB 导出与独立宿主接入 | pass | portfolio-room.json / .glb 下载后加载，独立 GLB 点击，iframe 事件 |
 | 键盘、错误、空状态、降级、减少动态 | pass | states.json；图片总量保护另加错误流程 1/1 |
 | 原房间/短片/复用回归、性能、构建 | pass | 21/21；性能记录；生产与 Pages 构建通过，audit 0 |
-| 文档、截图、工程与 GitHub 提交 | continue | 完成验收后记录真实结果 |
+| 文档、截图、工程与 GitHub 提交 | pass | README / PORTFOLIO / PORTFOLIO-VALIDATION，5 张截图、实际 JSON 与 GLB；独立分支已推送，CI 状态单独记录 |

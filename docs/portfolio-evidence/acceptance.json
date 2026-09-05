@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-05T08:19:27.051Z",
+  "timestamp": "2026-09-05T08:38:48.496Z",
   "baseline": "428cd19",
   "featureCodeCommit": "78e9382ad649f49053a6f2b8b56a79bc6ae4a7a4",
   "finalCodeCommit": "4b6b936129fee2a3e1f25002b3a7a20917929aab",
@@ -45,11 +45,19 @@
       "skipped": 0,
       "unexpected": 0,
       "flaky": 0
+    },
+    "finalPortfolio": {
+      "startTime": "2026-09-05T08:33:31.820Z",
+      "duration": 36483.5,
+      "expected": 5,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
     }
   },
   "github": {
     "status": "in_progress",
-    "finalRun": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33955146891",
+    "finalRun": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33955649267",
     "verifiedAsComplete": false,
     "firstRun": {
       "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33954590071",
@@ -63,7 +71,43 @@
       "portfolioPassed": 5,
       "filmExport": "failed at pause stability",
       "fixedBy": "4b6b936"
-    }
+    },
+    "thirdRun": {
+      "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33955146891",
+      "codeCommit": "4b6b936",
+      "regressionPassed": 21,
+      "portfolioPassed": 4,
+      "portfolioFailed": 1,
+      "diagnosis": "Trace: second toggle click occurred 12.3 s after start, after natural 10 s completion; it correctly restarted playback.",
+      "testFixedBy": "bd0feea"
+    },
+    "conclusion": "",
+    "finalJobs": [
+      {
+        "name": "browser-acceptance (room-reuse)",
+        "status": "in_progress",
+        "conclusion": "",
+        "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33955649267/job/101278390336"
+      },
+      {
+        "name": "browser-acceptance (film-export)",
+        "status": "in_progress",
+        "conclusion": "",
+        "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33955649267/job/101278390460"
+      },
+      {
+        "name": "browser-acceptance (film-controls)",
+        "status": "in_progress",
+        "conclusion": "",
+        "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33955649267/job/101278390481"
+      },
+      {
+        "name": "browser-acceptance (portfolio)",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33955649267/job/101278390523"
+      }
+    ]
   },
   "artifacts": [
     {
@@ -92,9 +136,19 @@
       "sha256": "4f849497188681fd764cee5aca98dc3c12b48e1319ccf3971e5683f96dc4b9d6"
     },
     {
-      "file": "film-regression.json",
+      "file": "cloud-film-regression.json",
       "bytes": 738,
-      "sha256": "72be70a6b3b2a6fd44f3bc3bba1e1c5db00dcebd94e34d6f933f4511b9077110"
+      "sha256": "b484ec5fba2db10ce19a6e2d2964651c9caf92fe0584738da2a6026ce12fbc7e"
+    },
+    {
+      "file": "film-regression.json",
+      "bytes": 739,
+      "sha256": "69df9bcafabf3f59faf6e296e54a3583adf4211d26b0e99b1f9c5093ac64e3fb"
+    },
+    {
+      "file": "gallery-pause.json",
+      "bytes": 426,
+      "sha256": "74b64ea25b6a8d48647d20d5d1fd9b671e2512b41b1978cb00b7ca5ae7abb428"
     },
     {
       "file": "journey.json",
@@ -117,9 +171,15 @@
       "sha256": "4707fa3bf5fb12d12762e9641756c7a76a7ab7d38ed3704a685706637dd2e423"
     },
     {
+      "file": "software-pause.json",
+      "bytes": 377,
+      "sha256": "28efe2b8901ecb9797a2131d53af3257594c98890118b7a977fd20d4dd8b5051"
+    },
+    {
       "file": "states.json",
       "bytes": 197,
       "sha256": "022a4749f192d65b6e35a5489edac05f3bc019c51727ba39c71696030a6b1be5"
     }
-  ]
+  ],
+  "finalTestCommit": "bd0feeaa8e9d2d2e91a2a0a60089a48625a621df"
 }
