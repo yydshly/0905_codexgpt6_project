@@ -1,0 +1,52 @@
+{
+  "src/assets/guide/creator-18.glb": {
+    "bytes": 7427696,
+    "sha256": "96c330f5fe50609c72525fc70c088af8fd6e253eea21f119e8f7567589c123f7",
+    "clips": [
+      "Walk_Loop",
+      "Idle_Loop"
+    ],
+    "meshes": 17,
+    "skins": 1,
+    "materials": 9
+  },
+  "src/assets/guide/personal-creator-01.glb": {
+    "bytes": 6655300,
+    "sha256": "75bc6af11f8fd569cebc8a28a766ba3d8a8f0ae25e2949fb553985abab966798",
+    "clips": [
+      "Idle_Loop",
+      "Walk_Loop"
+    ],
+    "meshes": 28,
+    "skins": 1,
+    "materials": 18
+  },
+  "src/assets/guide/personal-creator-02.glb": {
+    "bytes": 7448408,
+    "sha256": "179bd80758bd80077f430abd70162b66c99ff6a7665fa2a893487e821b9d3d6b",
+    "clips": [
+      "Idle_Loop",
+      "Walk_Loop"
+    ],
+    "meshes": 31,
+    "skins": 1,
+    "materials": 20
+  },
+  "src/assets/guide/guide-motion-v1.glb": {
+    "bytes": 598368,
+    "sha256": "ffa8848e21848b4fbdc0b5166165fd8112e47ea7a1a83c7180a20b1d96d16e86",
+    "clips": [
+      "Sitting_Enter",
+      "Sitting_Exit",
+      "Sitting_Idle_Loop",
+      "Walk_Loop"
+    ],
+    "meshes": 0,
+    "skins": 0,
+    "materials": 0
+  },
+  "docs/character-ip/source/personal-creator-02.blend": {
+    "bytes": 8937611,
+    "sha256": "406531111df8959d06f5179179227a61c475bf321309befde17132e43f1fafad"
+  }
+}

@@ -3,6 +3,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import bundledAvatarURL from './assets/guide/creator-18.glb?url';
 import personalAvatarURL from './assets/guide/personal-creator-01.glb?url';
+import personalAvatarV2URL from './assets/guide/personal-creator-02.glb?url';
 import motionURL from './assets/guide/guide-motion-v1.glb?url';
 import { DEFAULT_GUIDE_AVATAR, guideAvatars, type GuideAvatarId } from './guide-avatars';
 import type { GuideProject, GuideSample } from './guide-model';
@@ -11,7 +12,7 @@ import type { GuideProject, GuideSample } from './guide-model';
 export async function createGuideCharacter(avatar: GuideAvatarId = DEFAULT_GUIDE_AVATAR) {
   // The standalone kit references its adjacent file; the editor uses Vite's hashed asset.
   const avatarURL = typeof __GUIDE_ASSET_BASE__ === 'undefined'
-    ? (avatar === 'creator-18-v1' ? bundledAvatarURL : personalAvatarURL)
+    ? (avatar === 'creator-18-v1' ? bundledAvatarURL : avatar === 'personal-creator-02-v1' ? personalAvatarV2URL : personalAvatarURL)
     : __GUIDE_ASSET_BASE__ + guideAvatars[avatar].file;
   const loader = new GLTFLoader();
   const gltf = await loader.loadAsync(avatarURL);
@@ -148,7 +149,7 @@ export async function createGuideCharacter(avatar: GuideAvatarId = DEFAULT_GUIDE
         const blend = (1 - weight) * (name.startsWith('spine') ? .72 : 1);
         bone.quaternion.slerp(rest.get(name)!.q, blend); bone.position.lerp(rest.get(name)!.p, blend);
       }
-      if (avatar === 'personal-creator-01-v1') for (const [name, bone] of bones) if (/^(thumb|index|middle|ring|pinky)_/.test(name)) bone.quaternion.slerp(rest.get(name)!.q, (1 - weight) * .85);
+      if (avatar !== 'creator-18-v1') for (const [name, bone] of bones) if (/^(thumb|index|middle|ring|pinky)_/.test(name)) bone.quaternion.slerp(rest.get(name)!.q, (1 - weight) * .85);
       sittingPose(s);
       root.updateMatrixWorld(true);
       if (s.turning) {
@@ -179,15 +180,15 @@ export async function createGuideCharacter(avatar: GuideAvatarId = DEFAULT_GUIDE
       const handLeft = vector(.25, .93, .14).lerp(vector(.14, 1.10 + breath, .31), read).lerp(seatedHand, s.sitWeight);
       handLeft.y += Math.sin(s.stride * 2) * .009 * weight; handLeft.z += Math.sin(s.stride) * .014 * weight;
       const handRight = vector(-.14, 1.10 + breath, .31).lerp(vector(-.13, seatedHand.y, seatedHand.z), s.sitWeight);
-      book.position.copy(vector(.24, avatar === 'personal-creator-01-v1' ? .83 : .91, .13).lerp(vector(0, 1.11 + breath, .32), read));
+      book.position.copy(vector(.24, avatar !== 'creator-18-v1' ? .83 : .91, .13).lerp(vector(0, 1.11 + breath, .32), read));
       book.position.lerp(vector(0, seatedHand.y + .01, seatedHand.z + .01), s.sitWeight);
       book.rotation.set(-.12 * read, 0, (1 - read) * -.20);
       leaves.forEach((leaf, i) => { leaf.rotation.z = (i ? 1 : -1) * T.MathUtils.lerp(1.46, .16, read); });
       const flip = smooth((s.actionTime % 3.6 - 1.5) / .85); page.visible = read > .95 && flip > 0 && flip < 1; page.rotation.z = Math.PI * flip;
       arm('l', handLeft, vector(.39, handLeft.y, handLeft.z - .20), 1);
       arm('r', handRight, vector(-.39, handRight.y, handRight.z - .20), read);
-      handPose('l', .8 + .2 * read, avatar === 'personal-creator-01-v1' ? 1 - read : 0); handPose('r', read);
-      if (avatar === 'personal-creator-01-v1' && read < 1) {
+      handPose('l', .8 + .2 * read, avatar !== 'creator-18-v1' ? 1 - read : 0); handPose('r', read);
+      if (avatar !== 'creator-18-v1' && read < 1) {
         root.updateMatrixWorld(true);
         // The folded book's center follows the actual palm after IK, not a wrist-level guess.
         const grip = root.worldToLocal(worldPosition(bones.get('middle_01_l')!));

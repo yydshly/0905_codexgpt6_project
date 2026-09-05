@@ -2,9 +2,9 @@
 
 一间可编辑、可拍摄，也可作为个人作品主页的 3D 书房。支持 11 类物件、最多 3 段短片镜头、作品关联、多工程与保存版本，以及图片、视频、模型和独立网站导出。
 
-**本次网页补充归纳：**[网页入口、工程关系与发布能力](docs/WEB-CHARACTER-SUMMARY.md)汇总新增角色导览、原有工作区的关联、网页接入方式及实际成果；[人物质量升级路线](docs/CHARACTER-QUALITY-ROADMAP.md)记录后续建议，尚未作为新功能实现。当前角色网页源码和资产已提交在 `codex/character-guide`，推送该分支不会自动更新公开站点。
+**本次网页补充归纳：**[网页入口、工程关系与发布能力](docs/WEB-CHARACTER-SUMMARY.md)汇总新增角色导览、原有工作区的关联、网页接入方式及实际成果；[人物质量升级路线](docs/CHARACTER-QUALITY-ROADMAP.md)记录后续建议；本轮已制作并接入[个人 IP · 蓬松偏分 02](docs/character-ip/EDITION-02.md)，提供 Blender 源文件与网页模型，后续定制表演仍待完善。当前角色网页源码和资产已提交在 `codex/character-guide`，推送该分支不会自动更新公开站点。
 
-本分支 `codex/character-guide` 新增「小禾角色导览」可运行原型：以 18 岁青年为基准的骨骼角色、绕开家具行走、阅读随身手册与屏幕介绍、最多三段时间轴、设置与历史、本地导览快照、JSON、真实视频和独立导览网站包。默认 28 秒（阅读、介绍、坐下阅读并站起），新导览使用个人 IP 设定 01 的 3D 样版，支持与旧角色切换、保存及发布；保留原有全部工作区。[人物运动与坐下站起验收](docs/MOTION-GUIDE.md) · [个人 IP 3D 接入样版](docs/character-ip/INTEGRATION.md) · [青年角色升级与验收](docs/ADULT-AVATAR.md) · [上一版原型记录](docs/CHARACTER-GUIDE.md)。此分支尚未合并或部署到线上主站。
+本分支 `codex/character-guide` 新增「小禾角色导览」可运行原型：以 18 岁青年为基准的骨骼角色、绕开家具行走、阅读随身手册与屏幕介绍、最多三段时间轴、设置与历史、本地导览快照、JSON、真实视频和独立导览网站包。默认 28 秒（阅读、介绍、坐下阅读并站起），新导览使用个人 IP 蓬松偏分 02 的 3D 资产，支持与旧角色切换、保存及发布；保留原有全部工作区。[人物运动与坐下站起验收](docs/MOTION-GUIDE.md) · [个人 IP 3D 接入样版](docs/character-ip/INTEGRATION.md) · [青年角色升级与验收](docs/ADULT-AVATAR.md) · [上一版原型记录](docs/CHARACTER-GUIDE.md)。此分支尚未合并或部署到线上主站。
 
 主分支 `main` 汇总此前各阶段成果。当前发布包括工程库使用帮助、带备份与确认的工程删除，以及「不保存，返回工程库」。[本次发布总结与线上验收](docs/RELEASE-2026-09-05.md)。
 
@@ -54,8 +54,9 @@ GLB 带走模型、材质和部位标识；JSON 带走房间、照片与作品�
 
 ## 文档与实际交付
 
+- [个人 IP 02：实际效果、Blender 源文件、GLB、视频与验收](docs/character-ip/EDITION-02.md)
 - [新增网页能力、角色导览和远端交付归纳](docs/WEB-CHARACTER-SUMMARY.md)
-- [人物质量升级路线：模型、绑定、动画、控制与渲染（待实施）](docs/CHARACTER-QUALITY-ROADMAP.md)
+- [人物质量升级路线：模型、绑定、动画、控制与渲染（部分推进）](docs/CHARACTER-QUALITY-ROADMAP.md)
 - [本次发布总结、线上地址与验证](docs/RELEASE-2026-09-05.md)
 - [工程删除与不保存返回](docs/PROJECT-ACTIONS.md)
 - [工程库使用帮助](docs/PROJECTS-HELP.md)

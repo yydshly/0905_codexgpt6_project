@@ -487,3 +487,17 @@ motion capture or original animation by this project. This project's work:
 distance-driven gait timing, staged turns, transition blending, chair-relative
 alignment, hip height correction, leg/arm IK, notebook handling, deterministic
 preview/export sampling and integration. See docs/MOTION-GUIDE.md.
+
+
+PERSONAL IP EDITION 02 — MODEL AND BLENDER SOURCE
+src/assets/guide/personal-creator-02.glb and
+ docs/character-ip/source/personal-creator-02.blend retain the CC0-derived
+Quaternius body parts, skeleton and Idle_Loop / Walk_Loop as credited above.
+New/modified in scripts/build-personal-avatar-v2.py: freeform swept hair
+locks and undercut, refined head/face, almond eyes, lips, vertex skin color,
+slimmer tea frames, collar and tailoring. The .blend preserves separate
+editable meshes; the runtime GLB merges compatible meshes for rendering.
+This is a script-authored stylized 3D asset, not hand-sculpted portraiture,
+new motion capture, or a promise of resemblance to the user. Sitting and
+standing continue to use the separate CC0 motion file and project IK.
+See docs/character-ip/EDITION-02.md for reuse and validation details.

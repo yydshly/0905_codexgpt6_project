@@ -15,6 +15,7 @@ try{
  await page.goto(new URL('?workspace=guide',base).href);await page.waitForFunction(()=>document.documentElement.dataset.ready==='true');
  await page.locator('#guide-file').setInputFiles(dest+'/verified-guide.json');
  await replay.goto(`http://127.0.0.1:${server.address().port}/`);await replay.waitForFunction(()=>document.querySelector('video').readyState>=2);
+ const avatarId=await page.evaluate(()=>window.__guide.project().guide.avatar);
  const checks=[];
  for(const time of [1.5,5.5,10,13]){
   await page.bringToFront();await page.locator('#guide-scrub').fill(String(time));await page.waitForTimeout(250);
@@ -28,7 +29,7 @@ try{
   const legacy=diff(await crop(page,'#guide-canvas canvas',roi),video);
   if(same>12||legacy<=same+1)throw Error('Actor-region comparison failed '+JSON.stringify({time,same,legacy}));
   checks.push({time,region:roi,personalPreviewToVideoMae:same,legacyPreviewToVideoMae:legacy});
-  await page.locator('#guide-avatar').selectOption('personal-creator-01-v1');await page.waitForFunction(()=>window.__guide.avatar().asset==='personal-creator-01-v1');
+  await page.locator('#guide-avatar').selectOption(avatarId);await page.waitForFunction(id=>window.__guide.avatar().asset===id,avatarId);
  }
  await page.locator('#guide-color').selectOption('sage');await page.locator('#guide-start').click();await page.locator('#guide-character-close').click();await page.waitForTimeout(300);await page.screenshot({path:dest+'/13-personal-ip-front.png'});
  await page.locator('[data-guide-mood="dusk"]').click();await page.locator('#guide-character-close').click();await page.waitForTimeout(250);await page.screenshot({path:dest+'/14-personal-ip-dusk.png'});
