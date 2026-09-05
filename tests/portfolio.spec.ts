@@ -40,7 +40,17 @@ test('作品闭环：配置、模型点击、移动材质历史、恢复、JSON�
   await expect(page.locator('#work-title')).toHaveText('空间手记 · 我的创作');await expect(page.locator('.work-art img')).toBeVisible();await capture(page,'03-project-detail-1280x800.png');
   const popupPromise=page.waitForEvent('popup');await page.locator('.work-visit').click();const popup=await popupPromise;await popup.waitForURL('https://github.com/yydshly/0905_codexgpt6_project');await popup.close();await page.keyboard.press('Escape');
   await page.mouse.move(point.x,point.y);await page.mouse.down();await page.mouse.move(point.x+90,point.y+25,{steps:8});await page.mouse.up();await expect(page.locator('.work-dialog')).not.toBeVisible();
-  await page.locator('#portfolio-reset').click();await page.locator('#portfolio-markers').click();await page.locator('#portfolio-play').click();await expect(page.locator('.study-hotspots')).toBeHidden();await page.locator('#portfolio-play').click();await expect(page.locator('.study-hotspots')).toBeVisible();
+  await page.locator('#portfolio-reset').click();await page.locator('#portfolio-markers').click();
+  // Locate before playback: on software rendering the second locator action can take
+  // longer than the entire film, then legitimately click "play" after it has ended.
+  const playButton=await page.locator('#portfolio-play').boundingBox();expect(playButton).not.toBeNull();
+  await page.mouse.move(playButton!.x+playButton!.width/2,playButton!.y+playButton!.height/2);
+  await page.mouse.click(playButton!.x+playButton!.width/2,playButton!.y+playButton!.height/2);
+  await expect(page.locator('.study-hotspots')).toBeHidden();
+  await page.mouse.click(playButton!.x+playButton!.width/2,playButton!.y+playButton!.height/2);
+  const paused=await page.evaluate(()=>(window as any).__portfolio.state());expect(paused.playing).toBe(false);expect(paused.time).toBeLessThan(paused.duration);
+  await expect(page.locator('.study-hotspots')).toBeVisible();await page.waitForTimeout(180);
+  expect(await page.evaluate(()=>(window as any).__portfolio.state())).toEqual(paused);
   await page.setViewportSize({width:1280,height:800});await page.locator('#portfolio-reset').click();await page.locator('[data-work]').first().click();await capture(page,'03-project-detail-1280x800.png');await page.keyboard.press('Escape');
   for(const size of [{width:1440,height:900},{width:1280,height:800}]){await page.setViewportSize(size);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);await expect(page.locator('#portfolio-json')).toBeInViewport();await expect(page.locator('#portfolio-play')).toBeInViewport();}
   const viewer=await browser.newPage({baseURL:new URL('.',page.url()).href,viewport:{width:1280,height:800}});await ready(viewer,'viewer');await viewer.locator('#glb-file').setInputFiles(glbPath);await expect(viewer.locator('html')).toHaveAttribute('data-loaded','true');await viewer.locator('#glb-project').setInputFiles(jsonPath);await expect(viewer.locator('#glb-work-status')).toContainText('已关联 2');await viewer.locator('[data-target="monitor-1/screen"]').click();await expect(viewer.locator('#work-title')).toHaveText('理想书房 · 交互项目');await viewer.keyboard.press('Escape');const glbInfo=await viewer.evaluate(()=>(window as any).__glb);await capture(viewer,'04-independent-glb-1280x800.png');await viewer.close();
