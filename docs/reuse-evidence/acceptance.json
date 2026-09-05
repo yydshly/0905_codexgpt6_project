@@ -1,0 +1,120 @@
+{
+  "timestamp": "2026-09-05T06:50:42.296Z",
+  "functionalCommit": "147ca48498dc0a4679620fc05a4d68ce1f4e5199",
+  "normalizedCommit": "f30104082046b5e7b36aee789bd8ec8a1314d369",
+  "root": {
+    "baseURL": "http://127.0.0.1:4173/",
+    "stats": {
+      "startTime": "2026-09-05T06:40:35.473Z",
+      "duration": 111425.68900000001,
+      "expected": 20,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "then": "GLB directional-light orientation: 3 reuse tests passed; old film v2 migration: 1 test passed"
+  },
+  "pages": {
+    "baseURL": "http://127.0.0.1:4174/0905_codexgpt6_project/",
+    "stats": {
+      "startTime": "2026-09-05T06:47:42.605Z",
+      "duration": 24101.93,
+      "expected": 4,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  "audit": "0 vulnerabilities",
+  "ffprobe": {
+    "codec": "h264",
+    "width": 1280,
+    "height": 720,
+    "fps": 30,
+    "decodedFrames": 306,
+    "duration": 10.2,
+    "bytes": 6180011
+  },
+  "artifacts": [
+    {
+      "file": "01-photo-room-1440x900.png",
+      "bytes": 483341,
+      "sha256": "e905d28b2fcad52459deabd2e011c35a86fdfc883f9ff3f5011b284d75bbe8d9"
+    },
+    {
+      "file": "02-exported-glb-1280x800.png",
+      "bytes": 114711,
+      "sha256": "8e4a626144bc45567a0dd39c06df80ccfb0620e10798a0d82ea937b23fb1edb8"
+    },
+    {
+      "file": "03-sofa-1280x800.png",
+      "bytes": 363670,
+      "sha256": "264a6e040847e999fe88027cdf0ebf5feff6c791554e7e745da5d741cc15fe16"
+    },
+    {
+      "file": "04-bed-1280x800.png",
+      "bytes": 361627,
+      "sha256": "a8ff18493bd8793ab09a0da56e1a9a1272cf8417b60fa7417a7a1d369d294560"
+    },
+    {
+      "file": "05-product-integration-1440x900.png",
+      "bytes": 344197,
+      "sha256": "8b4c0ee0303d16a8e25665fdf84d4ed61507417d1992465025533d1f88f42270"
+    },
+    {
+      "file": "film-performance.json",
+      "bytes": 6517,
+      "sha256": "cc15b8762234fb97dc8c71bbc3a90fe1148880eac2f6dc8320de26ab08f381b6"
+    },
+    {
+      "file": "film-regression.json",
+      "bytes": 738,
+      "sha256": "c3f5c392efd174754050564fe8f6ede6c04945cab4ac028acf9310c11950e2ff"
+    },
+    {
+      "file": "film-regression.mp4",
+      "bytes": 6180011,
+      "sha256": "1686940bcfc04d79c391923067616a18dcfaca925e55559c288ad54b5a2cbc2c"
+    },
+    {
+      "file": "furniture.json",
+      "bytes": 2295,
+      "sha256": "70da76a2372de91ad85e145c20656e781493492b32e433d9329090794d8d9ca9"
+    },
+    {
+      "file": "integration.json",
+      "bytes": 203,
+      "sha256": "a7aeb4a0cea4babd130494b562898de05b27f565b2adf7226de77687991c1b75"
+    },
+    {
+      "file": "photo-and-glb.json",
+      "bytes": 1135,
+      "sha256": "ac81a0a000f12641bbe936b0bc350a8deb9da245137530c22df1e2949cc4fc58"
+    },
+    {
+      "file": "reusable-film.json",
+      "bytes": 17519,
+      "sha256": "4df481db943aa5309fda8156934b2b304a18457daaacaa54aad0b7ffe92cb193"
+    },
+    {
+      "file": "reusable-room.json",
+      "bytes": 15937,
+      "sha256": "fd1982dae86cda5857cf68c1452234bdbee9e26e72dde7ab2b1ab55d5de20dc9"
+    },
+    {
+      "file": "study-room.glb",
+      "bytes": 3801428,
+      "sha256": "693d50aaf250d33c4ec973c3fed7a25156913bef1547d3adf780d272cbb18e88"
+    },
+    {
+      "file": "test-photo.png",
+      "bytes": 22565,
+      "sha256": "0d1df2d25daeb3badc042b95f716c3c87523cd424b6d9f54674045ef7cdac188"
+    },
+    {
+      "file": "wall-photo.glb",
+      "bytes": 684800,
+      "sha256": "022fd4981088737060229a41b42bf820558cefc94278ea18cedabbb852f5617e"
+    }
+  ]
+}

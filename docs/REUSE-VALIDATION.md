@@ -43,6 +43,8 @@
 
 前一分支的 GitHub Actions `33949187559` 已结束失败，不能用本机测试替代它。本轮修正：视频逐帧向事件循环让出执行权，使慢速 GPU 上的取消输入不再等待三个画面；暂停测试先回到开头，避免慢速点击跨过片尾；完整 10.2 秒主流程在 CI 中允许更长编码时间。额外 VP9 / VP8 格式探针在 CI 中通过真实编辑器改成 3 秒、90 帧，明确与本地默认 10 秒、300 帧分开命名。未改变产品导出的默认尺寸、帧率或采样器。
 
-GitHub Pages 子路径与本分支 GitHub Actions 的最终状态将在本记录收尾时填写；当前不宣称云端通过。
+GitHub Pages 子路径 http://127.0.0.1:4174/0905_codexgpt6_project/ 的 4 项复用与迁移测试通过，含整屋 / 单件 GLB、JSON 与 iframe 路由。命令：npx playwright test --config playwright.pages.config.ts tests/reuse.spec.ts。实际统计与产物哈希见 reuse-evidence/acceptance.json。
+
+本分支云端运行 https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33950790993 尚在执行，收尾时填入结论，不宣称已通过。
 
 已知限制：完整手机编辑、其他浏览器、真实跨域宿主、React / Vue 生产应用、原生 WebView、Blender / Unity / Unreal 均未在本轮实测。GLB 的照明、bump 与后期不能保证和网页一致；照片限制在背墙，最多 3 个；手动移动可造成家具相交，未增加物理 / CAD。浏览器配额不足时会提示失败，JSON 是备份途径。账号、云同步、付费发布、npm 包发布均未实施。
