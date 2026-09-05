@@ -36,7 +36,9 @@
 
 `npm run build`、`build:pages`、TypeScript、`npm audit --audit-level=high` 通过，audit 0 漏洞。Three.js 主包仍有大于 500 kB 的构建提示，未掩盖或调高阈值。
 
-GitHub 已增加独立 publish 套件，与原四个套件共 30 项。[云端运行记录](https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33957682972)，交付记录时的状态见 [acceptance.json](publish-evidence/acceptance.json)，未完成任务不计通过。
+GitHub 已增加独立 publish 套件，与原四个套件共 30 项。[首轮云端运行](https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33957682972) 中 publish、portfolio、room-reuse、film-controls 通过，film-export 暂停步骤失败。实际 trace 显示播放期间定位按钮花费约 6.26 秒，加上鼠标操作延迟，按下时播放头已到 10.2 秒片尾；随后点击正常开始重播。测试提交 `d169584` 将按钮定位和鼠标移动放在播放前，保留暂停断言，并增加「暂停时间小于总时长」断言，没有修改产品行为。本机再次完成该短片的修改、保存刷新、视频下载和实际回放，**1/1 通过，28.2 秒**。
+
+[修正后的云端运行](https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33958022637) 已触发。交付记录时的逐任务状态见 [acceptance.json](publish-evidence/acceptance.json)，尚未结束的任务不计通过。
 
 ## 实际交付与性能
 

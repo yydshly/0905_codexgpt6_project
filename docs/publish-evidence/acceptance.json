@@ -1,7 +1,8 @@
 {
-  "timestamp": "2026-09-05T09:24:45.439Z",
+  "timestamp": "2026-09-05T09:31:06.468Z",
   "baseline": "df582ac",
   "codeCommit": "ad30c93707e8d0a1f3aa74ba2e4faef28f6aa8cf",
+  "finalTestCommit": "d169584800184ac89c4dc032535c6cad273f109b",
   "branch": "codex/publishable-portfolio",
   "local": {
     "fullFirst": {
@@ -35,12 +36,21 @@
       "skipped": 0,
       "unexpected": 0,
       "flaky": 0
+    },
+    "filmTimingRepair": {
+      "startTime": "2026-09-05T09:26:59.933Z",
+      "duration": 28219.643,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
     }
   },
-  "github": {
+  "githubFirst": {
     "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33957682972",
-    "status": "in_progress",
-    "conclusion": "",
+    "headSha": "ad30c93707e8d0a1f3aa74ba2e4faef28f6aa8cf",
+    "status": "completed",
+    "conclusion": "failure",
     "verifiedAsComplete": false,
     "jobs": [
       {
@@ -51,8 +61,8 @@
       },
       {
         "name": "browser-acceptance (room-reuse)",
-        "status": "in_progress",
-        "conclusion": "",
+        "status": "completed",
+        "conclusion": "success",
         "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33957682972/job/101283869620"
       },
       {
@@ -63,8 +73,8 @@
       },
       {
         "name": "browser-acceptance (film-controls)",
-        "status": "in_progress",
-        "conclusion": "",
+        "status": "completed",
+        "conclusion": "success",
         "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33957682972/job/101283869628"
       },
       {
@@ -74,6 +84,51 @@
         "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33957682972/job/101283869670"
       }
     ]
+  },
+  "github": {
+    "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33958022637",
+    "headSha": "d169584800184ac89c4dc032535c6cad273f109b",
+    "status": "in_progress",
+    "conclusion": "",
+    "verifiedAsComplete": false,
+    "jobs": [
+      {
+        "name": "browser-acceptance (room-reuse)",
+        "status": "in_progress",
+        "conclusion": "",
+        "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33958022637/job/101284770905"
+      },
+      {
+        "name": "browser-acceptance (portfolio)",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33958022637/job/101284770947"
+      },
+      {
+        "name": "browser-acceptance (film-export)",
+        "status": "in_progress",
+        "conclusion": "",
+        "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33958022637/job/101284770951"
+      },
+      {
+        "name": "browser-acceptance (film-controls)",
+        "status": "in_progress",
+        "conclusion": "",
+        "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33958022637/job/101284771010"
+      },
+      {
+        "name": "browser-acceptance (publish)",
+        "status": "in_progress",
+        "conclusion": "",
+        "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33958022637/job/101284771063"
+      }
+    ]
+  },
+  "cloudTestRepair": {
+    "affected": "film-export pause interaction",
+    "observed": "Trace shows locator took 6256 ms while playing. By mouse-down playhead was 10.2 (natural end); mouse-up correctly restarted the film.",
+    "change": "Locate and position the real pointer before playback; retain all pause assertions and add paused playhead < total duration. Runtime code unchanged.",
+    "localResult": "Full edit, save/reload, video export, real downloaded file replay passed again."
   },
   "publicDeploymentPerformed": false,
   "artifacts": [
