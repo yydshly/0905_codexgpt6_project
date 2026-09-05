@@ -1,0 +1,26 @@
+{
+  "timestamp": "2026-09-05T04:04:21.212Z",
+  "invalidImports": 8,
+  "planHistoryAndStoragePreserved": true,
+  "legacySource": "dafab5a:docs/evidence/verified-plan.json",
+  "legacyCoreExact": true,
+  "renamedLegacySavedAndRestored": true,
+  "sourceCommit": "498fc1b",
+  "localAcceptance": {
+    "passed": 10,
+    "failed": 0,
+    "durationSeconds": 34.0
+  },
+  "fileFeedbackVisibleInsideDialog": true,
+  "testedViewports": [
+    [
+      1440,
+      900
+    ],
+    [
+      1280,
+      800
+    ]
+  ],
+  "renamedItemIncludedInMainJsonRoundTrip": true
+}

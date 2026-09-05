@@ -75,12 +75,13 @@
       "material": "ivory"
     },
     {
-      "id": "taskLamp-78e8049d-6d62-4672-8896-1131208d9d1e",
+      "id": "taskLamp-76231807-cc88-4ff1-a0a0-78396ac344f3",
       "kind": "taskLamp",
       "x": 1.4068,
       "z": -1,
       "rotation": 15,
       "material": "sage",
+      "label": "桌边阅读灯",
       "parentId": "desk-1",
       "on": true,
       "brightness": 99
@@ -99,5 +100,5 @@
     ],
     "zoom": 1
   },
-  "selectedId": "taskLamp-78e8049d-6d62-4672-8896-1131208d9d1e"
+  "selectedId": "taskLamp-76231807-cc88-4ff1-a0a0-78396ac344f3"
 }

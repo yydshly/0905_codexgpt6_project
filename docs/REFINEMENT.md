@@ -2,6 +2,8 @@
 
 2026-09-05，响应「继续优化」。源码提交：[`42fc201`](https://github.com/yydshly/0905_codexgpt6_project/commit/42fc201)；镜头/拾取修正：[`9ccc492`](https://github.com/yydshly/0905_codexgpt6_project/commit/9ccc492)。保留单房间、8 类物件、3 种氛围和 JSON v1 格式，本轮没有新增依赖或外部资产。
 
+第三轮物件管理与文件保护另见 [USABILITY.md](USABILITY.md)。本报告保留第二轮数据；截图链接显示当前版本。
+
 ## 实际改变
 
 | 基线问题 | 本轮调整 | 验证结果 |
@@ -46,7 +48,7 @@
 
 每种氛围采集 100 个 requestAnimationFrame 间隔，丢弃前 5 个；包含真实观察拖动。它们是短时间帧间隔，不能当作 GPU 渲染耗时或所有机器的帧率保证。349 次对应缓存阴影后的观察画面；移动家具或切换氛围会重新绘制阴影。启动时仍生成所有材质缩略图，本轮没有宣称启动性能提高。
 
-原始记录：[performance.json](evidence/performance.json)、[optimization.json](evidence/optimization.json)。完整文件闭环记录：[journey.json](evidence/journey.json)。
+原始记录：[第二轮 performance.json](https://github.com/yydshly/0905_codexgpt6_project/blob/dafab5a/docs/evidence/performance.json)、[optimization.json](evidence/optimization.json)。完整文件闭环记录：[journey.json](evidence/journey.json)。
 
 ## 工程记录与边界
 
