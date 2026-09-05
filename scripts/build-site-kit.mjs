@@ -7,6 +7,7 @@ await build({configFile:false,publicDir:false,base:'./',define:{__GUIDE_ASSET_BA
 await mkdir(out,{recursive:true});
 const avatars=JSON.parse(await readFile(path.join(root,'src/assets/guide/avatars.json'),'utf8'));
 for(const avatar of Object.values(avatars)) await copyFile(path.join(root,'src/assets/guide',avatar.file),path.join(out,'assets',avatar.file));
+await copyFile(path.join(root,'src/assets/guide/guide-motion-v1.glb'),path.join(out,'assets/guide-motion-v1.glb'));
 await writeFile(path.join(out,'index.html'),'<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta name="description" content="探索我的 3D 创作空间与个人作品。"/><title>个人作品</title><link rel="stylesheet" href="./assets/site.css"/></head><body><div id="app"><p role="status">正在打开作品空间…</p></div><script type="module" src="./assets/site.js"></script></body></html>');
 await writeFile(path.join(out,'LICENSES.txt'),await readFile(path.join(root,'THIRD_PARTY_LICENSES.txt'),'utf8'));
 await writeFile(path.join(out,'manifest.json'),JSON.stringify({version:1,files:['index.html','assets/site.js','assets/site.css','LICENSES.txt']}));

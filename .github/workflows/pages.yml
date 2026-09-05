@@ -49,7 +49,7 @@ jobs:
         run: npx playwright test --config playwright.pages.config.ts tests/projects.spec.ts
       - name: Character guide at the Pages subpath
         if: matrix.suite == 'guide'
-        run: npx playwright test --config playwright.pages.config.ts tests/guide.spec.ts
+        run: npx playwright test --config playwright.pages.config.ts tests/guide.spec.ts tests/guide-motion.spec.ts
       - name: Keep actual browser evidence
         if: always()
         uses: actions/upload-artifact@v7.0.1

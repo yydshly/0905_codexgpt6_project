@@ -1,7 +1,7 @@
 import { StudyScene } from './scene';
 import { createGuideCharacter } from './adult-character';
 import { guideAvatars, type GuideAvatarId } from './guide-avatars';
-import { compileGuide, guideDuration, guideSignature, guideStart, guideTarget, guideWork, parseGuideProject, sampleGuide, type GuideProject } from './guide-model';
+import { compileGuide, guideActionName, guideDuration, guideSignature, guideStart, guideTarget, guideWork, parseGuideProject, sampleGuide, type GuideProject } from './guide-model';
 import { FPS, cameraForPose } from './film-model';
 import { MAX_JSON_BYTES, displayName } from './model';
 import { detectExportFormats, encodeSequence, type ExportFormat } from './film-export';
@@ -21,9 +21,9 @@ export async function mountGuide(initial: GuideProject, options: { visitor?: boo
     <header class="guide-header"><a class="guide-brand" href="${visitor ? '#' : '?workspace=projects'}"><span>◇</span> 理想书房 <small>/ 角色导览</small></a><span class="guide-edition">${visitor ? 'INTERACTIVE PORTFOLIO' : 'LAB 01 · 青年导览'}</span><nav>${visitor ? '' : '<button id="guide-undo" aria-label="撤销">↶</button><button id="guide-redo" aria-label="重做">↷</button><button id="guide-save">保存导览</button><button id="guide-export" class="guide-primary">导出视频 ↗</button>'}</nav></header>
     <div class="guide-main"><aside class="guide-sidebar"><div class="guide-intro"><span class="guide-eyebrow">A LITTLE COMPANY</span><h1>让作品，<br/>有人带你看。</h1><p><span id="guide-name-label"></span>会带你认识书房里的创作。<br/>点一件作品，开始一段小小的探索。</p></div>
       ${visitor ? '' : '<div class="guide-avatar-picker"><label for="guide-avatar">角色形象 <span>同一角色用于预览与导出</span></label><select id="guide-avatar" aria-label="角色形象"></select></div>'}
-      <div class="guide-section-title"><span>导览段落</span><small id="guide-total"></small></div><div id="guide-stops" class="guide-stops"></div>
+      <div class="guide-section-title"><span>导览段落</span><small id="guide-total"></small></div><div id="guide-stops" class="guide-stops"></div>${visitor ? '' : '<button id="guide-add-sit" class="guide-add-sit">＋ 添加坐下 / 站起段落</button>'}
       <section class="guide-current"><span class="guide-eyebrow" id="guide-action-title"></span><h2 id="guide-work-title"></h2><p id="guide-work-description"></p><button id="guide-open">直接查看作品 ↗</button><small>可跳过动作，直接打开作品详情。</small></section>
-      ${visitor ? '' : '<details class="guide-settings" open><summary>角色与段落设置</summary><label>导览名称<input id="guide-title" maxlength="48" aria-label="导览名称"/></label><div class="guide-field-row"><label>角色名字<input id="guide-name" maxlength="12" aria-label="角色名字"/></label><label>上衣颜色<select id="guide-color" aria-label="上衣颜色"><option value="sage">鼠尾草绿</option><option value="clay">陶土橘</option><option value="blue">雾蓝色</option></select></label></div><div class="guide-field-row"><label>当前段落时长<select id="guide-duration" aria-label="当前段落时长"></select></label><button id="guide-order">交换顺序 ⇅</button></div><p id="guide-avatar-note" class="guide-setting-note"></p></details>'}
+      ${visitor ? '' : '<details class="guide-settings" open><summary>角色与段落设置</summary><label>导览名称<input id="guide-title" maxlength="48" aria-label="导览名称"/></label><div class="guide-field-row"><label>角色名字<input id="guide-name" maxlength="12" aria-label="角色名字"/></label><label>上衣颜色<select id="guide-color" aria-label="上衣颜色"><option value="sage">鼠尾草绿</option><option value="clay">陶土橘</option><option value="blue">雾蓝色</option></select></label></div><div class="guide-field-row"><label>当前段落时长<select id="guide-duration" aria-label="当前段落时长"></select></label><button id="guide-order">交换顺序 ⇅</button></div><label id="guide-seat-field" hidden>使用的椅子<select id="guide-seat" aria-label="使用的椅子"></select><span class="guide-setting-note">按椅子位置与朝向坐下。时长包含进场、坐下、停留和站起。</span></label><div id="guide-seat-preview" hidden><button data-seat-phase="enter">看坐下</button><button data-seat-phase="hold">看坐姿</button><button data-seat-phase="exit">看站起</button></div><button id="guide-remove-sit" hidden>移除坐下段落</button><p id="guide-avatar-note" class="guide-setting-note"></p></details>'}
     </aside><section class="guide-stage" aria-label="角色导览预览"><div class="guide-stage-top"><span><i></i> LIVE 3D <b id="guide-status">正在打开书房…</b></span><div class="guide-camera-actions"><button id="guide-character-close">角色近景</button><button id="guide-camera">恢复导览镜头</button></div></div><div class="guide-frame"><div id="guide-canvas"></div><div id="guide-loading">正在加载书房与青年角色…</div></div><div class="guide-caption"><span id="guide-caption-index">01 / 02</span><div><strong id="guide-caption-title"></strong><p id="guide-caption-text"></p></div><span class="guide-character-tag">青年创作者<br/><b id="guide-character-identity"></b></span></div><div class="guide-stage-foot"><span>拖动旋转 · 滚轮缩放 · 点击标记探索作品</span><div>${['day','dusk','night'].map((m,i)=>`<button data-guide-mood="${m}">${['白昼','黄昏','深夜'][i]}</button>`).join('')}</div></div></section></div>
     <footer class="guide-timeline"><div class="guide-transport"><button id="guide-start" aria-label="回到开头">↤</button><button id="guide-play" class="guide-primary" aria-label="播放导览">▶ 播放导览</button><span id="guide-time">00.0 / 16.0 s</span></div><div class="guide-track"><div id="guide-track-labels"></div><input id="guide-scrub" type="range" min="0" step="0.03333333333333333" aria-label="导览播放头" /></div><div class="guide-timeline-end"><span id="guide-save-state">${visitor ? '点击物品，认识作品' : '独立导览 · 本地保存'}</span>${visitor ? '' : '<div><button id="guide-import">导入工程</button><button id="guide-json">JSON ↓</button><button id="guide-publish">网站包 ↓</button></div>'}</div></footer>
     <p id="guide-message" class="guide-message" role="status" aria-live="polite"></p><input type="file" id="guide-file" accept=".json,application/json" hidden />
@@ -46,37 +46,46 @@ export async function mountGuide(initial: GuideProject, options: { visitor?: boo
     $<HTMLInputElement>('#guide-scrub').value = String(s.time);
     $('#guide-status').textContent = exporting ? '正在生成视频' : playing ? s.phase : '已暂停 · 可自由观察';
     $('#guide-caption-index').textContent = `${String(s.index + 1).padStart(2, '0')} / ${String(project.guide.stops.length).padStart(2, '0')}`;
-    $('#guide-caption-title').textContent = stop ? (stop.action === 'read' ? '从一本书，认识一段创作。' : '屏幕里，装着另一个世界。') : '给书房留一点探索的空间。';
+    $('#guide-caption-title').textContent = stop ? ({ read: '从一本书，认识一段创作。', point: '屏幕里，装着另一个世界。', sit: '坐一会儿，让灵感慢下来。' }[stop.action]) : '给书房留一点探索的空间。';
     $('#guide-caption-text').textContent = `${project.guide.name} · ${s.phase}${playing ? '' : ' / 播放或拖动时间轴继续'}`;
     document.querySelectorAll<HTMLElement>('[data-stop]').forEach(el => el.classList.toggle('is-active', Number(el.dataset.stop) === project.selected));
     document.querySelectorAll<HTMLElement>('[data-track]').forEach(el => { el.classList.toggle('is-active', Number(el.dataset.track) === s.index); el.style.setProperty('--played', `${Math.max(0, Math.min(100, (s.time - guideStart(project, Number(el.dataset.track))) / project.guide.stops[Number(el.dataset.track)].duration * 100))}%`); });
   }
   function updateSelection() {
     const stop = project.guide.stops[project.selected], work = stop && guideWork(project, stop);
-    $('#guide-action-title').textContent = stop ? `CURRENT / ${stop.action === 'read' ? '阅读手册' : '屏幕介绍'}` : 'CURRENT / 等待物件';
-    $('#guide-work-title').textContent = work?.title ?? '这个物件还没有关联作品';
-    $('#guide-work-description').textContent = work?.description ?? '在布置书房中为书籍或屏幕关联作品，再导出 JSON 导入这里。';
+    $('#guide-action-title').textContent = stop ? `CURRENT / ${guideActionName(stop.action)}` : 'CURRENT / 等待物件';
+    $('#guide-work-title').textContent = work?.title ?? (stop?.action === 'sit' ? '在书房里，坐下来读一会儿' : '这个物件还没有关联作品');
+    $('#guide-work-description').textContent = work?.description ?? (stop?.action === 'sit' ? '拖动时间轴观察坐下、坐姿阅读和站起。椅子也可在布置书房中关联作品。' : '在布置书房中为书籍或屏幕关联作品，再导出 JSON 导入这里。');
     $<HTMLButtonElement>('#guide-open').disabled = !work || exporting;
-    if (!visitor) { $<HTMLSelectElement>('#guide-duration').value = String(stop?.duration ?? 8); $<HTMLSelectElement>('#guide-duration').disabled = !stop; }
+    if (!visitor) {
+      const sitting = stop?.action === 'sit';
+      $<HTMLSelectElement>('#guide-duration').innerHTML = Array.from({ length: 13 }, (_, i) => `<option value="${(sitting ? 10 : 6) + i * .5}">${(sitting ? 10 : 6) + i * .5} 秒</option>`).join('');
+      $<HTMLSelectElement>('#guide-duration').value = String(stop?.duration ?? 8); $<HTMLSelectElement>('#guide-duration').disabled = !stop;
+      $('#guide-seat-field').hidden = $('#guide-remove-sit').hidden = $('#guide-seat-preview').hidden = !sitting;
+      const select = $<HTMLSelectElement>('#guide-seat'); select.replaceChildren();
+      project.project.scene.objects.filter(o => o.kind === 'chair').forEach(o => select.add(new Option(displayName(o, project.project.scene.objects), o.id)));
+      select.value = sitting ? stop.itemId : '';
+    }
   }
   function refresh() {
     document.title = project.name + ' · 角色导览';
     $('#guide-name-label').textContent = project.guide.name;
     $('#guide-character-identity').textContent = project.guide.name + ' · 18';
-    if (!visitor) { $<HTMLSelectElement>('#guide-avatar').value = project.guide.avatar; $<HTMLSelectElement>('#guide-avatar').disabled = booting || !actor || switchingAvatar || exporting; $('#guide-avatar-note').textContent = guideAvatars[project.guide.avatar].description + ' 携带手册，阅读后介绍屏幕作品。'; }
+    if (!visitor) { $<HTMLSelectElement>('#guide-avatar').value = project.guide.avatar; $<HTMLSelectElement>('#guide-avatar').disabled = booting || !actor || switchingAvatar || exporting; $('#guide-avatar-note').textContent = guideAvatars[project.guide.avatar].description + ' 真实骨骼动作；走路、阅读、坐下与站起共享时间轴。'; }
     $('#guide-total').textContent = `${project.guide.stops.length} 段 · ${guideDuration(project)} 秒`;
     $('#guide-stops').replaceChildren(); $('#guide-track-labels').replaceChildren();
     project.guide.stops.forEach((stop, i) => {
       const button = document.createElement('button'); button.dataset.stop = String(i); button.className = 'guide-stop';
-      const mark = document.createElement('span'); mark.className = 'guide-stop-art ' + stop.action; mark.textContent = stop.action === 'read' ? '▤' : '▣';
+      const mark = document.createElement('span'); mark.className = 'guide-stop-art ' + stop.action; mark.textContent = { read: '▤', point: '▣', sit: '⌑' }[stop.action];
       const copy = document.createElement('span'), title = document.createElement('b'), small = document.createElement('small');
-      title.textContent = `${String(i + 1).padStart(2, '0')} · ${stop.action === 'read' ? '书页间的灵感' : '屏幕里的创作'}`;
+      title.textContent = `${String(i + 1).padStart(2, '0')} · ${{ read: '书页间的灵感', point: '屏幕里的创作', sit: '坐下，停留，再出发' }[stop.action]}`;
       small.textContent = `${displayName(project.project.scene.objects.find(o => o.id === stop.itemId)!, project.project.scene.objects)} · ${stop.duration} 秒`;
       copy.append(title, small); button.append(mark, copy); button.onclick = () => selectStop(i, false); $('#guide-stops').append(button);
-      const track = document.createElement('button'); track.dataset.track = String(i); track.style.flex = String(stop.duration); track.textContent = `${i + 1} / ${stop.action === 'read' ? '阅读手册' : '屏幕介绍'} · ${stop.duration}s`; track.onclick = () => selectStop(i, false); $('#guide-track-labels').append(track);
+      const track = document.createElement('button'); track.dataset.track = String(i); track.style.flex = String(stop.duration); track.textContent = `${i + 1} / ${guideActionName(stop.action)} · ${stop.duration}s`; track.onclick = () => selectStop(i, false); $('#guide-track-labels').append(track);
     });
+    if (!visitor) { $('#guide-add-sit').hidden = project.guide.stops.some(s => s.action === 'sit'); $<HTMLButtonElement>('#guide-add-sit').disabled = !project.project.scene.objects.some(o => o.kind === 'chair') || booting; }
     $<HTMLInputElement>('#guide-scrub').max = String(guideDuration(project));
-    if (!visitor) { $<HTMLInputElement>('#guide-title').value = project.name; $<HTMLInputElement>('#guide-name').value = project.guide.name; $<HTMLSelectElement>('#guide-color').value = project.guide.color; $<HTMLButtonElement>('#guide-order').disabled = project.guide.stops.length !== 2; $<HTMLButtonElement>('#guide-export').disabled = !scene || !actor || !!route.error || exporting; }
+    if (!visitor) { $<HTMLInputElement>('#guide-title').value = project.name; $<HTMLInputElement>('#guide-name').value = project.guide.name; $<HTMLSelectElement>('#guide-color').value = project.guide.color; $<HTMLButtonElement>('#guide-order').disabled = project.guide.stops.length < 2; $<HTMLButtonElement>('#guide-export').disabled = !scene || !actor || !!route.error || exporting; }
     document.querySelectorAll<HTMLElement>('[data-guide-mood]').forEach(b => b.classList.toggle('is-active', b.dataset.guideMood === project.project.scene.mood));
     updateSelection(); updatePlayback(); setButtons();
     $('#guide-save-state').textContent = visitor ? '点击物品，认识作品' : saved === guideSignature(project) ? '独立导览 · 本地保存' : '有未保存的修改';
@@ -150,7 +159,7 @@ export async function mountGuide(initial: GuideProject, options: { visitor?: boo
   $('#guide-character-close').onclick = () => {
     if (!scene || !actor || exporting) return;
     pause(); const s = sampleGuide(project, route, project.playhead);
-    scene.applyCamera(cameraForPose({ azimuth: 22, elevation: 12, zoom: 3.8 }, [s.position.x, 1.30 + s.position.y, s.position.z]));
+    scene.applyCamera(cameraForPose({ azimuth: 22, elevation: 12, zoom: 3.8 }, [s.position.x, 1.30 + s.position.y - .38 * s.seatBlend, s.position.z]));
     report('角色近景 · 可拖动观察。播放或恢复导览镜头可回到作品构图；视频使用导览镜头。');
   };
   $<HTMLInputElement>('#guide-scrub').oninput = e => seek(Number((e.target as HTMLInputElement).value));
@@ -163,7 +172,16 @@ export async function mountGuide(initial: GuideProject, options: { visitor?: boo
     $<HTMLInputElement>('#guide-name').onchange = e => commit(next => { next.guide.name = (e.target as HTMLInputElement).value; });
     $<HTMLSelectElement>('#guide-color').onchange = e => commit(next => { next.guide.color = (e.target as HTMLSelectElement).value as GuideProject['guide']['color']; });
     $<HTMLSelectElement>('#guide-duration').onchange = e => commit(next => { next.guide.stops[next.selected].duration = Number((e.target as HTMLSelectElement).value); });
-    $('#guide-order').onclick = () => commit(next => { next.guide.stops.reverse(); next.selected = 1 - next.selected; next.playhead = guideStart(next, next.selected); });
+    $('#guide-add-sit').onclick = () => commit(next => { const chair = next.project.scene.objects.find(o => o.kind === 'chair'); if (chair && !next.guide.stops.some(s => s.action === 'sit')) { next.guide.stops.push({ action: 'sit', itemId: chair.id, duration: 12 }); next.selected = next.guide.stops.length - 1; next.playhead = guideStart(next, next.selected); } });
+    document.querySelectorAll<HTMLButtonElement>('[data-seat-phase]').forEach(button => button.onclick = () => {
+      const index = project.selected, stop = project.guide.stops[index], segment = route.segments[index];
+      if (stop?.action !== 'sit' || !segment || exporting) return;
+      const offset = button.dataset.seatPhase === 'enter' ? segment.walkTime + 1.5 : button.dataset.seatPhase === 'hold' ? segment.walkTime + 3 : stop.duration - 1.25;
+      seek(guideStart(project, index) + offset);
+    });
+    $('#guide-remove-sit').onclick = () => commit(next => { next.guide.stops = next.guide.stops.filter(s => s.action !== 'sit'); next.selected = 0; next.playhead = 0; });
+    $<HTMLSelectElement>('#guide-seat').onchange = e => commit(next => { next.guide.stops[next.selected].itemId = (e.target as HTMLSelectElement).value; });
+    $('#guide-order').onclick = () => commit(next => { next.guide.stops.reverse(); next.selected = next.guide.stops.length - 1 - next.selected; next.playhead = guideStart(next, next.selected); });
     async function history(from: GuideProject[], to: GuideProject[]) { if (!from.length || exporting || switchingAvatar) return; pause(); manualEnd = null; const next = from.at(-1)!; await applyProject(next, () => { to.push(structuredClone(project)); from.pop(); }); }
     $('#guide-undo').onclick = () => history(past, future); $('#guide-redo').onclick = () => history(future, past);
     $('#guide-save').onclick = () => { pause(); try { localStorage.setItem(options.storageKey!, JSON.stringify(project)); saved = guideSignature(project); $('#guide-save-state').textContent = '已保存到本地'; report('导览快照已保存到当前浏览器，刷新可恢复。原房间工程保持完整；也可下载 JSON 备份。'); } catch { report('本地保存失败，请导出 JSON 备份后重试。', true); } };

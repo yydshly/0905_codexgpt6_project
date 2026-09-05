@@ -475,3 +475,15 @@ badge. These are actual 3D geometry, not baked character pictures. The IP
 concept image is separately AI-generated and is a visual reference, not a
 third-party human model. Existing Quaternius credits and CC0 notices remain.
 See docs/character-ip/INTEGRATION.md for scope, provenance and limitations.
+
+
+GUIDE MOTION V1 — CC0 SOURCE CLIPS, PROJECT RUNTIME ADAPTATION
+src/assets/guide/guide-motion-v1.glb contains Walk_Loop, Sitting_Enter,
+Sitting_Idle_Loop and Sitting_Exit from Quaternius Universal Animation
+Library [Standard], under the same CC0 license above. Extracted without
+meshes/textures by scripts/build-guide-motion.py; original bone samples
+retained. These are external authored skeletal clips, not newly recorded
+motion capture or original animation by this project. This project's work:
+distance-driven gait timing, staged turns, transition blending, chair-relative
+alignment, hip height correction, leg/arm IK, notebook handling, deterministic
+preview/export sampling and integration. See docs/MOTION-GUIDE.md.

@@ -1,0 +1,18 @@
+{
+  "asset": "personal-creator-01-v1",
+  "bones": 67,
+  "skinnedMeshes": 28,
+  "clips": [
+    "Idle_Loop",
+    "Walk_Loop",
+    "Sitting_Enter",
+    "Sitting_Exit",
+    "Sitting_Idle_Loop"
+  ],
+  "blinkMeshes": 12,
+  "samePoseOnRepeatSeek": true,
+  "nearCameraDoesNotChangeProject": true,
+  "v1MigrationPreservesRoomAndSettings": true,
+  "unknownAssetRejected": true,
+  "missingAssetPreservesJson": true
+}

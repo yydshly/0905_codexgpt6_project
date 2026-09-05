@@ -9,3 +9,7 @@
 
 /* Keep lighting controls in layout, so short desktop viewports never place them under the caption. */
 .guide-stage-foot{position:relative;bottom:auto;left:auto;right:auto;flex:none;width:100%}.guide-caption{flex-shrink:0}
+
+.guide-add-sit{width:100%;margin:8px 0 16px;padding:12px;border:1px dashed #97a393;border-radius:10px;background:#eff2ea;color:#344a39;cursor:pointer}.guide-stop-art.sit{background:#e8ddd0;color:#86603d}#guide-seat-field .guide-setting-note{display:block;line-height:1.6;margin-top:6px}#guide-remove-sit{padding:8px 10px;border:1px solid #d4c5b9;border-radius:8px;background:transparent;color:#79563f;margin:6px 0 10px}
+
+#guide-seat-preview{display:flex;gap:5px;margin:10px 0}#guide-seat-preview button{flex:1;padding:7px 3px;font-size:10px}

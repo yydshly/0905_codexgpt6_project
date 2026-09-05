@@ -3,6 +3,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import bundledAvatarURL from './assets/guide/creator-18.glb?url';
 import personalAvatarURL from './assets/guide/personal-creator-01.glb?url';
+import motionURL from './assets/guide/guide-motion-v1.glb?url';
 import { DEFAULT_GUIDE_AVATAR, guideAvatars, type GuideAvatarId } from './guide-avatars';
 import type { GuideProject, GuideSample } from './guide-model';
 
@@ -12,7 +13,11 @@ export async function createGuideCharacter(avatar: GuideAvatarId = DEFAULT_GUIDE
   const avatarURL = typeof __GUIDE_ASSET_BASE__ === 'undefined'
     ? (avatar === 'creator-18-v1' ? bundledAvatarURL : personalAvatarURL)
     : __GUIDE_ASSET_BASE__ + guideAvatars[avatar].file;
-  const gltf = await new GLTFLoader().loadAsync(avatarURL);
+  const loader = new GLTFLoader();
+  const gltf = await loader.loadAsync(avatarURL);
+  let motion: Awaited<ReturnType<GLTFLoader['loadAsync']>>;
+  try { motion = await loader.loadAsync(typeof __GUIDE_ASSET_BASE__ === 'undefined' ? motionURL : __GUIDE_ASSET_BASE__ + 'guide-motion-v1.glb'); }
+  catch (error) { gltf.scene.traverse(o => { if (o instanceof T.Mesh) { o.geometry.dispose(); for (const m of Array.isArray(o.material) ? o.material : [o.material]) { for (const value of Object.values(m)) if (value instanceof T.Texture) value.dispose(); m.dispose(); } } }); throw error; }
   const root = new T.Group(); root.name = avatar; root.add(gltf.scene);
   const resources = new Set<T.BufferGeometry | T.Material | T.Texture>();
   const bones = new Map<string, T.Bone>(), blinkMeshes: T.Mesh[] = [], smileMeshes: T.Mesh[] = [], shoes: T.SkinnedMesh[] = [];
@@ -42,6 +47,18 @@ export async function createGuideCharacter(avatar: GuideAvatarId = DEFAULT_GUIDE
     return { bone, property: path.propertyName, interpolant: track.InterpolantFactoryMethodLinear() };
   });
   const idleChannels = channels(idleClip), walkChannels = channels(walkClip);
+  const sittingClips = new Map(motion.animations.filter(c => c.name.startsWith('Sitting_')).map(clip => [clip.name, { clip, channels: channels(clip) }]));
+  if (sittingClips.size !== 3) throw new Error('坐下 / 站起动作资源不完整。');
+  function sittingPose(s: GuideSample) {
+    if (!s.sitWeight) return;
+    const animation = sittingClips.get(s.sitClip)!;
+    const time = s.sitClip === 'Sitting_Idle_Loop' ? s.sitTime % animation.clip.duration : T.MathUtils.clamp(s.sitTime, 0, animation.clip.duration);
+    for (const channel of animation.channels) {
+      const value = channel.interpolant.evaluate(time);
+      if (channel.property === 'quaternion') channel.bone.quaternion.slerp(new T.Quaternion().fromArray(value), s.sitWeight);
+      else (channel.property === 'position' ? channel.bone.position : channel.bone.scale).lerp(new T.Vector3().fromArray(value), s.sitWeight);
+    }
+  }
   function samplePose(time: number, walkTime: number, weight: number) {
     // Explicit clip evaluation avoids AnimationMixer's unchanged-value cache after custom IK.
     for (const [name, bone] of bones) { const r = rest.get(name)!; bone.position.copy(r.p); bone.quaternion.copy(r.q); bone.scale.copy(r.scale); }
@@ -97,6 +114,17 @@ export async function createGuideCharacter(avatar: GuideAvatarId = DEFAULT_GUIDE
     const elbow = a.clone().addScaledVector(axis, along).addScaledVector(bend, Math.sqrt(Math.max(0, lengthA * lengthA - along * along)));
     aim(upper, lower, elbow, weight); aim(lower, hand, end, weight);
   }
+  function leg(side: 'l' | 'r', end: T.Vector3) {
+    const upper = bones.get('thigh_' + side)!, lower = bones.get('calf_' + side)!, foot = bones.get('foot_' + side)!;
+    const rotation = foot.getWorldQuaternion(new T.Quaternion());
+    const a = worldPosition(upper), b = worldPosition(lower), c = worldPosition(foot), axis = end.clone().sub(a);
+    const l1 = a.distanceTo(b), l2 = b.distanceTo(c), d = T.MathUtils.clamp(axis.length(), .02, l1 + l2 - .001); axis.normalize();
+    const pole = world(vector(side === 'l' ? .16 : -.16, .40, .8)).sub(a); pole.addScaledVector(axis, -pole.dot(axis)).normalize();
+    const along = (l1 * l1 - l2 * l2 + d * d) / (2 * d);
+    const knee = a.clone().addScaledVector(axis, along).addScaledVector(pole, Math.sqrt(Math.max(0, l1 * l1 - along * along)));
+    aim(upper, lower, knee, 1); aim(lower, foot, end, 1);
+    foot.quaternion.copy(foot.parent!.getWorldQuaternion(new T.Quaternion()).invert().multiply(rotation)); foot.updateWorldMatrix(false, true);
+  }
   function handPose(side: 'l' | 'r', weight: number, carry = 0) {
     const sign = side === 'l' ? 1 : -1, hand = bones.get('hand_' + side)!;
     const y = vector(-sign * .80, .12, .6).lerp(vector(0, -.96, .28), carry).normalize(), z = vector(0, 1, 0).lerp(vector(sign, 0, 0), carry), x = new T.Vector3().crossVectors(y, z).normalize(); z.crossVectors(x, y);
@@ -114,21 +142,50 @@ export async function createGuideCharacter(avatar: GuideAvatarId = DEFAULT_GUIDE
       rib?.color.set({ sage: avatar === 'creator-18-v1' ? '#657d68' : '#748160', clay: '#966247', blue: '#586f88' }[color]);
       root.position.set(s.position.x, s.position.y, s.position.z); root.rotation.y = s.yaw;
       // Every evaluation starts at the same authored pose. Seeking never accumulates IK or morph state.
-      const weight = Math.min(1, s.walkWeight * 2.2);
-      samplePose(s.time, s.stride / (Math.PI * 2) * .43 / 1.20 * walkClip.duration, weight);
+      const weight = s.walkWeight;
+      samplePose(s.time, s.stride / (Math.PI * 2) * walkClip.duration, weight);
       for (const [name, bone] of bones) if (/^(pelvis|thigh|calf|foot|ball|spine)/.test(name)) {
         const blend = (1 - weight) * (name.startsWith('spine') ? .72 : 1);
         bone.quaternion.slerp(rest.get(name)!.q, blend); bone.position.lerp(rest.get(name)!.p, blend);
       }
       if (avatar === 'personal-creator-01-v1') for (const [name, bone] of bones) if (/^(thumb|index|middle|ring|pinky)_/.test(name)) bone.quaternion.slerp(rest.get(name)!.q, (1 - weight) * .85);
+      sittingPose(s);
       root.updateMatrixWorld(true);
-      const read = s.readWeight, breath = Math.sin(s.time * 1.7) * .0025;
+      if (s.turning) {
+        const turn = s.turning, delta = Math.atan2(Math.sin(turn.to - turn.from), Math.cos(turn.to - turn.from));
+        for (const [i, side] of (['l', 'r'] as const).entries()) {
+          const step = T.MathUtils.clamp((turn.progress - i * .38) / .62, 0, 1);
+          const heading = turn.from + delta * smooth(step), foot = bones.get('foot_' + side)!;
+          const local = root.worldToLocal(worldPosition(foot));
+          local.applyAxisAngle(vector(0, 1, 0), heading - s.yaw);
+          local.y += Math.sin(Math.PI * step) * .055 * Math.min(1, Math.abs(delta));
+          const end = world(local); leg(side, end);
+          rotateWorld(foot, new T.Quaternion().setFromAxisAngle(vector(0, 1, 0), heading - s.yaw));
+        }
+      }
+      if (s.seatBlend && s.seat) {
+        const feet = (['l', 'r'] as const).map(side => worldPosition(bones.get('foot_' + side)!));
+        const pelvis = bones.get('pelvis')!, position = worldPosition(pelvis);
+        // The source animation is made for a lower chair. Raise the hips to this cushion,
+        // then solve both legs back to their planted ankles instead of raising the feet.
+        position.y += (.51 + .09 - .528) * s.seatBlend;
+        pelvis.position.copy(pelvis.parent!.worldToLocal(position)); root.updateMatrixWorld(true);
+        leg('l', feet[0]); leg('r', feet[1]);
+      }
+      const read = Math.max(s.readWeight, s.seatReadWeight), breath = Math.sin(s.time * 1.7) * .0025;
+      // Follow the moving chest during the sit/stand weight shift, keeping the book clear of the lap.
+      const chest = root.worldToLocal(worldPosition(bones.get('spine_03')!));
+      const seatedHand = vector(.13, chest.y - .15, chest.z + .24);
+      const handLeft = vector(.25, .93, .14).lerp(vector(.14, 1.10 + breath, .31), read).lerp(seatedHand, s.sitWeight);
+      handLeft.y += Math.sin(s.stride * 2) * .009 * weight; handLeft.z += Math.sin(s.stride) * .014 * weight;
+      const handRight = vector(-.14, 1.10 + breath, .31).lerp(vector(-.13, seatedHand.y, seatedHand.z), s.sitWeight);
       book.position.copy(vector(.24, avatar === 'personal-creator-01-v1' ? .83 : .91, .13).lerp(vector(0, 1.11 + breath, .32), read));
+      book.position.lerp(vector(0, seatedHand.y + .01, seatedHand.z + .01), s.sitWeight);
       book.rotation.set(-.12 * read, 0, (1 - read) * -.20);
       leaves.forEach((leaf, i) => { leaf.rotation.z = (i ? 1 : -1) * T.MathUtils.lerp(1.46, .16, read); });
       const flip = smooth((s.actionTime % 3.6 - 1.5) / .85); page.visible = read > .95 && flip > 0 && flip < 1; page.rotation.z = Math.PI * flip;
-      arm('l', vector(.25, .93, .14).lerp(vector(.14, 1.10 + breath, .31), read), vector(.46, 1.05, .02), 1);
-      arm('r', vector(-.14, 1.10 + breath, .31), vector(-.46, 1.05, .02), read);
+      arm('l', handLeft, vector(.39, handLeft.y, handLeft.z - .20), 1);
+      arm('r', handRight, vector(-.39, handRight.y, handRight.z - .20), read);
       handPose('l', .8 + .2 * read, avatar === 'personal-creator-01-v1' ? 1 - read : 0); handPose('r', read);
       if (avatar === 'personal-creator-01-v1' && read < 1) {
         root.updateMatrixWorld(true);
@@ -172,7 +229,7 @@ export async function createGuideCharacter(avatar: GuideAvatarId = DEFAULT_GUIDE
       lastFootCorrection = Number.isFinite(lowest) ? s.position.y + .002 - lowest : 0;
       root.position.y += lastFootCorrection; root.updateMatrixWorld(true);
     },
-    metrics: () => ({ asset: avatar, bones: bones.size, skinnedMeshes: (() => { let n = 0; root.traverse(o => { if (o instanceof T.SkinnedMesh) n++; }); return n; })(), blinkMeshes: blinkMeshes.length, blink: blinkMeshes[0]?.morphTargetInfluences?.[blinkMeshes[0].morphTargetDictionary!.Blink], clips: gltf.animations.map(a => a.name), footCorrection: lastFootCorrection, pose: [...bones].map(([name, b]) => ({ name, position: b.position.toArray(), rotation: b.quaternion.toArray() })) }),
+    metrics: () => ({ asset: avatar, bones: bones.size, skinnedMeshes: (() => { let n = 0; root.traverse(o => { if (o instanceof T.SkinnedMesh) n++; }); return n; })(), blinkMeshes: blinkMeshes.length, blink: blinkMeshes[0]?.morphTargetInfluences?.[blinkMeshes[0].morphTargetDictionary!.Blink], clips: [...gltf.animations.map(a => a.name), ...sittingClips.keys()], footCorrection: lastFootCorrection, world: Object.fromEntries(['pelvis', 'Head', 'foot_l', 'foot_r', 'hand_l', 'hand_r'].map(name => [name, worldPosition(bones.get(name)!).toArray()])), pose: [...bones].map(([name, b]) => ({ name, position: b.position.toArray(), rotation: b.quaternion.toArray() })) }),
     dispose() { root.removeFromParent(); resources.forEach(resource => resource.dispose()); },
   };
 }
