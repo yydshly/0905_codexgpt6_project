@@ -1,0 +1,212 @@
+{
+  "codeCommit": "1d1db251333807b5193d5a257454c1f1fa5342cc",
+  "rootProduction": {
+    "startTime": "2026-09-05T05:32:57.42Z",
+    "duration": 111045.752,
+    "expected": 16,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "rootCases": [
+    {
+      "file": "film.spec.ts",
+      "name": "短片完整验收：修改第二镜头、播放、保存刷新、真实视频下载并打开检查",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 30022
+        }
+      ]
+    },
+    {
+      "file": "film.spec.ts",
+      "name": "镜头时序、排序、撤销重做、连续机位拖动与确定性拖动播放头",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 4420
+        }
+      ]
+    },
+    {
+      "file": "film.spec.ts",
+      "name": "v1 迁移、非法工程保护、工程内房间编辑及旧存档隔离",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 5016
+        }
+      ]
+    },
+    {
+      "file": "film.spec.ts",
+      "name": "视频取消恢复、无编码降级、低动态和窄屏预览",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 2280
+        }
+      ]
+    },
+    {
+      "file": "film.spec.ts",
+      "name": "无 WebGL 时仍能保存和导出工程，存储失败给出错误",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 713
+        }
+      ]
+    },
+    {
+      "file": "film.spec.ts",
+      "name": "默认自动播放、性能测量与浏览器支持的 WebM 格式实际编码回放",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 27870
+        }
+      ]
+    },
+    {
+      "file": "study.spec.ts",
+      "name": "完整验收：添加、拖动、旋转、灯光、材质、历史、本地恢复、PNG、JSON",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 5120
+        }
+      ]
+    },
+    {
+      "file": "study.spec.ts",
+      "name": "移动边界、桌面跟随、历史一致、选择删除、观察和缩放",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 2947
+        }
+      ]
+    },
+    {
+      "file": "study.spec.ts",
+      "name": "多视角、两种桌面尺寸、黄昏、键盘和真实帧时测量",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 5660
+        }
+      ]
+    },
+    {
+      "file": "study.spec.ts",
+      "name": "无 WebGL 时保留 JSON 备份能力，并明确提示",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 615
+        }
+      ]
+    },
+    {
+      "file": "study.spec.ts",
+      "name": "浏览器存储失败给出真实失败反馈，不伪报保存",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 1244
+        }
+      ]
+    },
+    {
+      "file": "study.spec.ts",
+      "name": "八类物件可添加，材质预览同步，键盘焦点和连续调光历史正确",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 4052
+        }
+      ]
+    },
+    {
+      "file": "study.spec.ts",
+      "name": "优化回归：镜头预设状态、保存恢复与编辑模式提示",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 4069
+        }
+      ]
+    },
+    {
+      "file": "study.spec.ts",
+      "name": "优化回归：合批键帽/毯穗仍可选中，材质、删除撤销和导出无辅助标记",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 3005
+        }
+      ]
+    },
+    {
+      "file": "study.spec.ts",
+      "name": "物件切换、重复编号、重命名、键盘保护及长名称布局",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 2715
+        }
+      ]
+    },
+    {
+      "file": "study.spec.ts",
+      "name": "异常镜头和物件名称导入保留方案，旧 v1 文件仍可编辑",
+      "status": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 3724
+        }
+      ]
+    }
+  ],
+  "pagesSubpathJourney": {
+    "startTime": "2026-09-05T05:36:07.52Z",
+    "duration": 37787.166000000005,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "pagesUrl": "http://127.0.0.1:4174/0905_codexgpt6_project/",
+  "audit": "0 vulnerabilities",
+  "environment": {
+    "os": "Windows 11 Home Chinese 10.0.26200",
+    "cpu": "Intel Core i9-13980HX",
+    "ramGB": 16,
+    "node": "22.15.0",
+    "npm": "10.9.2",
+    "chrome": "152.0.7977.82",
+    "playwright": "1.62.1",
+    "devicePixelRatio": 1,
+    "headless": true,
+    "gpu": "Intel UHD Graphics, ANGLE D3D11",
+    "ffprobe": "6.1.3"
+  }
+}

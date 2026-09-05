@@ -1,0 +1,67 @@
+[
+  {
+    "file": "docs/film-evidence/ideal-study-film.mp4",
+    "metadata": {
+      "programs": [],
+      "streams": [
+        {
+          "codec_name": "h264",
+          "width": 1280,
+          "height": 720,
+          "avg_frame_rate": "30/1",
+          "duration": "10.200000",
+          "nb_frames": "306",
+          "nb_read_frames": "306"
+        }
+      ],
+      "format": {
+        "duration": "10.200000",
+        "size": "6156532"
+      }
+    },
+    "fullDecodeExitCode": 0,
+    "sha256": "263F6DD800626F97259F00674EAA2B94F0DB8A1A744A04082F6C22F9B91A71C7"
+  },
+  {
+    "file": "docs/film-evidence/default-vp9.webm",
+    "metadata": {
+      "programs": [],
+      "streams": [
+        {
+          "codec_name": "vp9",
+          "width": 1280,
+          "height": 720,
+          "avg_frame_rate": "30/1",
+          "nb_read_frames": "300"
+        }
+      ],
+      "format": {
+        "duration": "10.000000",
+        "size": "6251468"
+      }
+    },
+    "fullDecodeExitCode": 0,
+    "sha256": "9026CE4D7B0B371AD6B377F20DF85F7D34CE4C632609F80C45A65526F4FACFBE"
+  },
+  {
+    "file": "test-results/film-evidence/default-vp8.webm",
+    "metadata": {
+      "programs": [],
+      "streams": [
+        {
+          "codec_name": "vp8",
+          "width": 1280,
+          "height": 720,
+          "avg_frame_rate": "30/1",
+          "nb_read_frames": "300"
+        }
+      ],
+      "format": {
+        "duration": "10.000000",
+        "size": "6091485"
+      }
+    },
+    "fullDecodeExitCode": 0,
+    "sha256": "8A7EBAE76FFD3703A8911BB6C89A8FE8FE315F8BDA213DB02AC22A87479270C3"
+  }
+]

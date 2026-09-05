@@ -1,23 +1,55 @@
-# 理想书房 · 3D 空间布置器
+# 理想书房 · 3D 镜头与短片工作台
 
-一间已经布置好的书房，一个安放灵感的地方。
+打开一段已经编排好的十秒日常，再拍出自己的版本。
 
-**可实际编辑的浏览器端产品**：8 类物件、3 种真实光照、物件与镜头操作、撤销重做、本地保存、PNG 与 JSON 导入导出。默认画面直接来自可编辑的场景数据。
+本分支在原空间布置器上新增 **最多 3 段镜头、起终机位与观察目标、时间轴、播放/暂停/拖动、时长与排序、撤销重做、v2 工程保存恢复，以及真实 MP4/WebM 视频导出**。预览、拖动播放头和逐帧编码使用同一套镜头数据。原八类物件、三种灯光、PNG/JSON 与家具编辑完整保留。
 
-**在线使用：[打开理想书房](https://yydshly.github.io/0905_codexgpt6_project/)** · GitHub Pages / HTTPS · 线上真实浏览器验收 10/10 通过。
+**独立分支：[codex/film-workbench](https://github.com/yydshly/0905_codexgpt6_project/tree/codex/film-workbench)**，从 `790c0ea` 开始；当前 GitHub Pages 仍是 [原空间布置器](https://yydshly.github.io/0905_codexgpt6_project/)，此短片版本尚未合并或部署。请按下方说明在本地打开新工作台。
 
-![实际线上运行：1440×900 白昼默认书房](docs/evidence/01-default-1440x900.png)
+![实际运行：1440×900 的短片工作台](docs/film-evidence/01-film-default-1440x900.png)
+
+交付原件：[默认 10 秒 WebM](docs/film-evidence/default-vp9.webm) · [修改后 10.2 秒 MP4](docs/film-evidence/ideal-study-film.mp4) · [对应可编辑工程](docs/film-evidence/verified-film-project.json) · [短片验收与已知限制](docs/FILM-WORKBENCH.md)。GitHub 文件页可通过 **Download raw file** 下载视频。
 
 ## 启动
 
 需要 **Node.js 22.12+**（本地验证为 22.15.0），以及支持 WebGL 2 的桌面浏览器。进入本仓库目录后运行：
 
 ```bash
+git switch codex/film-workbench
 npm ci
 npm run dev
 ```
 
 打开 **http://127.0.0.1:5173/**。端口固定且不自动跳号；如端口被占用，先停止已有的同端口服务。
+
+默认入口是短片工作台；`/?workspace=room` 是原 v1 空间布置器。工作台左下「保存并布置房间」会打开当前短片里的书房，保存后点击左上「返回短片工作台」继续拍摄。
+
+视频导出需要安全上下文（HTTPS 或 localhost/127.0.0.1）及浏览器实际支持的 WebCodecs 编码。应用会检测 H.264 / VP9 / VP8，只提供支持的格式。导出固定为无音轨 1280×720、30 fps，逐帧生成，不要求电脑能实时跑到 30 fps。
+
+## 拍摄自己的版本
+
+1. 首次打开自动播放 10 秒作品一次；已保存工程恢复时暂停，系统低动态偏好下也不自动播放。
+2. 选择左侧第二个镜头，切换「起点 A / 终点 B」，修改水平角、俯角与景别；点击「在画面中调整」后可拖动/缩放机位。观察目标 X/Y/Z 同时约束该段的起点与终点。
+3. 修改时长（每段 1–10 秒）与前移/后移顺序。时间轴同步更新；上方刻度区可拖动播放头，段落本身可选择镜头。时间码为 **秒:帧**。
+4. 空格播放/暂停，方向键逐帧定位，Shift + 方向键移动一秒；Ctrl/⌘ + Z 撤销，Ctrl/⌘ + Shift + Z 或 Ctrl + Y 重做。
+5. 命名并「保存工程」，刷新恢复；Ctrl/⌘ + S 也可保存。保存仅在当前浏览器，未添加云同步。
+6. 「导出视频」→ 选择当前浏览器支持的格式 →「生成视频」→ 在弹窗播放检查 →「下载视频」。生成可取消；真实编码、元数据与首帧解码成功后才提供下载结果。
+
+v2 工程包含原 scene v1 和镜头数据，保存键为 `ideal-study.film.v2`；原 `ideal-study.plan.v1` 存档独立保留。旧 JSON v1 可以导入短片工作台，自动加上默认镜头；首次打开时也可读取已有旧存档。非法文件先校验再处理，不改当前工程或存档。撤销历史保留当前会话最近 80 次编辑，连续机位拖动计一次，刷新不保留历史。
+
+## 本分支验收
+
+本地生产构建 **16/16** 真实浏览器用例通过，其中短片 6 项、原编辑器 10 项。覆盖第二镜头修改、保存刷新、工程往返、三种格式编码、文件回放、预览/视频画面比较、旧方案迁移、错误与取消状态。环境、性能、五张实际截图及视频检测报告见 [短片交付记录](docs/FILM-WORKBENCH.md)。
+
+```bash
+npm test          # 全部 16 项；自动构建、启动 4173 端口并测试
+npm run test:film # 6 项短片验收
+npm run test:room # 10 项原编辑器回归
+```
+
+本地默认使用已安装的 Google Chrome；测试证据在 `test-results/film-evidence/` 与 `test-results/room-evidence/`，交付选片在 `docs/film-evidence/`。GitHub Actions 会在此分支提交时使用 Chromium 执行相同验收，运行记录见 [Actions](https://github.com/yydshly/0905_codexgpt6_project/actions)。
+
+以下为原编辑器的部署、操作和历史验收说明；其旧版线上数据与本次短片本地验证分别记录。
 
 生产构建与本地预览：
 
@@ -32,7 +64,7 @@ npm run preview
 
 ## GitHub Pages 部署
 
-已于 2026-09-05 在用户确认后启用公开站点并完成首次发布。[发布工作流](.github/workflows/pages.yml) 仅手动触发，在仓库子路径完成同一套 10 项浏览器验收后才部署。提交代码不会自行更新线上版本。
+原版已于 2026-09-05 在用户确认后启用公开站点并完成首次发布，当时十项子路径验收通过。[发布工作流](.github/workflows/pages.yml) 只接受 main 上的手动触发。此短片分支不会自行更新线上版本。
 
 线上地址：[https://yydshly.github.io/0905_codexgpt6_project/](https://yydshly.github.io/0905_codexgpt6_project/)。[首次发布成功记录](https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33944881617)；浏览器线上复验、更新步骤与权限说明见 [发布说明](docs/PAGES.md)。
 
@@ -42,15 +74,15 @@ npm run preview:pages
 # 打开 http://127.0.0.1:4174/0905_codexgpt6_project/
 ```
 
-停止上述预览后运行 `npm run test:pages`，可自动构建、启动并验收 Pages 子路径。发布产物在 `dist-pages/`，测试证据在 `test-results/pages-evidence/`。本地根路径开发和普通生产构建仍使用原命令。
+停止上述预览后运行 `npm run test:pages`，可自动构建、启动并验收 Pages 子路径。构建产物在 `dist-pages/`，原编辑器证据在 `test-results/pages-evidence/`，短片测试文件仍写入 `test-results/film-evidence/`。本次只实际重跑了子路径下的短片完整流程（1/1），完整 16 项在根路径执行。
 
 运行 `npm run test:live` 可在真实线上 HTTPS 地址重跑十项验收，不启动本地服务器。它使用隔离的测试浏览器上下文，证据位于 `test-results/live-evidence/`，不会覆盖用户现有浏览器的存档。
 
 线上地址与本机开发地址的存档不互通；通过 JSON 导出、导入迁移。上线不会增加云同步，也不会上传访问者的方案。
 
-## 使用
+## 原空间布置器的使用
 
-1. 默认进入「林间 · 我的创作书房」。点击左侧物件缩略图添加物件，新物件会自动选中。
+1. 通过 `/?workspace=room` 进入原空间布置器。点击左侧物件缩略图添加物件，新物件会自动选中。
 2. 在「布置」模式中，点击场景物件选择并拖动；选中名称悬浮显示，拖动时显示实时坐标。位置吸附到 0.1 m 网格，限制于房间内；台灯和显示器约束在所属书桌上。
 3. 右侧顶部可直接切换物件，名称旁可重命名；重复物件自动编号。右侧修改 X/Z 坐标、朝向、材质；灯具支持开关和亮度。书桌移动或旋转时，桌面物件一起跟随。
 4. 切换「观察」模式后，左键拖动旋转镜头；两种模式均支持右键观察、滚轮缩放。上方可切换默认、俯视和近景，右下可恢复默认视角。手动旋转或缩放后，视角预设取消高亮；保存和刷新后仍与实际镜头一致。
@@ -104,7 +136,10 @@ npm test
 | `src/model.ts` | 唯一场景数据、默认布局、添加策略、约束、导入校验 |
 | `src/geometry.ts` | 家具、建筑与装饰的程序几何，木纹和织物材质 |
 | `src/scene.ts` | Three.js 渲染、真实灯光、阴影、SSAO、抗锯齿、拾取、拖动、镜头与 PNG |
-| `src/main.ts` | 产品界面、双向属性、历史、本地存档和文件操作 |
+| `src/main.ts` / `src/room-editor.ts` | 入口分流 / 保留原产品界面、属性、历史、存档和文件操作 |
+| `src/studio.ts` / `src/studio.css` | 镜头工作台、时间轴、编辑历史、工程持久化与视频回放 |
+| `src/film-model.ts` | v2 工程、旧版迁移、默认编排与唯一时间采样函数 |
+| `src/film-export.ts` | 实际编码能力检测、逐帧 WebCodecs 编码和 MP4/WebM 封装 |
 | `src/style.css` | 布局、视觉样式、交互状态与窄屏适配 |
 | `tests/study.spec.ts` | 实际浏览器连续操作、文件下载、恢复和回归验收 |
 
