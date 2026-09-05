@@ -35,6 +35,8 @@ export class StudyScene {
   private shadowKey='';
   private selectionKey='';
   private exporting=false;
+  private interactionEnabled=true;
+  private frameAspect:number|null=null;
   private frame=0;
   metrics={ renderTimes:[] as number[], renders:0, calls:0, triangles:0 };
   constructor(private host:HTMLElement, private cb:SceneCallbacks) {
@@ -64,9 +66,21 @@ export class StudyScene {
     canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();this.cb.error('图形上下文已中断。请先导出 JSON 备份，再刷新页面恢复。');});
     new ResizeObserver(()=>this.resize()).observe(host);this.resize();this.loop();
   }
-  private loop=()=>{this.frame=requestAnimationFrame(this.loop);if(this.dirty&&!document.hidden&&!this.exporting){this.dirty=false;this.ao.ssaoMaterial.uniforms.cameraProjectionMatrix.value.copy(this.camera.projectionMatrix);this.ao.ssaoMaterial.uniforms.cameraInverseProjectionMatrix.value.copy(this.camera.projectionMatrixInverse);const t=performance.now();this.renderer.info.reset();this.composer.render();this.metrics.renderTimes.push(performance.now()-t);if(this.metrics.renderTimes.length>240)this.metrics.renderTimes.shift();this.metrics.renders++;this.metrics.calls=this.renderer.info.render.calls;this.metrics.triangles=this.renderer.info.render.triangles;}};
+  private loop=()=>{this.frame=requestAnimationFrame(this.loop);if(this.dirty&&!document.hidden&&!this.exporting)this.renderNow();};
+  renderNow(){this.dirty=false;this.camera.updateMatrixWorld(true);this.ao.ssaoMaterial.uniforms.cameraProjectionMatrix.value.copy(this.camera.projectionMatrix);this.ao.ssaoMaterial.uniforms.cameraInverseProjectionMatrix.value.copy(this.camera.projectionMatrixInverse);const t=performance.now();this.renderer.info.reset();this.composer.render();this.metrics.renderTimes.push(performance.now()-t);if(this.metrics.renderTimes.length>240)this.metrics.renderTimes.shift();this.metrics.renders++;this.metrics.calls=this.renderer.info.render.calls;this.metrics.triangles=this.renderer.info.render.triangles;}
   invalidate(){this.dirty=true;}
-  resize(){const w=this.host.clientWidth,h=this.host.clientHeight;if(!w||!h||this.exporting)return;const height=Math.max(6.8,7.4/(w/h));this.camera.left=-height*w/h/2;this.camera.right=height*w/h/2;this.camera.top=height/2;this.camera.bottom=-height/2;this.camera.updateProjectionMatrix();this.renderer.setSize(w,h);this.composer.setSize(w,h);this.positionSelectionLabel();this.invalidate();}
+  private projection(w:number,h:number){const aspect=this.frameAspect??w/h,height=Math.max(6.8,7.4/aspect);this.camera.left=-height*aspect/2;this.camera.right=height*aspect/2;this.camera.top=height/2;this.camera.bottom=-height/2;this.camera.updateProjectionMatrix();}
+  setFraming(aspect:number|null){this.frameAspect=aspect;this.resize();}
+  resize(){const w=this.host.clientWidth,h=this.host.clientHeight;if(!w||!h||this.exporting)return;this.projection(w,h);this.renderer.setSize(w,h);this.composer.setSize(w,h);this.positionSelectionLabel();this.invalidate();}
+  setInteractionEnabled(enabled:boolean){this.interactionEnabled=enabled;this.controls.enabled=enabled;}
+  captureSession(width:number,height:number){
+    if(this.exporting)throw new Error('已有画面正在生成，请稍后重试。');
+    const ratio=this.renderer.getPixelRatio(),camera=this.getCamera(),selection=this.selection.visible,interaction=this.interactionEnabled;
+    this.exporting=true;this.selection.visible=false;this.setInteractionEnabled(false);
+    this.renderer.setPixelRatio(1);this.renderer.setSize(width,height,false);this.composer.setPixelRatio(1);this.composer.setSize(width,height);this.projection(width,height);
+    let closed=false;
+    return {render:(pose:CameraState)=>{if(closed)throw new Error('画面生成已结束');this.applyCamera(pose);this.renderNow();return this.renderer.domElement;},close:()=>{if(closed)return;closed=true;this.exporting=false;this.selection.visible=selection;this.renderer.setPixelRatio(ratio);this.composer.setPixelRatio(ratio);this.setInteractionEnabled(interaction);this.resize();this.applyCamera(camera);}};
+  }
   getCamera():CameraState{const rounded=(values:number[])=>values.map(v=>Math.round(v*100000)/100000);return {position:rounded(this.camera.position.toArray()),target:rounded(this.controls.target.toArray()),zoom:Math.round(this.camera.zoom*100000)/100000};}
   applyCamera(c:CameraState){this.camera.position.fromArray(c.position);this.controls.target.fromArray(c.target);this.camera.zoom=c.zoom;this.camera.updateProjectionMatrix();this.controls.update();this.camera.updateMatrixWorld(true);this.positionSelectionLabel();this.cb.camera();this.invalidate();}
   view(v:keyof typeof CAMERA_VIEWS){this.applyCamera(CAMERA_VIEWS[v]);}
@@ -129,7 +143,7 @@ export class StudyScene {
   private cast(e:PointerEvent){this.camera.updateMatrixWorld(true);for(const group of this.groups.values())group.updateMatrixWorld(true);const rect=this.renderer.domElement.getBoundingClientRect();this.pointer.set((e.clientX-rect.left)/rect.width*2-1,-(e.clientY-rect.top)/rect.height*2+1);this.ray.setFromCamera(this.pointer,this.camera);}
   private pick(e:PointerEvent){this.cast(e);const hit=this.ray.intersectObjects([...this.groups.values()],true)[0];let root:T.Object3D|null=hit?.object||null;while(root&&!root.userData.itemId)root=root.parent;return root?.userData.itemId as string|undefined;}
   private pointerDown=(e:PointerEvent)=>{
-    if(e.button!==0||this.mode!=='edit')return;const id=this.pick(e)||null;
+    if(e.button!==0||this.mode!=='edit'||!this.interactionEnabled)return;const id=this.pick(e)||null;
     this.cb.select(id);if(!id)return;
     const item=this.plan.objects.find(o=>o.id===id)!;const y=item.parentId?.78:0,p=new T.Vector3();this.ray.ray.intersectPlane(new T.Plane(new T.Vector3(0,1,0),-y),p);
     this.drag={id,startX:e.clientX,startY:e.clientY,offset:new T.Vector3(item.x,0,item.z).sub(p),y,moved:false};this.controls.enabled=false;this.renderer.domElement.setPointerCapture(e.pointerId);
@@ -138,7 +152,7 @@ export class StudyScene {
     if(!this.drag){if(this.mode==='edit'&&e.buttons===0)this.renderer.domElement.style.cursor=this.pick(e)?'grab':'default';return;}const d=this.drag;if(!d.moved&&Math.hypot(e.clientX-d.startX,e.clientY-d.startY)<4)return;
     if(!d.moved){this.cb.begin();d.moved=true;}this.cast(e);const p=new T.Vector3();if(this.ray.ray.intersectPlane(new T.Plane(new T.Vector3(0,1,0),-d.y),p)){p.add(d.offset);this.cb.move(d.id,p.x,p.z);}this.renderer.domElement.style.cursor='grabbing';
   };
-  private pointerUp=()=>{const moved=this.drag?.moved;this.drag=null;if(moved)this.cb.end();this.controls.enabled=true;this.renderer.domElement.style.cursor=this.mode==='edit'?'default':'grab';this.positionSelectionLabel();};
+  private pointerUp=()=>{const moved=this.drag?.moved;this.drag=null;if(moved)this.cb.end();this.controls.enabled=this.interactionEnabled;this.renderer.domElement.style.cursor=this.mode==='edit'?'default':'grab';this.positionSelectionLabel();};
   async exportPNG():Promise<Blob>{
     const w=this.host.clientWidth,h=this.host.clientHeight,ratio=this.renderer.getPixelRatio();
     this.selection.visible=false;this.exporting=true;

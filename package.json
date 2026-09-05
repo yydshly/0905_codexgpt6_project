@@ -10,11 +10,14 @@
     "preview": "vite preview --host 127.0.0.1 --port 4173 --strictPort",
     "preview:pages": "vite preview --mode pages --outDir dist-pages --host 127.0.0.1 --port 4174 --strictPort",
     "test": "playwright test",
+    "test:film": "playwright test --config playwright.film.config.ts",
+    "test:room": "playwright test tests/study.spec.ts",
     "test:pages": "playwright test --config playwright.pages.config.ts",
     "test:live": "playwright test --config playwright.live.config.ts"
   },
   "dependencies": {
     "lucide": "0.468.0",
+    "mediabunny": "1.55.7",
     "three": "0.180.0"
   },
   "devDependencies": {
