@@ -1,0 +1,18 @@
+{
+  "timestamp": "2026-09-05T10:03:44.772Z",
+  "browser": "152.0.7977.82",
+  "ids": {
+    "a": "2c2c8f87-b397-46e4-a56e-1e44ff697162",
+    "b": "e9ad2e44-10b4-49d2-a403-25f03b15f9e1",
+    "c": "003879bd-b5bb-4ebe-89e2-816ec834397a",
+    "copy": "612f7191-26ca-4108-a655-cfe2f3bc99ad"
+  },
+  "aOriginalRevision": 4,
+  "finalProjectCount": 5,
+  "distinctPublishedProjects": true,
+  "oldVersionsRetained": true,
+  "restoredProjectExact": true,
+  "otherProjectsUnchanged": true,
+  "jsonRoundTripExact": true,
+  "errors": []
+}

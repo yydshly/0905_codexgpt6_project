@@ -1,0 +1,176 @@
+{
+  "timestamp": "2026-09-05T10:07:42.080Z",
+  "baseline": "ffc03aa",
+  "codeCommit": "a4296c224233b406d73cfcdc56979e8c0bdcfc84",
+  "branch": "codex/project-library",
+  "local": {
+    "firstProjects": {
+      "startTime": "2026-09-05T09:55:12.422Z",
+      "duration": 45429.136000000006,
+      "expected": 2,
+      "skipped": 0,
+      "unexpected": 2,
+      "flaky": 0
+    },
+    "projectsFour": {
+      "startTime": "2026-09-05T09:56:38.334Z",
+      "duration": 29489.703,
+      "expected": 4,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "fullRegression": {
+      "startTime": "2026-09-05T09:57:43.519Z",
+      "duration": 202484.501,
+      "expected": 34,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "additionalFallback": {
+      "startTime": "2026-09-05T10:02:24.511Z",
+      "duration": 8450.695,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "pagesFive": {
+      "startTime": "2026-09-05T10:03:20.333Z",
+      "duration": 37598.517,
+      "expected": 5,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  "github": {
+    "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33959620002",
+    "headSha": "a4296c224233b406d73cfcdc56979e8c0bdcfc84",
+    "status": "in_progress",
+    "conclusion": "",
+    "verifiedAsComplete": false,
+    "jobs": [
+      {
+        "name": "browser-acceptance (film-controls)",
+        "status": "in_progress",
+        "conclusion": "",
+        "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33959620002/job/101289091421"
+      },
+      {
+        "name": "browser-acceptance (film-export)",
+        "status": "in_progress",
+        "conclusion": "",
+        "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33959620002/job/101289091473"
+      },
+      {
+        "name": "browser-acceptance (publish)",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33959620002/job/101289091508"
+      },
+      {
+        "name": "browser-acceptance (projects)",
+        "status": "in_progress",
+        "conclusion": "",
+        "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33959620002/job/101289091524"
+      },
+      {
+        "name": "browser-acceptance (room-reuse)",
+        "status": "in_progress",
+        "conclusion": "",
+        "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33959620002/job/101289091536"
+      },
+      {
+        "name": "browser-acceptance (portfolio)",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33959620002/job/101289091575"
+      }
+    ]
+  },
+  "publicDeploymentPerformed": false,
+  "artifacts": [
+    {
+      "file": "01-library-1440x900.png",
+      "bytes": 272968,
+      "sha256": "07cd50f8aaa13197e49ba8581862ed70482523a8244292ac2da982cd1fe7a5d6"
+    },
+    {
+      "file": "02-history-restore-1280x800.png",
+      "bytes": 184123,
+      "sha256": "a94ab4a2f7be4c71bc14aac1b2a7eab6282291087d91f3e2735db3b12f5e0b25"
+    },
+    {
+      "file": "03-editor-1280x800.png",
+      "bytes": 378186,
+      "sha256": "68468bc8fe8d814f6d4579b5354438262ebb8c3fa28afab2914d58f7e2f1d899"
+    },
+    {
+      "file": "04-library-mobile-390x844.png",
+      "bytes": 88958,
+      "sha256": "0490da395c4cda74b14d39d09eb4dacbaa8e4a3dee74409fdd25f9753a437911"
+    },
+    {
+      "file": "05-project-b-visitor-preview.png",
+      "bytes": 200623,
+      "sha256": "e92617f5e08d5c35d49aaa1ccd6268c904848e559b9e433b356d6c6193e9230c"
+    },
+    {
+      "file": "06-exported-b-independent-1440x900.png",
+      "bytes": 313992,
+      "sha256": "c7be0f13dcb13e7741e4351905b8ab761c787a2fba568ac4ea4e914193822702"
+    },
+    {
+      "file": "capability-performance-pages.json",
+      "bytes": 347,
+      "sha256": "a97c0a2bfc587d83d7f422dda285ed0fcbac3d5f15e4c7b4c8fe7484ba6c3f53"
+    },
+    {
+      "file": "capability-performance.json",
+      "bytes": 346,
+      "sha256": "810722b831d49082181ba50dba29ef9d68524f9d25d501b984f780ccdc9331cd"
+    },
+    {
+      "file": "film-regression.json",
+      "bytes": 738,
+      "sha256": "4929762a556c00efffa3cce85f524ae7198a23e73c88ad19ab096874844d399e"
+    },
+    {
+      "file": "independent-sites.json",
+      "bytes": 1682,
+      "sha256": "1ded2f5776fcc45062f4788a31cba2a9c9f145d3dddd5a7f0fca9f44cfecd184"
+    },
+    {
+      "file": "journey.json",
+      "bytes": 521,
+      "sha256": "ccc3d966ad3cf33e6e3e0cc6d1725e20260a97c04cf2da735cc0ddc641bd5b53"
+    },
+    {
+      "file": "migration.json",
+      "bytes": 242,
+      "sha256": "2e79f4a9fccd8f925e811b46ac753015391e7772895b854477d1e574d1c52ae3"
+    },
+    {
+      "file": "pages-journey.json",
+      "bytes": 521,
+      "sha256": "e03e1f72695c7c7bd818413077ccef7f55dd4dc99559302405fd936203f047d8"
+    },
+    {
+      "file": "project-a-site.zip",
+      "bytes": 296490,
+      "sha256": "0a329b7f61f14ee2f7a6d4f4b35a804e0f4e5d39407dae7697363ee7f3be1998"
+    },
+    {
+      "file": "project-a.json",
+      "bytes": 4128,
+      "sha256": "e046ab520f193d075d993c96fdac39156e0279c71bf3acc9079afd15a76e8d62"
+    },
+    {
+      "file": "project-b-site.zip",
+      "bytes": 296494,
+      "sha256": "dd709380783c79685e4fcfca012711634489bd8d5238a96440f6e9e83fd84cd0"
+    }
+  ]
+}

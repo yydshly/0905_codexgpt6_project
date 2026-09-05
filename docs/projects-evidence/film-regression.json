@@ -1,0 +1,33 @@
+{
+  "timestamp": "2026-09-05T09:58:15.976Z",
+  "browser": "152.0.7977.82",
+  "projectAfterRestoreExact": true,
+  "jsonRoundTripExact": true,
+  "format": "avc",
+  "videoInfo": {
+    "duration": 10.2,
+    "width": 1280,
+    "height": 720,
+    "ready": 4
+  },
+  "videoBytes": 6237870,
+  "frameChecks": [
+    {
+      "time": 1.2,
+      "meanAbsolutePixelDifference": 1.1784953703703704,
+      "cameraMatchesSampler": true
+    },
+    {
+      "time": 4.9,
+      "meanAbsolutePixelDifference": 1.697962962962963,
+      "cameraMatchesSampler": true
+    },
+    {
+      "time": 8.766666666666667,
+      "meanAbsolutePixelDifference": 1.7104861111111112,
+      "cameraMatchesSampler": true
+    }
+  ],
+  "downloadedFilePlayed": true,
+  "errors": []
+}

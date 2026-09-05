@@ -1,0 +1,69 @@
+{
+  "timestamp": "2026-09-05T10:05:01.750Z",
+  "records": [
+    {
+      "id": "a",
+      "profile": "林间的作品主页",
+      "work": "A 的摄影作品",
+      "mood": "day",
+      "shot2": 4.4,
+      "exactPackageData": true,
+      "projectOpened": true,
+      "noAuthorDatabase": true,
+      "readyMs": 1858,
+      "metrics": {
+        "renderTimes": [
+          476.30000001192093,
+          392.60000002384186,
+          4.599999964237213,
+          2.599999964237213
+        ],
+        "renders": 4,
+        "calls": 349,
+        "triangles": 189891,
+        "meshes": 171,
+        "instanceBatches": 15,
+        "sceneTriangles": 94942,
+        "gpu": "ANGLE (Intel, Intel(R) UHD Graphics (0x0000A788) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "pixelRatio": 1,
+        "canvas": [
+          1200,
+          657
+        ]
+      },
+      "errors": []
+    },
+    {
+      "id": "b",
+      "profile": "夜航的实验作品",
+      "work": "B 的独立产品",
+      "mood": "night",
+      "shot2": 2.8,
+      "exactPackageData": true,
+      "projectOpened": true,
+      "noAuthorDatabase": true,
+      "readyMs": 428,
+      "metrics": {
+        "renderTimes": [
+          125.70000004768372,
+          89.69999998807907,
+          5.800000011920929,
+          1.699999988079071
+        ],
+        "renders": 4,
+        "calls": 349,
+        "triangles": 189891,
+        "meshes": 171,
+        "instanceBatches": 15,
+        "sceneTriangles": 94942,
+        "gpu": "ANGLE (Intel, Intel(R) UHD Graphics (0x0000A788) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "pixelRatio": 1,
+        "canvas": [
+          1200,
+          657
+        ]
+      },
+      "errors": []
+    }
+  ]
+}

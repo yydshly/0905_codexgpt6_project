@@ -1,0 +1,14 @@
+{
+  "timestamp": "2026-09-05T10:02:32.332Z",
+  "browser": "152.0.7977.82",
+  "cachedOneProjectReadyMs": 74,
+  "cachedThumbnailReadyMs": 83,
+  "quotaErrorInjectedWithRealTransactionAbort": true,
+  "beforeSnapshotPreserved": true,
+  "noWebGLImportCopySearch": true,
+  "reducedMotion": true,
+  "viewport": {
+    "width": 390,
+    "height": 844
+  }
+}

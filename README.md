@@ -2,19 +2,20 @@
 
 一间可编辑、可拍摄，也可作为作品入口的 3D 书房。复用原有家具、材质和灯光，新增桌面书籍与显示器屏幕的作品绑定。
 
-当前分支：[codex/publishable-portfolio](https://github.com/yydshly/0905_codexgpt6_project/tree/codex/publishable-portfolio)，从 `df582ac` 继续扩展。11 类可选物件都可关联作品；新增个人标题、介绍和独立网站 ZIP 导出。未覆盖线上站点，GitHub Pages 仍是[原版布置器](https://yydshly.github.io/0905_codexgpt6_project/)。
+当前分支：[codex/project-library](https://github.com/yydshly/0905_codexgpt6_project/tree/codex/project-library)，从 `ffc03aa` 继续扩展。新增多工程库、真实缩略图、新建/复制/另存为、保存版本与恢复。11 类物件关联和独立网站 ZIP 导出继续保留。未覆盖线上站点，GitHub Pages 仍是[原版布置器](https://yydshly.github.io/0905_codexgpt6_project/)。
 
 ## 启动与入口
 
 Node.js 22.12+，支持 WebGL 2 的桌面浏览器：
 
 ```bash
-git switch codex/publishable-portfolio
+git switch codex/project-library
 npm ci
 npm run dev
 ```
 
-- [布置书房](http://127.0.0.1:5173/?workspace=room)：选中任意家具，在右侧「作品入口」配置作品。书桌和显示器另支持具体部位。
+- [我的工程](http://127.0.0.1:5173/?workspace=projects)：管理多套方案、复制、另存为、保存版本与恢复。
+- [布置书房](http://127.0.0.1:5173/?workspace=room)：快速工作区。选中任意家具，在右侧「作品入口」配置作品。管理多套方案请从工程库进入。
 - [作品展示示例](http://127.0.0.1:5173/?workspace=portfolio)：直接点击书籍或屏幕、标记或作品列表，打开项目详情。
 - [短片工作台](http://127.0.0.1:5173/?workspace=film)：默认入口，已编排 10 秒作品，支持最多 3 段镜头与真实视频导出。
 - [网页接入示例](http://127.0.0.1:5173/?workspace=integration)：宿主控制 iframe，接收作品点击事件并展示详情。
@@ -25,7 +26,8 @@ npm run dev
 ```bash
 npm run build
 npm run preview  # http://127.0.0.1:4173/
-npm test         # 30 项真实浏览器检查
+npm test         # 真实浏览器验收，包含多工程与版本恢复
+npx playwright test tests/projects.spec.ts
 npx playwright test tests/publish.spec.ts
 npx playwright test tests/portfolio.spec.ts
 npx playwright test --config playwright.pages.config.ts tests/portfolio.spec.ts
@@ -35,7 +37,7 @@ npx playwright test --config playwright.pages.config.ts tests/portfolio.spec.ts
 
 ## 保存与带走作品
 
-房间 v3、短片 v4、作品配置 v2；当前保存键为 `ideal-study.plan.v3` 与 `ideal-study.film.v4`。旧房间 v1/v2、短片 v2/v3、作品配置 v1 会迁移。保存仅在当前浏览器，刷新保留已保存方案，撤销历史不跨刷新。
+房间 v3、短片 v4、作品配置 v2。多工程保存在 IndexedDB `ideal-study.projects`，每套工程有独立 ID 和可跨刷新恢复的保存版本。原 `ideal-study.plan.v3` 与 `ideal-study.film.v4` 快速存档保留，进入工程库时迁入并去重。逐步撤销栈不跨刷新；保存版本独立保留。详见[工程与版本使用说明](docs/PROJECTS.md)。
 
 **发布个人主页：**布置并关联作品 → 顶部「3 作品展示」→「发布展示页」设置介绍 → 下载网站 ZIP → 解压部署。访客打开即能探索，不依赖作者存档。启动与构建命令自动生成发布模板。详见[使用与部署指南](docs/PUBLISH.md)。
 
@@ -45,6 +47,8 @@ GLB 带走模型、材质和部位标识；JSON 带走房间、照片与作品�
 
 ## 文档与实际交付
 
+- [多工程管理、版本恢复与限制](docs/PROJECTS.md)
+- [多工程实际截图、导出包与验证记录](docs/PROJECTS-VALIDATION.md)
 - [通用作品入口、个人网站发布与兼容边界](docs/PUBLISH.md)
 - [本轮真实截图、发布 ZIP 与验证记录](docs/PUBLISH-VALIDATION.md)
 - [作品配置、接入代码与兼容边界](docs/PORTFOLIO.md)
