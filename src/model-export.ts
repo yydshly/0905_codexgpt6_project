@@ -15,7 +15,7 @@ export async function exportSceneGLB(roots:T.Object3D[],name:string,localOrigin:
     }
     root.name=source.userData.itemId??(source instanceof T.Light?'scene-light':'room');
     output.add(root);
-    const batches:T.InstancedMesh[]=[];root.traverse(o=>{o.userData=o.userData.itemId?{itemId:o.userData.itemId}:{};if(o instanceof T.InstancedMesh)batches.push(o);});
+    const batches:T.InstancedMesh[]=[];root.traverse(o=>{o.userData={...(o.userData.itemId?{itemId:o.userData.itemId}:{}),...(o.userData.partId?{partId:o.userData.partId}: {})};if(o instanceof T.InstancedMesh)batches.push(o);});
     for(const batch of batches){const group=new T.Group();group.position.copy(batch.position);group.quaternion.copy(batch.quaternion);group.scale.copy(batch.scale);for(let index=0;index<batch.count;index++){const part=new T.Mesh(batch.geometry,batch.material),matrix=new T.Matrix4();batch.getMatrixAt(index,matrix);matrix.decompose(part.position,part.quaternion,part.scale);group.add(part);}batch.parent!.add(group);batch.removeFromParent();}
   }
   // Bump-only detail and renderer postprocessing are not part of this portable asset.

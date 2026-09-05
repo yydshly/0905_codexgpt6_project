@@ -90,7 +90,8 @@ export function createFurniture(item:Item,preview=false):T.Group {
     box(g,.58,.014,.22,material('#d6d2c4'),0,.791,.23,.013);
     for(let row=0;row<4;row++)for(let col=0;col<14;col++)box(g,.028,.006,.032,cream,-.259+col*.039,.801,.147+row*.043,.003);
     box(g,.074,.033,.112,cream,.43,.803,.22,.023);
-    box(g,.19,.027,.26,material('#b88665'),-.68,.796,.18,.005);box(g,.175,.017,.247,cream,-.68,.809,.18,.002);
+    const book=new T.Group();book.name='part-book-1';book.userData.partId='book-1';g.add(book);
+    box(book,.19,.027,.26,material('#b88665'),-.68,.796,.18,.005);box(book,.175,.017,.247,cream,-.68,.809,.18,.002);
     cup(g,.80,.784,-.30);
   }
   if(item.kind==='chair') {
@@ -137,15 +138,16 @@ export function createFurniture(item:Item,preview=false):T.Group {
   if(item.kind==='monitor') {
     box(g,.31,.018,.22,m,0,.011,.01,.03);box(g,.045,.22,.045,m,0,.13,-.04,.012);
     box(g,.82,.47,.042,m,0,.29,-.055,.016);
+    const screen=new T.Group();screen.name='part-screen';screen.userData.partId='screen';g.add(screen);
     const screenmat=new T.MeshStandardMaterial({color:'#879a8d',emissive:'#698577',emissiveIntensity:.35,roughness:.36});
-    box(g,.781,.416,.004,screenmat,0,.295,-.031,.008);
+    box(screen,.781,.416,.004,screenmat,0,.295,-.031,.008);
     // The screen is geometric artwork, not a photograph of the room.
-    box(g,.27,.416,.006,material('#253b35'),-.25,.295,-.027,.003);
-    box(g,.19,.012,.007,material('#d0d6be'),-.26,.424,-.022,.002);
-    for(let i=0;i<5;i++)box(g,.13-(i%2)*.035,.004,.007,material('#7c9583'),-.285,.386-i*.021,-.022,.001);
-    const disc=mesh(g,new T.CircleGeometry(.115,40),material('#c9c2a0'),.16,.318,-.023);disc.castShadow=false;
-    box(g,.39,.052,.01,material('#50695b'),.17,.132,-.02,.005);
-    sphere(g,.003,cream,0,.074,-.031);
+    box(screen,.27,.416,.006,material('#253b35'),-.25,.295,-.027,.003);
+    box(screen,.19,.012,.007,material('#d0d6be'),-.26,.424,-.022,.002);
+    for(let i=0;i<5;i++)box(screen,.13-(i%2)*.035,.004,.007,material('#7c9583'),-.285,.386-i*.021,-.022,.001);
+    const disc=mesh(screen,new T.CircleGeometry(.115,40),material('#c9c2a0'),.16,.318,-.023);disc.castShadow=false;
+    box(screen,.39,.052,.01,material('#50695b'),.17,.132,-.02,.005);
+    sphere(screen,.003,cream,0,.074,-.031);
   }
   if(item.kind==='shelf') {
     for(const x of [-.557,.557])box(g,.045,2.05,.36,m,x,1.025,0,.006);

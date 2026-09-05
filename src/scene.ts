@@ -7,6 +7,7 @@ import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { SMAAPass } from 'three/addons/postprocessing/SMAAPass.js';
 import { createFurniture, createRoom, thumbCamera } from './geometry';
 import { CATALOG, dimensions, DEFAULT_CAMERA, CAMERA_LIMITS, displayName, localPoint, type Plan, type Kind, type CameraState, type Item } from './model';
+import { sameTarget, type ContentTarget } from './portfolio-model';
 
 const CAMERA_VIEWS={default:DEFAULT_CAMERA,top:{position:[.05,11,.12],target:[0,0,0],zoom:1.1},close:{position:[5.4,3.5,6.2],target:[.25,1.05,-.72],zoom:1.6}} satisfies Record<string,CameraState>;
 
@@ -146,7 +147,28 @@ export class StudyScene {
     this.selectionLabel.style.left=`${T.MathUtils.clamp((p.x+1)/2*w,Math.min(halfLabel,w/2),Math.max(w-halfLabel,w/2))}px`;
     this.selectionLabel.style.top=`${T.MathUtils.clamp((1-p.y)/2*h,115,h-75)}px`;
   }
-  private cast(e:PointerEvent){this.camera.updateMatrixWorld(true);for(const group of this.groups.values())group.updateMatrixWorld(true);const rect=this.renderer.domElement.getBoundingClientRect();this.pointer.set((e.clientX-rect.left)/rect.width*2-1,-(e.clientY-rect.top)/rect.height*2+1);this.ray.setFromCamera(this.pointer,this.camera);}
+  private cast(e:{clientX:number;clientY:number}){this.camera.updateMatrixWorld(true);for(const group of this.groups.values())group.updateMatrixWorld(true);this.room.updateMatrixWorld(true);const rect=this.renderer.domElement.getBoundingClientRect();this.pointer.set((e.clientX-rect.left)/rect.width*2-1,-(e.clientY-rect.top)/rect.height*2+1);this.ray.setFromCamera(this.pointer,this.camera);}
+  /** The first visible surface owns a click; never raycast only the interactive objects. */
+  contentTargetAt(clientX:number,clientY:number):ContentTarget|null {
+    this.cast({clientX,clientY});
+    const hit=this.ray.intersectObjects([this.room,...this.groups.values()],true)[0];
+    let node:T.Object3D|null=hit?.object??null,partId:ContentTarget['partId']|undefined;
+    while(node){if(node.userData.partId)partId=node.userData.partId;if(node.userData.itemId)return partId?{itemId:node.userData.itemId,partId}:null;node=node.parent;}
+    return null;
+  }
+  contentAnchors(){
+    const rect=this.renderer.domElement.getBoundingClientRect();
+    this.camera.updateMatrixWorld(true);
+    return this.plan.portfolio.bindings.flatMap(binding=>{
+      const root=this.groups.get(binding.target.itemId);if(!root)return [];
+      root.updateMatrixWorld(true);let part:T.Object3D|undefined;
+      root.traverse(o=>{if(o.userData.partId===binding.target.partId)part=o;});if(!part)return [];
+      const p=new T.Box3().setFromObject(part).getCenter(new T.Vector3()).project(this.camera);
+      const x=(p.x+1)*rect.width/2,y=(1-p.y)*rect.height/2;
+      const hit=this.contentTargetAt(rect.left+x,rect.top+y);
+      return [{target:binding.target,x,y,visible:p.z>=-1&&p.z<=1&&x>18&&x<rect.width-18&&y>18&&y<rect.height-18&&!!hit&&sameTarget(hit,binding.target)}];
+    });
+  }
   private pick(e:PointerEvent){this.cast(e);const hit=this.ray.intersectObjects([...this.groups.values()],true)[0];let root:T.Object3D|null=hit?.object||null;while(root&&!root.userData.itemId)root=root.parent;return root?.userData.itemId as string|undefined;}
   private pointerDown=(e:PointerEvent)=>{
     if(e.button!==0||this.mode!=='edit'||!this.interactionEnabled)return;const id=this.pick(e)||null;

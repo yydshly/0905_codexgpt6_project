@@ -1,9 +1,10 @@
+import { emptyPortfolio, parsePortfolio, type Portfolio } from './portfolio-model';
 export type Kind = 'desk' | 'chair' | 'monitor' | 'shelf' | 'taskLamp' | 'floorLamp' | 'plant' | 'rug' | 'sofa' | 'bed' | 'wallPhoto';
 export type Mood = 'day' | 'dusk' | 'night';
 export interface Item { id: string; kind: Kind; x: number; z: number; rotation: number; material: string; label?: string; parentId?: string; on?: boolean; brightness?: number; y?: number; width?: number; height?: number; photo?: string }
 export interface CameraState { position: number[]; target: number[]; zoom: number }
-export interface Plan { app: 'ideal-study'; version: 2; name: string; mood: Mood; objects: Item[]; selectedId: string | null; camera: CameraState }
-export const ROOM_STORAGE = 'ideal-study.plan.v2';
+export interface Plan { app: 'ideal-study'; version: 3; portfolio: Portfolio; name: string; mood: Mood; objects: Item[]; selectedId: string | null; camera: CameraState }
+export const ROOM_STORAGE = 'ideal-study.plan.v3';
 export const MAX_JSON_BYTES = 6 * 1024 * 1024;
 export const defaultWallPhoto = (): Item => ({ id:'wall-art',kind:'wallPhoto',x:.6,y:1.93,z:-2.17,rotation:0,material:'oak',width:1.15,height:.82 });
 export const dimensions = (item: Item) => item.kind === 'wallPhoto' ? { ...CATALOG.wallPhoto, width:item.width ?? 1.15, height:item.height ?? .82 } : CATALOG[item.kind];
@@ -40,7 +41,7 @@ export function displayName(item:Item,objects:Item[]) {
   return CATALOG[item.kind].name+(siblings.length>1?' '+String(siblings.findIndex(o=>o.id===item.id)+1).padStart(2,'0'):'');
 }
 export function initialPlan(): Plan {
-  return { app: 'ideal-study', version: 2, name: '林间 · 我的创作书房', mood: 'day', selectedId: null, camera: clone(DEFAULT_CAMERA), objects: [
+  return { app: 'ideal-study', version: 3, portfolio: emptyPortfolio(), name: '林间 · 我的创作书房', mood: 'day', selectedId: null, camera: clone(DEFAULT_CAMERA), objects: [
     { id: 'rug-1', kind: 'rug', x: .25, z: .4, rotation: 0, material: 'linen' },
     { id: 'desk-1', kind: 'desk', x: .65, z: -1.12, rotation: 0, material: 'oak' },
     { id: 'chair-1', kind: 'chair', x: .58, z: -.02, rotation: -12, material: 'sage' },
@@ -132,7 +133,7 @@ export function parsePlan(raw: unknown): Plan {
   if(!raw||typeof raw!=='object') throw new Error('文件内容不是有效的方案。');
   const p = raw as Plan;
   const version=(raw as {version:unknown}).version;
-  if(p.app!=='ideal-study'||![1,2].includes(version as number)||typeof p.name!=='string'||!p.name.trim()||p.name.length>48||!['day','dusk','night'].includes(p.mood)||!Array.isArray(p.objects)||p.objects.length>40) throw new Error('请导入理想书房 v1 或 v2 JSON 方案。');
+  if(p.app!=='ideal-study'||![1,2,3].includes(version as number)||typeof p.name!=='string'||!p.name.trim()||p.name.length>48||!['day','dusk','night'].includes(p.mood)||!Array.isArray(p.objects)||p.objects.length>40) throw new Error('请导入理想书房 v1、v2 或 v3 JSON 方案。');
   const ids=new Set<string>();
   const finite=(v:unknown)=>typeof v==='number'&&Number.isFinite(v);
   for(const o of p.objects) {
@@ -162,5 +163,5 @@ export function parsePlan(raw: unknown): Plan {
   const objects=p.objects.map(o=>({id:o.id,kind:o.kind,x:o.x,z:o.z,rotation:o.rotation,material:o.material,...(o.label!==undefined?{label:o.label.trim()}:{}),...(o.parentId?{parentId:o.parentId}:{}),...(o.kind==='wallPhoto'?{y:o.y,width:o.width,height:o.height,...(o.photo?{photo:o.photo}:{})}:{}),...(['taskLamp','floorLamp'].includes(o.kind)?{on:o.on,brightness:o.brightness}:{})}));
   // The formerly fixed decoration becomes editable; legacy furniture and camera stay intact.
   if(version===1&&objects.length<40){const art=defaultWallPhoto();while(ids.has(art.id))art.id+='-m';objects.push(art);}
-  return { app:'ideal-study', version:2,name:p.name.trim(),mood:p.mood,objects,camera:clone(p.camera),selectedId:typeof p.selectedId==='string'&&ids.has(p.selectedId)?p.selectedId:null };
+  return { app:'ideal-study', version:3,portfolio:version===3?parsePortfolio(p.portfolio,objects):emptyPortfolio(),name:p.name.trim(),mood:p.mood,objects,camera:clone(p.camera),selectedId:typeof p.selectedId==='string'&&ids.has(p.selectedId)?p.selectedId:null };
 }

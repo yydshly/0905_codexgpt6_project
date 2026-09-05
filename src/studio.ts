@@ -112,6 +112,7 @@ $('#shot-add').onclick = () => { if (project.film.shots.length >= 3) return; mut
 $('#film-undo').onclick = () => undo(); $('#film-redo').onclick = () => undo(true); $('#film-save').onclick = save;
 $('#edit-room').onclick = () => { if (save()) location.href = '?workspace=room&project=film'; };
 $('#workspace-room').onclick = $('#edit-room').onclick;
+$('#workspace-portfolio').onclick=()=>{if(save())location.href='?workspace=portfolio&project=film';};
 $<HTMLInputElement>('#film-name').onchange = e => { const name = (e.target as HTMLInputElement).value.trim(); if (!name) { (e.target as HTMLInputElement).value = project.name; toast('请为工程取个名字。', true); return; } mutate(() => project.name = name); };
 $('#film-json').onclick = () => { pause(); finish(); download(new Blob([JSON.stringify(project, null, 2)], { type: 'application/json' }), 'json'); toast('v2 工程已交给浏览器下载，包含房间和全部镜头。'); };
 $('#film-import').onclick = () => { pause(); $<HTMLInputElement>('#film-file').click(); };

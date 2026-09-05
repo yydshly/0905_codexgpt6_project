@@ -15,7 +15,7 @@ test('照片沿墙编辑、原档迁移、图片保存刷新及整屋/单件 GLB
   test.setTimeout(150000);const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
   const legacy=JSON.parse(await readFile('tests/fixtures/legacy-v1.json','utf8'));
   await page.addInitScript(value=>{if(!localStorage.getItem('ideal-study.plan.v1'))localStorage.setItem('ideal-study.plan.v1',JSON.stringify({plan:value,savedAt:'original'}));},legacy);
-  await ready(page);expect((await plan(page)).version).toBe(2);expect((await plan(page)).objects.filter((o:any)=>o.kind!=='wallPhoto')).toEqual(legacy.objects);
+  await ready(page);expect((await plan(page)).version).toBe(3);expect((await plan(page)).objects.filter((o:any)=>o.kind!=='wallPhoto')).toEqual(legacy.objects);
   const old=await page.evaluate(()=>localStorage.getItem('ideal-study.plan.v1'));
   await page.getByRole('combobox',{name:'切换当前物件'}).selectOption('wall-art');
   await expect(page.getByRole('spinbutton',{name:'朝向角度'})).toHaveCount(0);await expect(page.getByRole('spinbutton',{name:'Z 位置',exact:true})).toHaveCount(0);
@@ -80,14 +80,14 @@ test('真实宿主网页驱动 iframe：材质、光照、定位、播放及工�
   const iframe=page.frames().find(f=>f.url().includes('workspace=embed'))!;
   await iframe.evaluate(()=>window.dispatchEvent(new MessageEvent('message',{origin:'https://untrusted.example',source:parent,data:{channel:'ideal-study',version:1,id:'fake',command:'setMood',payload:'night'}})));
   await page.locator('#host-pause').click();await expect.poll(async()=>(await result()).project.scene.mood).toBe('day');
-  expect(await page.evaluate(()=>localStorage.getItem('ideal-study.plan.v2'))).toBeNull();expect(await page.evaluate(()=>localStorage.getItem('ideal-study.film.v3'))).toBeNull();
+  expect(await page.evaluate(()=>localStorage.getItem('ideal-study.plan.v3'))).toBeNull();expect(await page.evaluate(()=>localStorage.getItem('ideal-study.film.v4'))).toBeNull();
   await writeFile(path.join(evidence,'integration.json'),JSON.stringify({timestamp:new Date().toISOString(),liveIframeControlled:true,materialMoodAndPlayback:true,legacyImport:true,untrustedOriginIgnored:true,localStorageUntouched:true},null,2));
 });
 
-test('旧短片 v2 升级到 v3：镜头保留、内嵌房间迁移、原存档不覆盖',async({page})=>{
+test('旧短片 v2 升级到 v4：镜头保留、内嵌房间迁移、原存档不覆盖',async({page})=>{
   const legacy=JSON.parse(await readFile('docs/film-evidence/verified-film-project.json','utf8'));
   await page.addInitScript(value=>{if(!localStorage.getItem('ideal-study.film.v2'))localStorage.setItem('ideal-study.film.v2',JSON.stringify({project:value,savedAt:'original-v2'}));},legacy);
   await ready(page,'film');const before=await page.evaluate(()=>(window as any).__film.getProject()),old=await page.evaluate(()=>localStorage.getItem('ideal-study.film.v2'));
-  expect(before.version).toBe(3);expect(before.scene.version).toBe(2);expect(before.film).toEqual(legacy.film);expect(before.playhead).toBe(legacy.playhead);expect(before.scene.objects.filter((o:any)=>o.kind!=='wallPhoto')).toEqual(legacy.scene.objects);
+  expect(before.version).toBe(4);expect(before.scene.version).toBe(3);expect(before.film).toEqual(legacy.film);expect(before.playhead).toBe(legacy.playhead);expect(before.scene.objects.filter((o:any)=>o.kind!=='wallPhoto')).toEqual(legacy.scene.objects);
   await page.locator('#film-save').click();await page.reload();await expect(page.locator('html')).toHaveAttribute('data-ready','true');expect(await page.evaluate(()=>(window as any).__film.getProject())).toEqual(before);expect(await page.evaluate(()=>localStorage.getItem('ideal-study.film.v2'))).toBe(old);
 });

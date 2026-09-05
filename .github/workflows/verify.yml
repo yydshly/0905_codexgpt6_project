@@ -1,7 +1,7 @@
 name: Verify study and film workbench
 on:
   push:
-    branches: [main, 'codex/film-workbench', 'codex/reusable-study']
+    branches: [main, 'codex/film-workbench', 'codex/reusable-study', 'codex/portfolio-interactions']
     paths-ignore: ['docs/**', 'README.md', 'THIRD_PARTY_LICENSES.txt']
   pull_request:
     paths-ignore: ['docs/**', 'README.md', 'THIRD_PARTY_LICENSES.txt']
@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        suite: [film-export, film-controls, room-reuse]
+        suite: [film-export, film-controls, room-reuse, portfolio]
     steps:
       - uses: actions/checkout@v7.0.1
       - uses: actions/setup-node@v7.0.0
@@ -34,6 +34,9 @@ jobs:
       - name: Room editing and reusable assets
         if: matrix.suite == 'room-reuse'
         run: npx playwright test tests/study.spec.ts tests/reuse.spec.ts
+      - name: Portfolio authoring, actual model activation and portable GLB
+        if: matrix.suite == 'portfolio'
+        run: npx playwright test tests/portfolio.spec.ts
       - name: Keep actual browser evidence
         if: always()
         uses: actions/upload-artifact@v7.0.1

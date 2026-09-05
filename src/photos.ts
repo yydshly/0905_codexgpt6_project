@@ -10,7 +10,7 @@ async function decode(data: string) {
 }
 export async function preparePhotos(plan: Plan) {
   const pending = new Map<string, HTMLImageElement>();
-  for (const data of new Set(plan.objects.flatMap(o => o.photo ? [o.photo] : []))) {
+  for (const data of new Set([...plan.objects.flatMap(o => o.photo ? [o.photo] : []),...plan.portfolio.projects.flatMap(w=>w.cover?[w.cover]:[])])) {
     if (images.has(data)) continue;
     const image = await decode(data);
     if(image.naturalWidth>1024||image.naturalHeight>1024)throw new Error('工程照片须为应用处理后的 1024 像素以内图片。');
