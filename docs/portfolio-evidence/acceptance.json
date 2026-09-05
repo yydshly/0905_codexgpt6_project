@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-05T08:38:48.496Z",
+  "timestamp": "2026-09-05T08:39:30.799Z",
   "baseline": "428cd19",
   "featureCodeCommit": "78e9382ad649f49053a6f2b8b56a79bc6ae4a7a4",
   "finalCodeCommit": "4b6b936129fee2a3e1f25002b3a7a20917929aab",
@@ -107,7 +107,15 @@
         "conclusion": "success",
         "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33955649267/job/101278390523"
       }
-    ]
+    ],
+    "finalPortfolioStats": {
+      "startTime": "2026-09-05T08:35:27.813Z",
+      "duration": 130870.145,
+      "expected": 5,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
   },
   "artifacts": [
     {

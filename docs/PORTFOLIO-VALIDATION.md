@@ -48,7 +48,7 @@
 - `8397179` 的作品流程 5 项通过，但原短片回归出现暂停后播放头仍前进的失败（[33954823081](https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33954823081)）。未归咎于图片校验，也未重试后隐去原失败；在 `4b6b936` 改为主指针按下即暂停，并消费同次 click 防止重新播放，键盘点击保留。
 - `4b6b936` 云端重验中，房间、短片、复用 **21/21 通过**；作品流程 **4/5 通过**（[33955146891](https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33955146891)）。trace 显示测试第二次点击实际发生在第一次播放约 12.3 秒之后，10 秒短片已自然结束，按钮已变为「播放短片」，因此触发重新播放。它是测试时序问题，未据此修改正确的播放器结束行为。
 - `bd0feea` 将按钮定位放在播放前，再用真实鼠标坐标点击，增加暂停状态、未到片尾、等待后播放头不变的断言，没有重试、跳过或放宽断言。真实 SwiftShader 另验证 1.2 秒暂停、Enter 切换，以及播放到 10 秒自然结束后恢复作品入口：[gallery-pause.json](portfolio-evidence/gallery-pause.json)。
-- 最终测试版本云端记录：[33955649267](https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33955649267)，状态与逐项结果见 acceptance.json。未完成的任务不计通过。
+- 最终测试版本云端记录：[33955649267](https://github.com/yydshly/0905_codexgpt6_project/actions/runs/33955649267)，**作品 5/5 通过，无重试、跳过或不稳定用例**。同轮其他套件仍在运行时不计通过；前述 21 项通过来自同一产品代码 `4b6b936` 的上一轮。状态与逐项结果见 acceptance.json。
 
 五张保留的图片均为实际运行截图：
 
