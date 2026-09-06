@@ -4,15 +4,17 @@ import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.j
 import bundledAvatarURL from './assets/guide/creator-18.glb?url';
 import personalAvatarURL from './assets/guide/personal-creator-01.glb?url';
 import personalAvatarV2URL from './assets/guide/personal-creator-02.glb?url';
+import narutoAvatarURL from './assets/guide/naruto-author-01.glb?url';
 import motionURL from './assets/guide/guide-motion-v1.glb?url';
 import { DEFAULT_GUIDE_AVATAR, guideAvatars, type GuideAvatarId } from './guide-avatars';
 import type { GuideProject, GuideSample } from './guide-model';
 
-/** CC0 base + locomotion: Quaternius. Wardrobe, preparation and guide poses: this project. */
+/** Asset credits: ronildo.facanha (Naruto), Quaternius (base/locomotion), project adaptations. */
 export async function createGuideCharacter(avatar: GuideAvatarId = DEFAULT_GUIDE_AVATAR) {
+  const anime = avatar === 'naruto-author-01-v1';
   // The standalone kit references its adjacent file; the editor uses Vite's hashed asset.
   const avatarURL = typeof __GUIDE_ASSET_BASE__ === 'undefined'
-    ? (avatar === 'creator-18-v1' ? bundledAvatarURL : avatar === 'personal-creator-02-v1' ? personalAvatarV2URL : personalAvatarURL)
+    ? (anime ? narutoAvatarURL : avatar === 'creator-18-v1' ? bundledAvatarURL : avatar === 'personal-creator-02-v1' ? personalAvatarV2URL : personalAvatarURL)
     : __GUIDE_ASSET_BASE__ + guideAvatars[avatar].file;
   const loader = new GLTFLoader();
   const gltf = await loader.loadAsync(avatarURL);
@@ -27,11 +29,13 @@ export async function createGuideCharacter(avatar: GuideAvatarId = DEFAULT_GUIDE
     if (o instanceof T.Bone) bones.set(o.name, o);
     if (!(o instanceof T.Mesh)) return;
     o.castShadow = o.receiveShadow = true; o.frustumCulled = false;
+    if (anime && o.name === 'Naruto_Outline') o.castShadow = o.receiveShadow = false;
     resources.add(o.geometry);
     for (const m of Array.isArray(o.material) ? o.material : [o.material]) {
       resources.add(m);
       for (const v of Object.values(m)) if (v instanceof T.Texture) resources.add(v);
       if (m.name === 'GuideCotton') cotton = m as T.MeshStandardMaterial;
+      if (anime && m.name === 'tex01.png') cotton = m as T.MeshStandardMaterial;
       if (m.name === 'CottonRib') rib = m as T.MeshStandardMaterial;
       if (m.name.includes('Hair')) { (m as T.MeshStandardMaterial).color.set('#37271e'); (m as T.MeshStandardMaterial).roughness = .86; }
     }
@@ -48,6 +52,9 @@ export async function createGuideCharacter(avatar: GuideAvatarId = DEFAULT_GUIDE
     return { bone, property: path.propertyName, interpolant: track.InterpolantFactoryMethodLinear() };
   });
   const idleChannels = channels(idleClip), walkChannels = channels(walkClip);
+  const runClip = T.AnimationClip.findByName(gltf.animations, 'Run_Loop');
+  if (anime && !runClip) throw new Error('鸣人跑步动作资源不完整，请重新加载页面。');
+  const runChannels = runClip ? channels(runClip) : walkChannels;
   const sittingClips = new Map(motion.animations.filter(c => c.name.startsWith('Sitting_')).map(clip => [clip.name, { clip, channels: channels(clip) }]));
   if (sittingClips.size !== 3) throw new Error('坐下 / 站起动作资源不完整。');
   function sittingPose(s: GuideSample) {
@@ -60,7 +67,7 @@ export async function createGuideCharacter(avatar: GuideAvatarId = DEFAULT_GUIDE
       else (channel.property === 'position' ? channel.bone.position : channel.bone.scale).lerp(new T.Vector3().fromArray(value), s.sitWeight);
     }
   }
-  function samplePose(time: number, walkTime: number, weight: number) {
+  function samplePose(time: number, walkTime: number, weight: number, running = false) {
     // Explicit clip evaluation avoids AnimationMixer's unchanged-value cache after custom IK.
     for (const [name, bone] of bones) { const r = rest.get(name)!; bone.position.copy(r.p); bone.quaternion.copy(r.q); bone.scale.copy(r.scale); }
     for (const channel of idleChannels) {
@@ -68,8 +75,8 @@ export async function createGuideCharacter(avatar: GuideAvatarId = DEFAULT_GUIDE
       if (channel.property === 'quaternion') channel.bone.quaternion.fromArray(value);
       else (channel.property === 'position' ? channel.bone.position : channel.bone.scale).fromArray(value);
     }
-    for (const channel of walkChannels) {
-      const value = channel.interpolant.evaluate(walkTime % walkClip!.duration);
+    for (const channel of running ? runChannels : walkChannels) {
+      const value = channel.interpolant.evaluate(walkTime % (running ? runClip! : walkClip!).duration);
       if (channel.property === 'quaternion') channel.bone.quaternion.slerp(new T.Quaternion().fromArray(value), weight);
       else (channel.property === 'position' ? channel.bone.position : channel.bone.scale).lerp(new T.Vector3().fromArray(value), weight);
     }
@@ -139,12 +146,13 @@ export async function createGuideCharacter(avatar: GuideAvatarId = DEFAULT_GUIDE
   let lastFootCorrection = 0;
   return { root,
     apply(s: GuideSample, color: GuideProject['guide']['color']) {
-      cotton?.color.set({ sage: avatar === 'creator-18-v1' ? '#829c87' : '#8b9876', clay: '#b67956', blue: '#7895ae' }[color]);
+      cotton?.color.set(anime ? { sage: '#ffffff', clay: '#ffd5b5', blue: '#bddbff' }[color] : { sage: avatar === 'creator-18-v1' ? '#829c87' : '#8b9876', clay: '#b67956', blue: '#7895ae' }[color]);
       rib?.color.set({ sage: avatar === 'creator-18-v1' ? '#657d68' : '#748160', clay: '#966247', blue: '#586f88' }[color]);
       root.position.set(s.position.x, s.position.y, s.position.z); root.rotation.y = s.yaw;
       // Every evaluation starts at the same authored pose. Seeking never accumulates IK or morph state.
       const weight = s.walkWeight;
-      samplePose(s.time, s.stride / (Math.PI * 2) * walkClip.duration, weight);
+      const running = anime && s.locomotion === 'ninja', run = running ? weight : 0;
+      samplePose(s.time, s.stride / (Math.PI * 2) * (running ? runClip! : walkClip).duration, weight, running);
       for (const [name, bone] of bones) if (/^(pelvis|thigh|calf|foot|ball|spine)/.test(name)) {
         const blend = (1 - weight) * (name.startsWith('spine') ? .72 : 1);
         bone.quaternion.slerp(rest.get(name)!.q, blend); bone.position.lerp(rest.get(name)!.p, blend);
@@ -202,6 +210,25 @@ export async function createGuideCharacter(avatar: GuideAvatarId = DEFAULT_GUIDE
         const q = new T.Quaternion().setFromRotationMatrix(new T.Matrix4().makeBasis(x, y, z)).premultiply(root.getWorldQuaternion(new T.Quaternion())).premultiply(hand.parent!.getWorldQuaternion(new T.Quaternion()).invert());
         hand.quaternion.slerp(q, s.pointWeight);
         for (const finger of ['thumb', 'index', 'middle', 'ring', 'pinky']) for (let i = 1; i <= 3; i++) { const name = `${finger}_0${i}_r`, bone = bones.get(name); if (bone) bone.quaternion.slerp(rest.get(name)!.q, s.pointWeight * .88); }
+      }
+      // Naruto's characteristic arms-back silhouette is an additive, absolute-time
+      // adaptation of the CC0 run, with a short greeting before presenting the work.
+      book.scale.setScalar(1 - run); book.visible = run < .995;
+      if (run > 0) {
+        bones.get('spine_02')!.rotateX(.10 * run); root.updateMatrixWorld(true);
+        for (const side of ['l', 'r'] as const) {
+          const sign = side === 'l' ? 1 : -1;
+          arm(side, vector(sign * .35, 1.13, -.49), vector(sign * .38, 1.28, -.23), run);
+          handPose(side, run, 0);
+        }
+      }
+      if (anime && s.action === 'point' && s.pointWeight > 0) {
+        const wave = s.pointWeight * (1 - smooth((s.actionTime - 1.65) / .55));
+        const sway = Math.sin(s.actionTime * Math.PI * 3.6) * .20;
+        arm('r', vector(-.39 + sway * .10, 1.64, .23), vector(-.61, 1.35, .08), wave);
+        const hand = bones.get('hand_r')!, y = vector(sway, 1, 0).normalize(), z = vector(0, 0, 1), x = new T.Vector3().crossVectors(y, z).normalize();
+        const q = new T.Quaternion().setFromRotationMatrix(new T.Matrix4().makeBasis(x, y, z)).premultiply(root.getWorldQuaternion(new T.Quaternion())).premultiply(hand.parent!.getWorldQuaternion(new T.Quaternion()).invert());
+        hand.quaternion.slerp(q, wave);
       }
       const head = bones.get('Head')!;
       head.rotateX(read * .48 + Math.sin(s.time * .8) * .018 * (1 - weight));

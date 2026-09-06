@@ -18,13 +18,14 @@ test.beforeEach(async ({ page }) => { page.on('dialog', d => d.accept()); });
 test('导览闭环：修改、历史、保存恢复、JSON、真实视频重新播放与同帧比对', async ({ page, browser }) => {
   test.setTimeout(process.env.CI ? 900000 : 300000); const errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
   await ready(page); await capture(page, '01-guide-default-1440x900.png'); expect((await state(page)).routeError).toBe('');
-  expect((await project(page)).guide.avatar).toBe('personal-creator-02-v1');
-  expect(await page.evaluate(() => (window as any).__guide.avatar().asset)).toBe('personal-creator-02-v1');
+  expect((await project(page)).guide.avatar).toBe('naruto-author-01-v1');
+  expect(await page.evaluate(() => (window as any).__guide.avatar().asset)).toBe('naruto-author-01-v1');
   await page.locator('[data-stop="1"]').click();
+  await page.locator('#guide-movement').selectOption('ninja');
   await page.locator('#guide-duration').selectOption('6.5'); await page.locator('#guide-color').selectOption('clay');
   await page.locator('#guide-name').fill('小禾'); await page.locator('#guide-name').press('Tab');
   await page.locator('#guide-title').fill('小禾 · 作品导览验收'); await page.locator('#guide-title').press('Tab');
-  await page.locator('#guide-undo').click(); expect((await project(page)).name).toBe('小禾的书房漫游'); await page.locator('#guide-redo').click();
+  await page.locator('#guide-undo').click(); expect((await project(page)).name).toBe('鸣人的书房漫游'); await page.locator('#guide-redo').click();
   await page.locator('#guide-start').click(); await page.locator('#guide-play').click();
   const playback = await page.evaluate(async () => { const intervals: number[] = []; let last = performance.now(), start = last; await new Promise<void>(resolve => { const tick = (now: number) => { intervals.push(now - last); last = now; if (now - start >= 2000) resolve(); else requestAnimationFrame(tick); }; requestAnimationFrame(tick); }); return { intervals, metrics: (window as any).__guide.metrics() }; });
   expect((await state(page)).playing).toBe(true); await page.locator('#guide-play').click(); const paused = (await project(page)).playhead; await page.waitForTimeout(160); expect((await project(page)).playhead).toBe(paused);
@@ -79,9 +80,11 @@ test('真实点击入口、快速切换、跳过、动作完成、镜头冲突�
 });
 
 test('导览网站包离线于编辑器、子路径部署、作品关联与访客模式', async ({ page, browser }) => {
-  await ready(page); await page.locator('#guide-name').fill('阿禾'); await page.locator('#guide-name').press('Tab'); await page.locator('#guide-color').selectOption('blue'); const author = await project(page);
+  await ready(page); await page.locator('#guide-movement').selectOption('ninja'); await page.locator('#guide-name').fill('阿禾'); await page.locator('#guide-name').press('Tab'); await page.locator('#guide-color').selectOption('blue'); const author = await project(page);
   const event = page.waitForEvent('download'); await page.locator('#guide-publish').click(); const download = await event, file = path.join(evidence, 'xiaohe-guide.website.zip'); await download.saveAs(file); const files = unzipSync(new Uint8Array(await readFile(file))); const published = JSON.parse(new TextDecoder().decode(files['project.json'])); expect(published.guide).toEqual(author.guide); expect(published.app).toBe('ideal-study-guide');
-  expect(files['assets/personal-creator-02.glb']).toEqual(new Uint8Array(await readFile('src/assets/guide/personal-creator-02.glb')));
+  expect(new TextDecoder().decode(files['LICENSES.txt'])).toContain('ronildo.facanha'); expect(published.guide.movement).toBe('ninja');
+  expect(files['assets/naruto-author-01.glb']).toEqual(new Uint8Array(await readFile('src/assets/guide/naruto-author-01.glb')));
+  expect(files['assets/personal-creator-02.glb']).toBeUndefined();
   expect(files['assets/personal-creator-01.glb']).toBeUndefined();
   expect(files['assets/creator-18.glb']).toBeUndefined(); expect(files['assets/guide-motion-v1.glb']).toEqual(new Uint8Array(await readFile('src/assets/guide/guide-motion-v1.glb')));
   const server = createServer((req, res) => { const name = (req.url ?? '').replace(/^\/demo\//, '') || 'index.html'; const bytes = files[name]; if (!bytes) { res.writeHead(404); res.end(); return; } res.writeHead(200, { 'Content-Type': name.endsWith('.js') ? 'text/javascript' : name.endsWith('.css') ? 'text/css' : name.endsWith('.json') ? 'application/json' : 'text/html' }); res.end(bytes); });
@@ -118,12 +121,12 @@ test('青年骨骼、姿态重复采样、近景、旧角色迁移及模型加�
   const avatar = () => page.evaluate(() => (window as any).__guide.avatar());
   expect((await avatar()).bones).toBeGreaterThanOrEqual(67);
   expect((await avatar()).skinnedMeshes).toBeGreaterThan(5);
-  expect((await avatar()).clips.sort()).toEqual(['Idle_Loop', 'Sitting_Enter', 'Sitting_Exit', 'Sitting_Idle_Loop', 'Walk_Loop']);
+  expect((await avatar()).clips.sort()).toEqual(['Idle_Loop', 'Run_Loop', 'Sitting_Enter', 'Sitting_Exit', 'Sitting_Idle_Loop', 'Walk_Loop']);
   await scrub(page, 5.5); const pose = await avatar();
   await scrub(page, 13); await scrub(page, 5.5); expect(await avatar()).toEqual(pose);
   await scrub(page, 3);
   for (let i = 0; i < 3; i++) await page.locator('#guide-scrub').press('ArrowRight');
-  expect((await avatar()).blink).toBeGreaterThan(.8);
+  expect((await avatar()).blinkMeshes).toBe(0); // Author asset has a painted face; no fabricated facial rig.
   await scrub(page, 5.5);
   await page.locator('[data-stop="2"]').click(); await page.locator('#guide-remove-sit').click(); await scrub(page, 5.5);
   const before = await project(page), camera = await page.evaluate(() => (window as any).__guide.camera());
@@ -133,14 +136,14 @@ test('青年骨骼、姿态重复采样、近景、旧角色迁移及模型加�
   const legacy = structuredClone(before); legacy.guide.version = 1; delete legacy.guide.avatar;
   await page.locator('#guide-file').setInputFiles({ name: 'guide-v1.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(legacy)) });
   await expect.poll(async () => (await avatar()).asset).toBe('creator-18-v1');
-  const migrated = await project(page); expect(migrated).toEqual({ ...before, guide: { ...before.guide, avatar: 'creator-18-v1' } }); expect(migrated.guide.version).toBe(4);
-  await page.locator('#guide-avatar').selectOption('personal-creator-02-v1');
-  await expect.poll(async () => (await avatar()).asset).toBe('personal-creator-02-v1');
+  const migrated = await project(page); expect(migrated).toEqual({ ...before, guide: { ...before.guide, avatar: 'creator-18-v1' } }); expect(migrated.guide.version).toBe(5);
+  await page.locator('#guide-avatar').selectOption('naruto-author-01-v1');
+  await expect.poll(async () => (await avatar()).asset).toBe('naruto-author-01-v1');
   expect(await project(page)).toEqual(before);
   const invalid = structuredClone(before); invalid.guide.avatar = 'unknown-avatar';
   await page.locator('#guide-file').setInputFiles({ name: 'unknown-avatar.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(invalid)) }); await expect(page.locator('#guide-message')).toContainText('导入失败'); expect(await project(page)).toEqual(before);
   await page.locator('#guide-save').click();
-  await page.route('**/*personal-creator-02*.glb*', route => route.abort()); await page.reload();
+  await page.route('**/*naruto-author-01*.glb*', route => route.abort()); await page.reload();
   await expect(page.locator('html')).toHaveAttribute('data-ready', 'error'); await expect(page.locator('#guide-play')).toBeDisabled(); await expect(page.locator('#guide-export')).toBeDisabled();
   expect(await project(page)).toEqual(before); const downloaded = page.waitForEvent('download'); await page.locator('#guide-json').click(); expect((await downloaded).suggestedFilename()).toMatch(/guide.json$/);
   await writeFile(path.join(evidence, 'adult-avatar.json'), JSON.stringify({ asset: pose.asset, bones: pose.bones, skinnedMeshes: pose.skinnedMeshes, clips: pose.clips, blinkMeshes: pose.blinkMeshes, samePoseOnRepeatSeek: true, nearCameraDoesNotChangeProject: true, v1MigrationPreservesRoomAndSettings: true, unknownAssetRejected: true, missingAssetPreservesJson: true }, null, 2));
@@ -153,7 +156,7 @@ test('个人 IP 切换事务、v2 外观保留、撤销重做与旧角色网站�
   legacy.guide.stops = legacy.guide.stops.filter((s: any) => s.action !== 'sit'); legacy.guide.version = 2; legacy.guide.avatar = 'creator-18-v1'; legacy.guide.name = '旧工程角色';
   await page.locator('#guide-file').setInputFiles({ name: 'guide-v2.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(legacy)) });
   await expect.poll(avatar).toBe('creator-18-v1');
-  expect(await project(page)).toEqual({ ...legacy, guide: { ...legacy.guide, version: 4 } });
+  expect(await project(page)).toEqual({ ...legacy, guide: { ...legacy.guide, version: 5 } });
   await page.locator('#guide-avatar').selectOption('personal-creator-01-v1');
   await expect.poll(avatar).toBe('personal-creator-01-v1');
   const upgraded = await project(page); expect(upgraded.project).toEqual(original.project);
@@ -187,7 +190,7 @@ test('个人 IP 切换事务、v2 外观保留、撤销重做与旧角色网站�
 test('首次角色加载期间锁定选择，避免显示资源与工程身份不一致', async ({ page }) => {
   let release!: () => void;
   const gate = new Promise<void>(resolve => { release = resolve; });
-  await page.route('**/*personal-creator-02*.glb*', async route => { await gate; await route.continue(); });
+  await page.route('**/*naruto-author-01*.glb*', async route => { await gate; await route.continue(); });
   try {
     await page.goto('./?workspace=guide', { waitUntil: 'commit' });
     await expect(page.locator('#guide-avatar')).toBeDisabled();

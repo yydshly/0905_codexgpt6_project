@@ -7,7 +7,7 @@ export type GuideAction = 'read' | 'point' | 'sit';
 export interface GuideStop { action: GuideAction; itemId: string; duration: number }
 export interface GuideProject {
   app: 'ideal-study-guide'; version: 1; name: string; project: FilmProject;
-  guide: { version: 4; avatar: GuideAvatarId; name: string; color: 'sage' | 'clay' | 'blue'; stops: GuideStop[] };
+  guide: { version: 5; avatar: GuideAvatarId; movement: 'walk' | 'ninja'; name: string; color: 'sage' | 'clay' | 'blue'; stops: GuideStop[] };
   playhead: number; selected: number;
 }
 export interface Point { x: number; z: number }
@@ -29,7 +29,7 @@ export function createGuideProject(source?: FilmProject): GuideProject {
   }
   const chair = project.scene.objects.find(o => o.kind === 'chair');
   if (chair) stops.push({ action: 'sit', itemId: chair.id, duration: 12 });
-  return { app: 'ideal-study-guide', version: 1, name: '小禾的书房漫游', project, guide: { version: 4, avatar: DEFAULT_GUIDE_AVATAR, name: '小禾', color: 'sage', stops }, playhead: 0, selected: 0 };
+  return { app: 'ideal-study-guide', version: 1, name: '鸣人的书房漫游', project, guide: { version: 5, avatar: DEFAULT_GUIDE_AVATAR, movement: 'walk', name: '鸣人', color: 'sage', stops }, playhead: 0, selected: 0 };
 }
 export function parseGuideProject(raw: unknown): GuideProject {
   if (!raw || typeof raw !== 'object') throw new Error('不是有效的导览工程。');
@@ -37,7 +37,7 @@ export function parseGuideProject(raw: unknown): GuideProject {
   const p = raw as GuideProject;
   const fail = (): never => { throw new Error('导览数据无效或版本不支持，当前工程未更改。'); };
   // Wrapper/storage key stay at v1. Legacy v1/v2 keep the old appearance; upgrading is explicit.
-  if (p.version !== 1 || typeof p.name !== 'string' || !p.name.trim() || p.name.length > 48 || ![1, 2, 3, 4].includes(p.guide?.version) || (Number(p.guide.version) === 2 && p.guide.avatar !== 'creator-18-v1') || (Number(p.guide.version) >= 3 && !isGuideAvatarId(p.guide.avatar)) || typeof p.guide.name !== 'string' || !p.guide.name.trim() || p.guide.name.length > 12 || !['sage', 'clay', 'blue'].includes(p.guide.color) || !Array.isArray(p.guide.stops) || p.guide.stops.length > (Number(p.guide.version) >= 4 ? 3 : 2)) return fail();
+  if (p.version !== 1 || typeof p.name !== 'string' || !p.name.trim() || p.name.length > 48 || ![1, 2, 3, 4, 5].includes(p.guide?.version) || (Number(p.guide?.version) >= 5 && !['walk', 'ninja'].includes(p.guide.movement)) || (Number(p.guide.version) === 2 && p.guide.avatar !== 'creator-18-v1') || (Number(p.guide.version) >= 3 && !isGuideAvatarId(p.guide.avatar)) || typeof p.guide.name !== 'string' || !p.guide.name.trim() || p.guide.name.length > 12 || !['sage', 'clay', 'blue'].includes(p.guide.color) || !Array.isArray(p.guide.stops) || p.guide.stops.length > (Number(p.guide.version) >= 4 ? 3 : 2)) return fail();
   const project = parseFilmProject(p.project).project;
   const actions = new Set<string>();
   const stops = p.guide.stops.map(s => {
@@ -46,7 +46,7 @@ export function parseGuideProject(raw: unknown): GuideProject {
   });
   if (!Number.isInteger(p.selected) || p.selected < 0 || p.selected >= Math.max(1, stops.length) || !Number.isFinite(p.playhead) || p.playhead < 0 || p.playhead > guideDuration(p)) return fail();
   project.scene.selectedId = null;
-  return { app: 'ideal-study-guide', version: 1, name: p.name.trim(), project, guide: { version: 4, avatar: Number(p.guide.version) < 3 ? 'creator-18-v1' : p.guide.avatar, name: p.guide.name.trim(), color: p.guide.color, stops }, selected: p.selected, playhead: Math.round(p.playhead * FPS) / FPS };
+  return { app: 'ideal-study-guide', version: 1, name: p.name.trim(), project, guide: { version: 5, avatar: Number(p.guide.version) < 3 ? 'creator-18-v1' : p.guide.avatar, movement: Number(p.guide.version) < 5 ? 'walk' : p.guide.movement, name: p.guide.name.trim(), color: p.guide.color, stops }, selected: p.selected, playhead: Math.round(p.playhead * FPS) / FPS };
 }
 
 const distance = (a: Point, b: Point) => Math.hypot(a.x - b.x, a.z - b.z);
@@ -107,7 +107,7 @@ export function compileGuide(p: GuideProject) {
     const lengths = reduced.slice(1).map((point, i) => distance(reduced[i], point));
     previous = reduced.at(-1)!;
     const length = lengths.reduce((a, b) => a + b, 0);
-    const walkTime = Math.max(.8, length / .78 + .55) + .5;
+    const walkTime = Math.max(.8, length / (p.guide.avatar === 'naruto-author-01-v1' && p.guide.movement === 'ninja' ? 1.65 : .78) + .55) + .5;
     const available = stop.duration - (chair ? 6.2 : 1.4);
     const seatGround = chair && plan.objects.some(o => o.kind === 'rug' && Math.abs(localPoint(chair.x, chair.z, o).x) < dimensions(o).width / 2 && Math.abs(localPoint(chair.x, chair.z, o).z) < dimensions(o).depth / 2) ? .027 : 0;
     return { path: reduced, lengths, length, walkTime, yaw: chair ? item.rotation * Math.PI / 180 + Math.PI : .28,
@@ -173,9 +173,11 @@ export function sampleGuide(p: GuideProject, route: GuideRoute, seconds: number)
   const sitWeight = sitting ? smooth((elapsed - sitStart + .28) / .28) * (1 - smooth((elapsed - (duration - .5)) / .5)) : 0;
   const seatBlend = sitting ? smooth(seatTime / 1.7) * (1 - smooth((elapsed - standStart) / 1.55)) : 0;
   const seatReadWeight = sitting ? smooth((seatTime - 1.7) / .5) * (1 - smooth((elapsed - standStart + .55) / .5)) : 0;
-  const phase = elapsed < .5 ? '转向行进方向' : elapsed < walkTime ? '走向座椅 / 作品' : elapsed < walkTime + .7 ? '转身站稳' : sitting ? elapsed < sitStart + 1.7 ? '屈膝坐下' : elapsed < standStart - .55 ? '坐姿休息' : elapsed < standStart ? '收起手册' : elapsed < duration - .5 ? '前倾站起' : '站立完成' : stop?.action === 'read' ? '翻阅随身手册' : '介绍屏幕作品';
+  const ninja = p.guide.avatar === 'naruto-author-01-v1' && p.guide.movement === 'ninja';
+  const phase = elapsed < .5 ? '转向行进方向' : elapsed < walkTime ? ninja ? '忍者跑向目标' : '走向座椅 / 作品' : elapsed < walkTime + .7 ? '转身站稳' : sitting ? elapsed < sitStart + 1.7 ? '屈膝坐下' : elapsed < standStart - .55 ? '坐姿休息' : elapsed < standStart ? '收起手册' : elapsed < duration - .5 ? '前倾站起' : '站立完成' : stop?.action === 'read' ? '翻阅随身手册' : '介绍屏幕作品';
   return { time, index, action: stop?.action ?? 'read', position: { ...position, y: segment?.seat?.ground ?? ground }, yaw: finalYaw,
-    stride: traveled / 1.06 * Math.PI * 2, walking: progress < 1 && !!segment?.length,
+    locomotion: ninja ? 'ninja' as const : 'walk' as const,
+    stride: traveled / (ninja ? 1.5 : 1.06) * Math.PI * 2, walking: progress < 1 && !!segment?.length,
     walkWeight: segment?.length ? smooth(walkElapsed / .28) * (1 - smooth((elapsed - walkTime + .38) / .38)) : 0,
     sitClip, sitTime, sitWeight, seatBlend, seatReadWeight, turning, seat: segment?.seat ?? null,
     actionWeight, readWeight, pointWeight, actionTime, target: previousAction === 'point' && last ? { x: mix(last.target.x, segment!.target.x, departure), y: mix(last.target.y, segment!.target.y, departure), z: mix(last.target.z, segment!.target.z, departure) } : segment?.target ?? { x: 0, y: 1, z: 0 }, camera, phase };

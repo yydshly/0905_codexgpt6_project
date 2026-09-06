@@ -122,3 +122,8 @@ npm run test:live
 主要支持桌面编辑，窄屏工程库与访客页已有浏览器窗口验证；真实手机 GPU、Safari/Firefox 和大量工程长期负载未验证。没有回收站或整库历史备份；保存失败会明确反馈，重要内容请下载 JSON。
 
 历次成果和测量保留在对应文档，不把旧版本截图当作当前线上结果：[原房间验收](docs/VERIFICATION.md) · [造型优化](docs/REFINEMENT.md) · [编辑体验](docs/USABILITY.md) · [首次上线](docs/PAGES.md)。
+
+
+## 鸣人动漫角色（独立分支）
+
+`codex/anime-character` 新增作者提供的鸣人模型，支持自然行走／忍者跑、招呼、阅读、坐下站起，以及同一时间轴的视频和独立网站导出。`npm ci` → `npm run dev` → `http://127.0.0.1:5173/?workspace=guide`。旧角色与旧工程继续保留。模型来源、复用方式与明确限制见 [角色接入说明](docs/NARUTO-CHARACTER.md)；这是 CC BY 标注的已有角色模型，不能视为原创个人 IP。

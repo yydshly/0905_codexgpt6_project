@@ -1,0 +1,41 @@
+{
+  "timestamp": "2026-09-06T03:38:24.903Z",
+  "browser": "152.0.7977.82",
+  "platform": "win32",
+  "viewport": [
+    1440,
+    900
+  ],
+  "headless": true,
+  "readyMs": 1911,
+  "avatar": {
+    "asset": "naruto-author-01-v1",
+    "bones": 67,
+    "skinnedMeshes": 6,
+    "clips": [
+      "Idle_Loop",
+      "Walk_Loop",
+      "Run_Loop",
+      "Sitting_Enter",
+      "Sitting_Exit",
+      "Sitting_Idle_Loop"
+    ],
+    "blinkMeshes": 0
+  },
+  "elapsedMs": 2005,
+  "sceneRenders": 60,
+  "renderedFramesPerSecond": 29.92518703241895,
+  "renderSubmissionMeanMs": 2.2800000031789143,
+  "renderSubmissionP95Ms": 2.700000047683716,
+  "gpu": "ANGLE (Intel, Intel(R) UHD Graphics (0x0000A788) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "calls": 576,
+  "sceneTriangles": 105188,
+  "canvas": [
+    996,
+    560
+  ],
+  "pixelRatio": 1,
+  "idleRendersIn600Ms": 0,
+  "errors": [],
+  "note": "Scene rendering is limited to the 30 fps guide sampler. Submission timings measure composer.render on the JS thread, not isolated GPU duration. Ready time is an unthrottled local-server cold browser context, not an Internet download guarantee. This is one local machine; not a cross-device FPS guarantee."
+}

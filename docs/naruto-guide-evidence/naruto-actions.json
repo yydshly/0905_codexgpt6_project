@@ -1,0 +1,12 @@
+{
+  "runTime": 1.5,
+  "waveTime": 12.376222325570872,
+  "walkPoseDifferent": true,
+  "deterministicRun": true,
+  "movementUndoRedo": true,
+  "savedRestoredExact": true,
+  "v4AppearanceRetained": true,
+  "invalidMovementPreservesProject": true,
+  "waveHandHeight": 1.671901863088586,
+  "errors": []
+}

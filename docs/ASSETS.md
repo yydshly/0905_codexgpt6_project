@@ -45,3 +45,8 @@
 - 作品配置、悬停入口、详情面板、展示页、消息事件和 GLB 交互适配器由本项目实现，拾取与 glTF 元数据交换复用 Three.js。
 - 验收封面复用上述自行绘制的 `test-photo.png`，并非用户真实作品或外部摄影。默认示例链接明确指向本项目真实 GitHub 仓库与已发布的原版编辑器，没有虚构个人项目成果。
 - `docs/portfolio-evidence` 中的截图均来自本轮真实 Chrome，JSON 与 GLB 通过页面下载获得。没有新增依赖或外部字体。
+
+
+## 2026-09-06 鸣人角色接入
+
+新增外部鸣人模型与贴图，作者 ronildo.facanha，CC BY 4.0 标注；不属于自行建模的个人 IP。动作骨架与基础片段来自 Quaternius CC0，本项目完成权重与导览动作适配。前文“无外部模型”描述只适用于对应的早期房间阶段。完整来源、改动与限制见 [NARUTO-CHARACTER.md](NARUTO-CHARACTER.md)。
