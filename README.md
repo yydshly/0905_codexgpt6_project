@@ -6,7 +6,7 @@
 
 角色导览默认 28 秒，包含阅读、介绍、坐下阅读并站起。新建示例使用作者提供的鸣人模型，支持自然行走／忍者跑、招手、最多三段时间轴、设置与历史、本地快照、JSON、真实视频和独立网站包；保留青年基础版及个人 IP 设定 01／02 与旧工程。最新修正包括支撑脚约束、起停与重心过渡、连续时间预览及精确暂停恢复。[角色接入与来源](docs/NARUTO-CHARACTER.md) · [步行优化与实际视频](docs/walk-refinement-evidence/README.md) · [个人 IP 02 制作记录](docs/character-ip/EDITION-02.md)。鸣人模型是外部已有角色资产，不属于原创个人 IP；[人物质量升级路线](docs/CHARACTER-QUALITY-ROADMAP.md)中的后续建议不等于已交付功能。
 
-角色导览与本轮人物优化已在 GitHub Pages 上线。[当前发布与真实 HTTPS 验收](docs/RELEASE-2026-09-06.md) · [此前工作台发布](docs/RELEASE-2026-09-05.md)。
+角色导览与人物优化已在 GitHub Pages 上线。[最新加载恢复与配置入口修复](docs/GUIDE-LOADING-RECOVERY.md) · [首次角色发布与真实 HTTPS 验收](docs/RELEASE-2026-09-06.md) · [此前工作台发布](docs/RELEASE-2026-09-05.md)。
 
 [角色切换与快照恢复加固](docs/GUIDE-LOADING-RECOVERY.md)：加载取消／重试、完整角色资源释放、有效存档优先恢复及顶部“配置角色”入口。该记录区分已验证的加载问题与尚未确定原因的浏览器崩溃，并说明角色仍是独立导览配置，尚未统一到房间物件编辑器。
 
@@ -59,7 +59,7 @@ GLB 带走模型、材质和部位标识；JSON 带走房间、照片与作品�
 - [个人 IP 02：实际效果、Blender 源文件、GLB、视频与验收](docs/character-ip/EDITION-02.md)
 - [新增网页能力、角色导览和远端交付归纳](docs/WEB-CHARACTER-SUMMARY.md)
 - [人物质量升级路线：模型、绑定、动画、控制与渲染（部分推进）](docs/CHARACTER-QUALITY-ROADMAP.md)
-- [当前角色发布、线上地址与验证](docs/RELEASE-2026-09-06.md)
+- [首次角色发布、线上地址与验证](docs/RELEASE-2026-09-06.md)
 - [此前完整工作台发布](docs/RELEASE-2026-09-05.md)
 - [工程删除与不保存返回](docs/PROJECT-ACTIONS.md)
 - [工程库使用帮助](docs/PROJECTS-HELP.md)

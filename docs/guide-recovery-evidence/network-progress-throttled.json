@@ -1,0 +1,66 @@
+{
+  "environment": "Local preview build; GLB requests redirected to GitHub Pages; Chrome CDP network throttling",
+  "browser": "152.0.7977.82",
+  "throttledBytesPerSecond": 150000,
+  "steps": [
+    {
+      "label": "ready",
+      "ms": 14918,
+      "avatar": "naruto-author-01-v1",
+      "message": "示例导览 · 书籍与屏幕关联本项目。点击播放，也可以导入你自己的房间 JSON。"
+    },
+    {
+      "label": "personal-creator-02-v1",
+      "ms": 62769,
+      "avatar": "personal-creator-02-v1",
+      "message": "示例导览 · 书籍与屏幕关联本项目。点击播放，也可以导入你自己的房间 JSON。"
+    }
+  ],
+  "network": {
+    "62324.18": {
+      "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/naruto-author-01-VveAJh75.glb",
+      "started": 1788682159900,
+      "bytes": 2429904,
+      "status": 200,
+      "protocol": "h2",
+      "finished": 1788682170440
+    },
+    "62324.26": {
+      "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/guide-motion-v1-BPhcysLX.glb",
+      "started": 1788682170465,
+      "bytes": 598368,
+      "status": 200,
+      "protocol": "h2",
+      "finished": 1788682172582
+    },
+    "62324.27": {
+      "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/personal-creator-02-kX-zTZ-r.glb",
+      "started": 1788682172922,
+      "bytes": 7448408,
+      "status": 200,
+      "protocol": "h2",
+      "finished": 1788682230420
+    },
+    "62324.28": {
+      "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/guide-motion-v1-BPhcysLX.glb",
+      "started": 1788682230423,
+      "bytes": 598368,
+      "status": 200,
+      "protocol": "h2",
+      "finished": 1788682234673
+    },
+    "62324.46": {
+      "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/personal-creator-02-kX-zTZ-r.glb",
+      "started": 1788682236005,
+      "bytes": 7344110,
+      "status": 200,
+      "protocol": "h2",
+      "failed": "net::ERR_ABORTED"
+    }
+  },
+  "errors": [
+    "page.waitForFunction: Timeout 150000ms exceeded."
+  ],
+  "restoredExact": null,
+  "note": "Slow character switch completed; subsequent reload download did not finish. This diagnostic is not a passing save/reload journey."
+}

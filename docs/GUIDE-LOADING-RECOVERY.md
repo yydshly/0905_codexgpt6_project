@@ -32,6 +32,23 @@
 
 另外使用本地修复构建，将 GLB 请求重定向到真实 GitHub Pages 文件，并通过 Chrome 网络限速为 150,000 字节／秒、20 ms 延迟，实测个人 IP 02 成功切换耗时 62.769 秒。这验证了真实网络资源持续超过 30 秒时仍可完成；该混合环境结果不冒充完整线上构建验收。
 
+该限速诊断随后刷新时发生另一次不完整传输，收到 7,344,110 字节后未完成，未通过该诊断的刷新闭环。[完整网络记录](guide-recovery-evidence/network-progress-throttled.json) 同时保留成功切换和刷新失败；保存恢复的线上结论以最终发布后的完整操作记录为准。
+
+提供 [真实联网操作脚本](guide-recovery-evidence/check-live.mjs)：安装项目依赖后运行 `node docs/guide-recovery-evidence/check-live.mjs`。它在独立 Chrome 存储中实际切换四种角色、配置、播放／暂停、保存刷新、JSON 往返并截图；每次加载最多两次明确的界面尝试，所有失败与重试均记录。按两份资源各最多 120 秒设置等待预算，避免把产品允许的慢速加载误判为固定 30 秒断言失败。该脚本已在本地修复构建和最终线上版本完整通过。
+
+## 最终发布与真实线上结果
+
+最终运行源码为 `5ba9e594323b850b88345655fcbbcc9038cdfe29`，已合入并推送 `main`。[Pages 发布](https://github.com/yydshly/0905_codexgpt6_project/actions/runs/34021257947) 于 2026-09-06T08:48:39Z 成功完成，[主干 CI](https://github.com/yydshly/0905_codexgpt6_project/actions/runs/34021257220) 同样通过。
+
+发布前七组共 55 项检查通过：发布 4、房间复用 14、作品 5、导览 16、短片控制 6、短片视频导出 1、工程库 9。下载实际发布产物并逐一核对，52 个线上文件均返回 HTTP 200，SHA-256 全部一致，见 [发布文件核对](guide-recovery-evidence/assets.json)。
+
+2026-09-06T08:50:16Z 在真实 HTTPS 页面使用独立 Chrome 存储完成“打开 → 四种角色切换 → 定位配置并修改名字与颜色 → 播放／暂停 → 保存 → 刷新恢复 → 导出 JSON → 重新导入”。六次加载均第一次成功，无脚本错误或请求失败；保存刷新和 JSON 往返后的工程数据完全一致。四次角色切换分别耗时 2,973、1,589、273、1,661 ms，刷新恢复 1,280 ms；这些是本次网络与缓存条件下的观测值，不是所有网络的性能保证。
+
+- [完整线上操作记录](guide-recovery-evidence/verification.json) · [实际导出的测试工程](guide-recovery-evidence/verified-guide.json)
+- [1440×900 实际截图](guide-recovery-evidence/online-configure-1440.png) · [1280×800 实际截图](guide-recovery-evidence/online-configure-1280.png)
+
+两张实际截图均已逐张查看，顶部入口可见、左侧设置可到达、时间轴和主要场景保持可用。以上为独立测试工程，不代表已恢复原崩溃标签中的用户快照；未清除或覆盖用户存档。
+
 ## 目前配置能力的准确边界
 
 角色仍属于独立导览工作区。可选四种已接入形象，调整名字、上衣配色、段落时长／顺序与坐下使用的椅子；鸣人可选择自然行走或忍者跑。角色及动作使用同一份导览数据进行预览、时间轴采样、视频和独立网站导出。
@@ -42,7 +59,7 @@
 
 `snapshot=...` 是本地存储索引，不是服务器分享 ID。首次来源在当前标签的 sessionStorage；点击保存后导览才写入同一站点的 localStorage。仅复制地址不能跨设备带走数据；跨设备编辑应使用导览 JSON，公开展示应部署导出的网站包。先前导出到别处的网站需要重新导出、重新部署才包含本次修正。
 
-## 验证
+## 首轮本地验证与保留证据
 
 测试使用隔离存储，Windows 11、Chrome 152.0.7977.82、Playwright 1.62.1、DPR 1，覆盖 1440×900 和 1280×800。
 
@@ -57,7 +74,7 @@
 
 补充实际内置浏览器检查：本机开发页面中，通过界面切换到“个人 IP · 蓬松偏分 02”，模型正常出现；点击顶部“配置角色”后角色名字获得焦点、设置区滚入视野；播放跨入第二段后可暂停，角色姿态与画面正常。该检查未写入用户存档，也不能替代原崩溃标签的恢复验证。
 
-首轮修复通过 [PR #3](https://github.com/yydshly/0905_codexgpt6_project/pull/3) 合入 `main`，合并提交 `c99c76146e1af0b574b469cc825b1f0f5967e64e`。[首轮 Pages 发布](https://github.com/yydshly/0905_codexgpt6_project/actions/runs/34018932016) 已成功。上文的慢速下载跟进修正需另行发布与线上验证，不能将首轮记录当作跟进版本的发布证据。
+首轮修复通过 [PR #3](https://github.com/yydshly/0905_codexgpt6_project/pull/3) 合入 `main`，合并提交 `c99c76146e1af0b574b469cc825b1f0f5967e64e`。[首轮 Pages 发布](https://github.com/yydshly/0905_codexgpt6_project/actions/runs/34018932016) 已成功。慢速下载跟进修正及最终发布证据见上文，首轮记录保留用于说明验收中实际发现的问题。
 
 ## 剩余限制
 

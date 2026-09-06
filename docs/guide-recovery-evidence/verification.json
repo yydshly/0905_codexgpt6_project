@@ -1,0 +1,67 @@
+{
+  "url": "https://yydshly.github.io/0905_codexgpt6_project/?workspace=guide",
+  "timestamp": "2026-09-06T08:50:16.673Z",
+  "browser": "152.0.7977.82",
+  "platform": "win32",
+  "attempts": [
+    {
+      "label": "initial load",
+      "attempt": 1,
+      "elapsedMs": 3883,
+      "ok": true,
+      "ready": "true",
+      "avatar": "naruto-author-01-v1",
+      "message": "示例导览 · 书籍与屏幕关联本项目。点击播放，也可以导入你自己的房间 JSON。"
+    },
+    {
+      "label": "select creator-18-v1",
+      "attempt": 1,
+      "elapsedMs": 2973,
+      "ok": true,
+      "ready": "true",
+      "avatar": "creator-18-v1",
+      "message": "示例导览 · 书籍与屏幕关联本项目。点击播放，也可以导入你自己的房间 JSON。"
+    },
+    {
+      "label": "select personal-creator-01-v1",
+      "attempt": 1,
+      "elapsedMs": 1589,
+      "ok": true,
+      "ready": "true",
+      "avatar": "personal-creator-01-v1",
+      "message": "示例导览 · 书籍与屏幕关联本项目。点击播放，也可以导入你自己的房间 JSON。"
+    },
+    {
+      "label": "select naruto-author-01-v1",
+      "attempt": 1,
+      "elapsedMs": 273,
+      "ok": true,
+      "ready": "true",
+      "avatar": "naruto-author-01-v1",
+      "message": "示例导览 · 书籍与屏幕关联本项目。点击播放，也可以导入你自己的房间 JSON。"
+    },
+    {
+      "label": "select personal-creator-02-v1",
+      "attempt": 1,
+      "elapsedMs": 1661,
+      "ok": true,
+      "ready": "true",
+      "avatar": "personal-creator-02-v1",
+      "message": "示例导览 · 书籍与屏幕关联本项目。点击播放，也可以导入你自己的房间 JSON。"
+    },
+    {
+      "label": "saved reload",
+      "attempt": 1,
+      "elapsedMs": 1280,
+      "ok": true,
+      "ready": "true",
+      "avatar": "personal-creator-02-v1",
+      "message": "已恢复上次保存的本地导览，播放保持暂停。"
+    }
+  ],
+  "errors": [],
+  "networkFailures": [],
+  "restoredExact": true,
+  "jsonRoundTripExact": true,
+  "success": true
+}
