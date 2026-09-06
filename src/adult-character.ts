@@ -1,5 +1,5 @@
 import * as T from 'three';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { disposeCharacterScene, loadCharacterGLTF, type CharacterLoadOptions } from './guide-character-assets';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import bundledAvatarURL from './assets/guide/creator-18.glb?url';
 import personalAvatarURL from './assets/guide/personal-creator-01.glb?url';
@@ -10,19 +10,19 @@ import { DEFAULT_GUIDE_AVATAR, guideAvatars, type GuideAvatarId } from './guide-
 import type { GuideProject, GuideSample } from './guide-model';
 
 /** Asset credits: ronildo.facanha (Naruto), Quaternius (base/locomotion), project adaptations. */
-export async function createGuideCharacter(avatar: GuideAvatarId = DEFAULT_GUIDE_AVATAR) {
+export async function createGuideCharacter(avatar: GuideAvatarId = DEFAULT_GUIDE_AVATAR, options: CharacterLoadOptions = {}) {
   const anime = avatar === 'naruto-author-01-v1';
   // The standalone kit references its adjacent file; the editor uses Vite's hashed asset.
   const avatarURL = typeof __GUIDE_ASSET_BASE__ === 'undefined'
     ? (anime ? narutoAvatarURL : avatar === 'creator-18-v1' ? bundledAvatarURL : avatar === 'personal-creator-02-v1' ? personalAvatarV2URL : personalAvatarURL)
     : __GUIDE_ASSET_BASE__ + guideAvatars[avatar].file;
-  const loader = new GLTFLoader();
-  const gltf = await loader.loadAsync(avatarURL);
-  let motion: Awaited<ReturnType<GLTFLoader['loadAsync']>>;
-  try { motion = await loader.loadAsync(typeof __GUIDE_ASSET_BASE__ === 'undefined' ? motionURL : __GUIDE_ASSET_BASE__ + 'guide-motion-v1.glb'); }
-  catch (error) { gltf.scene.traverse(o => { if (o instanceof T.Mesh) { o.geometry.dispose(); for (const m of Array.isArray(o.material) ? o.material : [o.material]) { for (const value of Object.values(m)) if (value instanceof T.Texture) value.dispose(); m.dispose(); } } }); throw error; }
+  const gltf = await loadCharacterGLTF(avatarURL, '角色模型', options);
   const root = new T.Group(); root.name = avatar; root.add(gltf.scene);
   const resources = new Set<T.BufferGeometry | T.Material | T.Texture>();
+  try {
+  const motion = await loadCharacterGLTF(typeof __GUIDE_ASSET_BASE__ === 'undefined' ? motionURL : __GUIDE_ASSET_BASE__ + 'guide-motion-v1.glb', '角色动作', options);
+  // Motion GLB contributes clips only. Release any scene resources supplied by future revisions.
+  disposeCharacterScene(motion.scene);
   const bones = new Map<string, T.Bone>(), blinkMeshes: T.Mesh[] = [], smileMeshes: T.Mesh[] = [], shoes: T.SkinnedMesh[] = [];
   let cotton: T.MeshStandardMaterial | undefined, rib: T.MeshStandardMaterial | undefined;
   gltf.scene.traverse(o => {
@@ -324,8 +324,9 @@ export async function createGuideCharacter(avatar: GuideAvatarId = DEFAULT_GUIDE
       root.updateMatrixWorld(true);
     },
     metrics: () => ({ asset: avatar, bones: bones.size, skinnedMeshes: (() => { let n = 0; root.traverse(o => { if (o instanceof T.SkinnedMesh) n++; }); return n; })(), blinkMeshes: blinkMeshes.length, blink: blinkMeshes[0]?.morphTargetInfluences?.[blinkMeshes[0].morphTargetDictionary!.Blink], clips: [...gltf.animations.map(a => a.name), ...sittingClips.keys()], footCorrection: lastFootCorrection, world: Object.fromEntries(['pelvis', 'Head', 'foot_l', 'foot_r', 'hand_l', 'hand_r'].map(name => [name, worldPosition(bones.get(name)!).toArray()])), pose: [...bones].map(([name, b]) => ({ name, position: b.position.toArray(), rotation: b.quaternion.toArray() })) }),
-    dispose() { root.removeFromParent(); resources.forEach(resource => resource.dispose()); },
+    dispose() { disposeCharacterScene(root, resources); },
   };
+  } catch (error) { disposeCharacterScene(root, resources); throw error; }
 }
 
 declare const __GUIDE_ASSET_BASE__: string;

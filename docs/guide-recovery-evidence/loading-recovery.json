@@ -1,0 +1,25 @@
+{
+  "browser": "152.0.7977.82",
+  "cycles": 3,
+  "switches": 12,
+  "baseline": {
+    "geometries": 154,
+    "textures": 20
+  },
+  "afterEachCycle": [
+    {
+      "geometries": 154,
+      "textures": 20
+    },
+    {
+      "geometries": 154,
+      "textures": 20
+    },
+    {
+      "geometries": 154,
+      "textures": 20
+    }
+  ],
+  "saveRestoreExact": true,
+  "errors": []
+}

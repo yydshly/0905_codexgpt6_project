@@ -8,6 +8,8 @@
 
 角色导览与本轮人物优化已在 GitHub Pages 上线。[当前发布与真实 HTTPS 验收](docs/RELEASE-2026-09-06.md) · [此前工作台发布](docs/RELEASE-2026-09-05.md)。
 
+[角色切换与快照恢复加固](docs/GUIDE-LOADING-RECOVERY.md)：加载取消／重试、完整角色资源释放、有效存档优先恢复及顶部“配置角色”入口。该记录区分已验证的加载问题与尚未确定原因的浏览器崩溃，并说明角色仍是独立导览配置，尚未统一到房间物件编辑器。
+
 公开入口：[角色导览](https://yydshly.github.io/0905_codexgpt6_project/?workspace=guide) · [我的工程](https://yydshly.github.io/0905_codexgpt6_project/?workspace=projects) · [默认短片](https://yydshly.github.io/0905_codexgpt6_project/) · [作品展示示例](https://yydshly.github.io/0905_codexgpt6_project/?workspace=portfolio)。本机与线上存档分开，带走现有工程请在本机备份 JSON，再在线上导入。
 
 ## 启动与入口

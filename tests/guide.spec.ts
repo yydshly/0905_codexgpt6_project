@@ -15,6 +15,98 @@ function difference(a: number[], b: number[]) { let sum = 0; for (let i = 0; i <
 test.beforeAll(async () => { await mkdir(evidence, { recursive: true }); });
 test.beforeEach(async ({ page }) => { if (process.env.CI) { test.setTimeout(300000); page.setDefaultTimeout(45000); } page.on('dialog', d => d.accept()); });
 
+test('角色加载恢复：取消与超时不更改工程，失败后可以重试或换角色', async ({ page }) => {
+  await page.clock.install(); await ready(page);
+  const original = await project(page), history = await state(page);
+  let release!: () => void;
+  const gate = new Promise<void>(resolve => { release = resolve; });
+  await page.route('**/*personal-creator-02*.glb*', async route => { await gate; await route.continue().catch(() => {}); });
+  try {
+    await page.locator('#guide-avatar').selectOption('personal-creator-02-v1');
+    await expect(page.locator('#guide-load-cancel')).toBeVisible();
+    await page.locator('#guide-load-cancel').click();
+    await expect(page.locator('#guide-loading')).toBeHidden();
+    await expect(page.locator('#guide-message')).toContainText('已取消');
+    expect(await project(page)).toEqual(original); expect(await state(page)).toEqual(history);
+    await page.locator('#guide-avatar').selectOption('personal-creator-02-v1');
+    await expect(page.locator('#guide-load-cancel')).toBeVisible();
+    await page.clock.fastForward(31000);
+    await expect(page.locator('#guide-message')).toContainText('超过 30 秒');
+    await expect(page.locator('#guide-play')).toBeEnabled();
+    expect(await project(page)).toEqual(original); expect(await state(page)).toEqual(history);
+  } finally { release(); await page.unroute('**/*personal-creator-02*.glb*'); }
+  await page.locator('#guide-save').click();
+  const raw = await page.evaluate(() => localStorage.getItem('ideal-study.guide.v1:demo'));
+  await page.route('**/*naruto-author-01*.glb*', route => route.abort());
+  await page.reload(); await expect(page.locator('html')).toHaveAttribute('data-ready', 'error');
+  await capture(page, 'loading-recovery-1440.png');
+  await expect(page.locator('#guide-load-retry')).toBeEnabled();
+  await page.unroute('**/*naruto-author-01*.glb*');
+  await page.locator('#guide-load-retry').click(); await expect(page.locator('html')).toHaveAttribute('data-ready', 'true');
+  expect(await project(page)).toEqual(original);
+  await page.route('**/*naruto-author-01*.glb*', route => route.abort());
+  await page.reload(); await expect(page.locator('html')).toHaveAttribute('data-ready', 'error');
+  await page.locator('#guide-avatar').selectOption('creator-18-v1');
+  await expect(page.locator('html')).toHaveAttribute('data-ready', 'true');
+  expect((await project(page)).guide.avatar).toBe('creator-18-v1');
+  expect(await page.evaluate(() => localStorage.getItem('ideal-study.guide.v1:demo'))).toBe(raw);
+  await page.unroute('**/*naruto-author-01*.glb*');
+  await page.locator('#guide-undo').click();
+  await expect.poll(async () => (await project(page)).guide.avatar).toBe(original.guide.avatar);
+  expect(await project(page)).toEqual(original);
+});
+
+test('四种角色连续切换释放资源，配置入口可见且保存刷新保持一致', async ({ page, browser }) => {
+  if (!process.env.CI) test.setTimeout(120000);
+  const errors: string[] = [], resources: unknown[] = [];
+  page.on('pageerror', e => errors.push(e.message)); page.on('crash', () => errors.push('page crashed'));
+  await ready(page);
+  const readResources = () => page.evaluate(() => (window as any).__guide.resources());
+  const baseline = await readResources();
+  for (let cycle = 0; cycle < 3; cycle++) {
+    for (const id of ['personal-creator-02-v1', 'creator-18-v1', 'personal-creator-01-v1', 'naruto-author-01-v1']) {
+      await page.locator('#guide-avatar').selectOption(id);
+      await expect.poll(() => page.evaluate(() => (window as any).__guide.avatar()?.asset)).toBe(id);
+      await page.waitForTimeout(150);
+    }
+    await expect.poll(readResources).toEqual(baseline); resources.push(await readResources());
+  }
+  for (const viewport of [{ width: 1440, height: 900 }, { width: 1280, height: 800 }]) {
+    await page.setViewportSize(viewport);
+    await page.getByRole('button', { name: '配置角色', exact: true }).click();
+    await expect(page.locator('#guide-name')).toBeFocused();
+    await expect(page.locator('.guide-scope-note')).toBeInViewport();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    await capture(page, 'configure-character-' + viewport.width + '.png');
+  }
+  await page.locator('#guide-name').fill('我的导览角色'); await page.locator('#guide-name').press('Tab');
+  await page.locator('#guide-avatar').selectOption('personal-creator-02-v1');
+  await expect.poll(() => page.evaluate(() => (window as any).__guide.avatar()?.asset)).toBe('personal-creator-02-v1');
+  await page.locator('#guide-save').click(); const saved = await project(page);
+  await page.reload(); await expect(page.locator('html')).toHaveAttribute('data-ready', 'true');
+  expect(await project(page)).toEqual(saved); expect(errors).toEqual([]);
+  await writeFile(path.join(evidence, 'loading-recovery.json'), JSON.stringify({ browser: browser.version(), cycles: 3, switches: 12, baseline, afterEachCycle: resources, saveRestoreExact: true, errors }, null, 2));
+});
+
+test('失效或损坏的快照来源不阻断有效存档恢复，原始数据不会被覆盖', async ({ page }) => {
+  await ready(page); const saved = await project(page); saved.guide.name = '已保存的角色';
+  const url = './?workspace=guide&snapshot=broken-source';
+  await page.evaluate(saved => {
+    sessionStorage.setItem('ideal-study.guide.source:broken-source', '{broken');
+    localStorage.setItem('ideal-study.guide.v1:broken-source', JSON.stringify(saved));
+  }, saved);
+  await page.goto(url); await expect(page.locator('html')).toHaveAttribute('data-ready', 'true');
+  expect(await project(page)).toEqual(saved);
+  await page.evaluate(() => localStorage.setItem('ideal-study.guide.v1:broken-source', 'invalid saved json'));
+  await page.reload(); await expect(page.locator('html')).toHaveAttribute('data-ready', 'true');
+  await expect(page.locator('#guide-message')).toContainText('原始存档保留');
+  await expect(page.locator('#guide-message')).toContainText('快照来源无法读取');
+  expect(await page.evaluate(() => [sessionStorage.getItem('ideal-study.guide.source:broken-source'), localStorage.getItem('ideal-study.guide.v1:broken-source')])).toEqual(['{broken', 'invalid saved json']);
+  await page.goto('./?workspace=guide&snapshot=not-on-this-device');
+  await expect(page.locator('html')).toHaveAttribute('data-ready', 'true');
+  await expect(page.locator('#guide-message')).toContainText('此链接不能跨设备分享');
+});
+
 test('导览闭环：修改、历史、保存恢复、JSON、真实视频重新播放与同帧比对', async ({ page, browser }) => {
   test.setTimeout(process.env.CI ? 2100000 : 300000); const errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
   await ready(page); await capture(page, '01-guide-default-1440x900.png'); expect((await state(page)).routeError).toBe('');
