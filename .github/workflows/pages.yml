@@ -15,7 +15,8 @@ jobs:
   build-and-verify:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    # Match the full-quality guide export budget used by pull-request verification.
+    timeout-minutes: ${{ matrix.suite == 'guide' && 45 || 25 }}
     strategy:
       fail-fast: false
       matrix:

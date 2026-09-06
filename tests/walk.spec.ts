@@ -3,6 +3,7 @@ import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
 test('自然步行：连续采样、实际支撑脚锁定、任意跳转与暂停保存恢复', async ({ page }) => {
+  if (process.env.CI) { test.setTimeout(300000); page.setDefaultTimeout(45000); }
   page.on('dialog', dialog => dialog.accept());
   await page.goto('./?workspace=guide'); await expect(page.locator('html')).toHaveAttribute('data-ready', 'true');
   const state = () => page.evaluate(() => { const g = (window as any).__guide, project = g.project(); return { project, sample: g.sample(project.playhead), avatar: g.avatar() }; });

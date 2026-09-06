@@ -11,7 +11,8 @@ permissions:
 jobs:
   browser-acceptance:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    # The full 26.5-second guide is rendered at unchanged 720p on software GPUs.
+    timeout-minutes: ${{ matrix.suite == 'guide' && 45 || 25 }}
     strategy:
       fail-fast: false
       matrix:

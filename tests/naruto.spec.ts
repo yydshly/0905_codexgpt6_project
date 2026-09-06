@@ -3,6 +3,7 @@ import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
 test('鸣人：跑步、招呼、切换旧形象、v4 迁移与动作设置恢复', async ({ page }) => {
+  if (process.env.CI) { test.setTimeout(300000); page.setDefaultTimeout(45000); }
   const out = path.resolve(process.env.GUIDE_EVIDENCE_DIR ?? 'test-results/naruto'); await mkdir(out, { recursive: true });
   page.on('dialog', d => d.accept()); const errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
   await page.goto('./?workspace=guide'); await expect(page.locator('html')).toHaveAttribute('data-ready', 'true');

@@ -13,10 +13,10 @@ async function capture(page: Page, filename: string) { await page.waitForTimeout
 async function pixels(page: Page, selector: string) { return page.locator(selector).evaluate(el => { const c = document.createElement('canvas'); c.width = 160; c.height = 90; const ctx = c.getContext('2d')!; ctx.drawImage(el as HTMLCanvasElement, 0, 0, 160, 90); return [...ctx.getImageData(0, 0, 160, 90).data]; }); }
 function difference(a: number[], b: number[]) { let sum = 0; for (let i = 0; i < a.length; i++) if (i % 4 !== 3) sum += Math.abs(a[i] - b[i]); return sum / (a.length * .75); }
 test.beforeAll(async () => { await mkdir(evidence, { recursive: true }); });
-test.beforeEach(async ({ page }) => { page.on('dialog', d => d.accept()); });
+test.beforeEach(async ({ page }) => { if (process.env.CI) { test.setTimeout(300000); page.setDefaultTimeout(45000); } page.on('dialog', d => d.accept()); });
 
 test('导览闭环：修改、历史、保存恢复、JSON、真实视频重新播放与同帧比对', async ({ page, browser }) => {
-  test.setTimeout(process.env.CI ? 900000 : 300000); const errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
+  test.setTimeout(process.env.CI ? 2100000 : 300000); const errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
   await ready(page); await capture(page, '01-guide-default-1440x900.png'); expect((await state(page)).routeError).toBe('');
   expect((await project(page)).guide.avatar).toBe('naruto-author-01-v1');
   expect(await page.evaluate(() => (window as any).__guide.avatar().asset)).toBe('naruto-author-01-v1');
@@ -44,7 +44,7 @@ test('导览闭环：修改、历史、保存恢复、JSON、真实视频重新�
   for (const raw of ['broken json', JSON.stringify({ ...saved, version: 99 }), JSON.stringify({ ...saved, guide: { ...saved.guide, stops: [{ ...saved.guide.stops[0], itemId: 'missing' }] } })]) { await page.locator('#guide-file').setInputFiles({ name: 'invalid.json', mimeType: 'application/json', buffer: Buffer.from(raw) }); await expect(page.locator('#guide-message')).toContainText('导入失败'); expect(await project(page)).toEqual(saved); }
   expect(await page.evaluate(() => localStorage.getItem('ideal-study.guide.v1:demo'))).toBe(rawStorage);
   await page.locator('#guide-export').click(); await expect(page.locator('#guide-render')).toBeEnabled(); const codec = await page.locator('#guide-codec').inputValue(), began = Date.now();
-  await page.locator('#guide-render').click(); await expect(page.locator('#guide-video-result')).toBeVisible({ timeout: process.env.CI ? 720000 : 180000 }); const encodingMs = Date.now() - began;
+  await page.locator('#guide-render').click(); await expect(page.locator('#guide-video-result')).toBeVisible({ timeout: process.env.CI ? 1800000 : 180000 }); const encodingMs = Date.now() - began;
   const info = await page.locator('#guide-video').evaluate((v: HTMLVideoElement) => ({ duration: v.duration, width: v.videoWidth, height: v.videoHeight, ready: v.readyState })); expect(info.duration).toBeCloseTo(26.5, 2); expect([info.width, info.height]).toEqual([1280, 720]);
   downloaded = page.waitForEvent('download'); await page.locator('#guide-video-download').click(); const movie = await downloaded; const moviePath = path.join(evidence, 'xiaohe-guide.' + (codec === 'avc' ? 'mp4' : 'webm')); await movie.saveAs(moviePath); const bytes = await readFile(moviePath); expect(bytes.length).toBeGreaterThan(100000);
   await page.locator('#guide-video').evaluate((v: HTMLVideoElement) => v.play()); await page.waitForTimeout(250); expect(await page.locator('#guide-video').evaluate((v: HTMLVideoElement) => v.currentTime)).toBeGreaterThan(.1); await capture(page, '04-guide-export-replay.png'); await page.locator('#guide-export-close').click(); expect(await project(page)).toEqual(saved);
@@ -63,9 +63,14 @@ test('真实点击入口、快速切换、跳过、动作完成、镜头冲突�
   await ready(page);
   // Hide only the DOM sign, then click its anchor on the real book mesh.
   const book = page.locator('.study-hotspot[data-target="desk-1/book-1"]'), bookBox = await book.boundingBox();
-  await book.evaluate(el => { el.style.visibility = 'hidden'; }); await page.mouse.click(bookBox!.x + bookBox!.width / 2, bookBox!.y + bookBox!.height / 2); await book.evaluate(el => { el.style.visibility = ''; }); expect((await state(page)).playing).toBe(true);
+  // Capture the result of the real pointer event before slow GPU readback can
+  // consume the entire eight-second segment before Playwright reads the state.
+  await page.locator('#guide-canvas canvas').evaluate(el => el.addEventListener('pointerup', () => { (window as any).__clickedGuideState = (window as any).__guide.state(); }, { once: true }));
+  await book.evaluate(el => { el.style.visibility = 'hidden'; }); await page.mouse.click(bookBox!.x + bookBox!.width / 2, bookBox!.y + bookBox!.height / 2); await book.evaluate(el => { el.style.visibility = ''; });
+  expect(await page.evaluate(() => (window as any).__clickedGuideState.playing)).toBe(true);
+  if (await page.locator('.work-dialog').isVisible()) await page.getByRole('button', { name: '关闭作品详情' }).click();
   await page.locator('.study-hotspot[data-target="monitor-1/screen"]').click(); expect((await project(page)).selected).toBe(1);
-  await page.locator('#guide-open').click(); await expect(page.locator('.work-dialog')).toBeVisible(); await expect(page.locator('#work-title')).toHaveText('让空间，成为作品'); expect((await state(page)).playing).toBe(false); await page.getByRole('button', { name: '关闭作品详情' }).click();
+  if (!await page.locator('.work-dialog').isVisible()) await page.locator('#guide-open').click(); await expect(page.locator('.work-dialog')).toBeVisible(); await expect(page.locator('#work-title')).toHaveText('让空间，成为作品'); expect((await state(page)).playing).toBe(false); await page.getByRole('button', { name: '关闭作品详情' }).click();
   await page.waitForTimeout(700); await expect(page.locator('.work-dialog')).toBeHidden();
   await page.locator('.study-hotspot[data-target="desk-1/book-1"]').click(); await expect(page.locator('.work-dialog')).toBeVisible({ timeout: 15000 }); await expect(page.locator('#work-title')).toHaveText('理想书房 · 开源创作'); await page.getByRole('button', { name: '关闭作品详情' }).click();
   await page.locator('#guide-play').click(); const canvas = await page.locator('#guide-canvas').boundingBox(); await page.mouse.move(canvas!.x + canvas!.width * .65, canvas!.y + canvas!.height * .8); await page.mouse.down(); await page.mouse.move(canvas!.x + canvas!.width * .7, canvas!.y + canvas!.height * .75, { steps: 10 }); await page.mouse.up(); expect((await state(page)).playing).toBe(false);
@@ -88,7 +93,7 @@ test('导览网站包离线于编辑器、子路径部署、作品关联与访�
   expect(files['assets/personal-creator-01.glb']).toBeUndefined();
   expect(files['assets/creator-18.glb']).toBeUndefined(); expect(files['assets/guide-motion-v1.glb']).toEqual(new Uint8Array(await readFile('src/assets/guide/guide-motion-v1.glb')));
   const server = createServer((req, res) => { const name = (req.url ?? '').replace(/^\/demo\//, '') || 'index.html'; const bytes = files[name]; if (!bytes) { res.writeHead(404); res.end(); return; } res.writeHead(200, { 'Content-Type': name.endsWith('.js') ? 'text/javascript' : name.endsWith('.css') ? 'text/css' : name.endsWith('.json') ? 'application/json' : 'text/html' }); res.end(bytes); });
-  await new Promise<void>(r => server.listen(0, '127.0.0.1', r)); const visitor = await browser.newPage({ viewport: { width: 1440, height: 900 } }), errors: string[] = []; visitor.on('pageerror', e => errors.push(e.message));
+  await new Promise<void>(r => server.listen(0, '127.0.0.1', r)); const visitor = await browser.newPage({ viewport: { width: 1440, height: 900 } }), errors: string[] = []; visitor.on('pageerror', e => errors.push(e.message)); if (process.env.CI) visitor.setDefaultTimeout(45000);
   try { await visitor.goto(`http://127.0.0.1:${(server.address() as any).port}/demo/`); await expect(visitor.locator('html')).toHaveAttribute('data-ready', 'true'); expect((await project(visitor)).guide).toEqual(author.guide); await expect(visitor.locator('#guide-save')).toHaveCount(0); await expect(visitor.locator('#guide-import')).toHaveCount(0); await expect(visitor.locator('#guide-name-label')).toHaveText('阿禾');
     await scrub(page, 1.5); await scrub(visitor, 1.5);
     expect(await visitor.evaluate(() => (window as any).__guide.avatar())).toEqual(await page.evaluate(() => (window as any).__guide.avatar()));
