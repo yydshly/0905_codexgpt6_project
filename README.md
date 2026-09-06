@@ -2,9 +2,9 @@
 
 一间可编辑、可拍摄，也可作为个人作品主页的 3D 书房。支持 11 类物件、最多 3 段短片镜头、作品关联、多工程与保存版本，以及图片、视频、模型和独立网站导出。
 
-**本次网页补充归纳：**[网页入口、工程关系与发布能力](docs/WEB-CHARACTER-SUMMARY.md)汇总新增角色导览、原有工作区的关联、网页接入方式及实际成果；[人物质量升级路线](docs/CHARACTER-QUALITY-ROADMAP.md)记录后续建议；本轮已制作并接入[个人 IP · 蓬松偏分 02](docs/character-ip/EDITION-02.md)，提供 Blender 源文件与网页模型，后续定制表演仍待完善。当前角色网页源码和资产已提交在 `codex/character-guide`，推送该分支不会自动更新公开站点。
+**当前交付归纳：**[网页入口、工程关系、角色与复用](docs/WEB-CHARACTER-SUMMARY.md)汇总截至功能提交 `129be24` 的成果。当前开发分支为 `codex/anime-character`，基于 `codex/character-guide`，通过 [PR #2](https://github.com/yydshly/0905_codexgpt6_project/pull/2) 审阅；推送该分支不会自动更新公开站点。
 
-本分支 `codex/character-guide` 新增「小禾角色导览」可运行原型：以 18 岁青年为基准的骨骼角色、绕开家具行走、阅读随身手册与屏幕介绍、最多三段时间轴、设置与历史、本地导览快照、JSON、真实视频和独立导览网站包。默认 28 秒（阅读、介绍、坐下阅读并站起），新导览使用个人 IP 蓬松偏分 02 的 3D 资产，支持与旧角色切换、保存及发布；保留原有全部工作区。[人物运动与坐下站起验收](docs/MOTION-GUIDE.md) · [个人 IP 3D 接入样版](docs/character-ip/INTEGRATION.md) · [青年角色升级与验收](docs/ADULT-AVATAR.md) · [上一版原型记录](docs/CHARACTER-GUIDE.md)。此分支尚未合并或部署到线上主站。
+角色导览默认 28 秒，包含阅读、介绍、坐下阅读并站起。新建示例使用作者提供的鸣人模型，支持自然行走／忍者跑、招手、最多三段时间轴、设置与历史、本地快照、JSON、真实视频和独立网站包；保留青年基础版及个人 IP 设定 01／02 与旧工程。最新修正包括支撑脚约束、起停与重心过渡、连续时间预览及精确暂停恢复。[角色接入与来源](docs/NARUTO-CHARACTER.md) · [步行优化与实际视频](docs/walk-refinement-evidence/README.md) · [个人 IP 02 制作记录](docs/character-ip/EDITION-02.md)。鸣人模型是外部已有角色资产，不属于原创个人 IP；[人物质量升级路线](docs/CHARACTER-QUALITY-ROADMAP.md)中的后续建议不等于已交付功能。
 
 主分支 `main` 汇总此前各阶段成果。当前发布包括工程库使用帮助、带备份与确认的工程删除，以及「不保存，返回工程库」。[本次发布总结与线上验收](docs/RELEASE-2026-09-05.md)。
 
@@ -15,13 +15,13 @@
 Node.js 22.12+，支持 WebGL 2 的桌面浏览器：
 
 ```bash
-git switch codex/character-guide  # 原版请使用 main
+git switch codex/anime-character  # 已发布原版请使用 main
 npm ci
 npm run dev
 ```
 
 - [我的工程](http://127.0.0.1:5173/?workspace=projects)：管理多套方案、复制、另存为、保存版本与恢复、删除与使用帮助。
-- [角色导览原型](http://127.0.0.1:5173/?workspace=guide)：点击播放体验小禾的作品导览与坐下 / 站起动作；从作品展示顶部进入会带上当前房间和作品关联，也可导入已有 JSON。
+- [角色导览](http://127.0.0.1:5173/?workspace=guide)：点击播放体验当前角色的作品导览与坐下 / 站起；左侧可切换角色及移动方式。从作品展示顶部进入会带上当前房间和作品关联，也可导入已有 JSON。
 - [布置书房](http://127.0.0.1:5173/?workspace=room)：快速工作区。选中任意家具，在右侧「作品入口」配置作品。管理多套方案请从工程库进入。
 - [作品展示示例](http://127.0.0.1:5173/?workspace=portfolio)：直接点击书籍或屏幕、标记或作品列表，打开项目详情。
 - [短片工作台](http://127.0.0.1:5173/?workspace=film)：默认入口，已编排 10 秒作品，支持最多 3 段镜头与真实视频导出。
@@ -113,7 +113,7 @@ npm run test:live
 | `src/projects.ts` / `src/project-store.ts` / `src/project-menu.ts` | 工程库、IndexedDB 与版本事务、切换和另存为 |
 | `src/portfolio-*.ts` / `src/publish-dialog.ts` / `src/site-export.ts` | 作品关联、访客展示、个人网站配置与导出 |
 | `src/player.ts` / `src/glb-portfolio.ts` / `src/integration.ts` | 独立播放器、GLB 点击适配和宿主示例 |
-| `tests/*.spec.ts` | 六组真实浏览器验收，当前合计 39 项 |
+| `tests/*.spec.ts` | 10 个文件共 51 项已定义用例，CI 分为七组；各轮实际执行结果见对应验收记录 |
 
 ## 已知边界
 
