@@ -1,0 +1,18 @@
+{
+  "pr2": {
+    "mergeCommit": {
+      "oid": "1400f9b45ce001f8e9f0d239b8f73ce3694ee1d2"
+    },
+    "mergedAt": "2026-09-06T05:36:21Z",
+    "state": "MERGED",
+    "url": "https://github.com/yydshly/0905_codexgpt6_project/pull/2"
+  },
+  "pr1": {
+    "mergeCommit": {
+      "oid": "0558edd4c0cb2df579643b9be60ad27cbbb6cacf"
+    },
+    "mergedAt": "2026-09-06T05:36:51Z",
+    "state": "MERGED",
+    "url": "https://github.com/yydshly/0905_codexgpt6_project/pull/1"
+  }
+}

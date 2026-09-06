@@ -2,11 +2,11 @@
 
 一间可编辑、可拍摄，也可作为个人作品主页的 3D 书房。支持 11 类物件、最多 3 段短片镜头、作品关联、多工程与保存版本，以及图片、视频、模型和独立网站导出。
 
-**当前交付归纳：**[网页入口、工程关系、角色与复用](docs/WEB-CHARACTER-SUMMARY.md)汇总截至功能提交 `129be24` 的成果。当前开发分支为 `codex/anime-character`，基于 `codex/character-guide`，通过 [PR #2](https://github.com/yydshly/0905_codexgpt6_project/pull/2) 审阅；推送该分支不会自动更新公开站点。
+**当前交付归纳：**[网页入口、工程关系、角色与复用](docs/WEB-CHARACTER-SUMMARY.md)汇总截至功能提交 `129be24` 的成果。角色能力已通过 [PR #2](https://github.com/yydshly/0905_codexgpt6_project/pull/2) → [PR #1](https://github.com/yydshly/0905_codexgpt6_project/pull/1) 合入 `main`。[主干合并记录](docs/MERGE-2026-09-06.md) 记录提交、验证与发布状态。
 
 角色导览默认 28 秒，包含阅读、介绍、坐下阅读并站起。新建示例使用作者提供的鸣人模型，支持自然行走／忍者跑、招手、最多三段时间轴、设置与历史、本地快照、JSON、真实视频和独立网站包；保留青年基础版及个人 IP 设定 01／02 与旧工程。最新修正包括支撑脚约束、起停与重心过渡、连续时间预览及精确暂停恢复。[角色接入与来源](docs/NARUTO-CHARACTER.md) · [步行优化与实际视频](docs/walk-refinement-evidence/README.md) · [个人 IP 02 制作记录](docs/character-ip/EDITION-02.md)。鸣人模型是外部已有角色资产，不属于原创个人 IP；[人物质量升级路线](docs/CHARACTER-QUALITY-ROADMAP.md)中的后续建议不等于已交付功能。
 
-主分支 `main` 汇总此前各阶段成果。当前发布包括工程库使用帮助、带备份与确认的工程删除，以及「不保存，返回工程库」。[本次发布总结与线上验收](docs/RELEASE-2026-09-05.md)。
+主分支 `main` 已包含角色导览与本轮人物优化。公开 GitHub Pages 仍是此前发布的工作台版本；本次合并未触发站点部署。[此前发布总结与线上验收](docs/RELEASE-2026-09-05.md)。
 
 公开入口：[我的工程](https://yydshly.github.io/0905_codexgpt6_project/?workspace=projects) · [默认短片](https://yydshly.github.io/0905_codexgpt6_project/) · [作品展示示例](https://yydshly.github.io/0905_codexgpt6_project/?workspace=portfolio)。本机与线上存档分开，带走现有工程请在本机备份 JSON，再在线上导入。
 
@@ -15,7 +15,7 @@
 Node.js 22.12+，支持 WebGL 2 的桌面浏览器：
 
 ```bash
-git switch codex/anime-character  # 已发布原版请使用 main
+git switch main
 npm ci
 npm run dev
 ```
@@ -124,8 +124,8 @@ npm run test:live
 历次成果和测量保留在对应文档，不把旧版本截图当作当前线上结果：[原房间验收](docs/VERIFICATION.md) · [造型优化](docs/REFINEMENT.md) · [编辑体验](docs/USABILITY.md) · [首次上线](docs/PAGES.md)。
 
 
-## 鸣人动漫角色（独立分支）
+## 鸣人动漫角色
 
-`codex/anime-character` 新增作者提供的鸣人模型，支持自然行走／忍者跑、招呼、阅读、坐下站起，以及同一时间轴的视频和独立网站导出。`npm ci` → `npm run dev` → `http://127.0.0.1:5173/?workspace=guide`。旧角色与旧工程继续保留。模型来源、复用方式与明确限制见 [角色接入说明](docs/NARUTO-CHARACTER.md)；这是 CC BY 标注的已有角色模型，不能视为原创个人 IP。
+`main` 已包含作者提供的鸣人模型，支持自然行走／忍者跑、招呼、阅读、坐下站起，以及同一时间轴的视频和独立网站导出。`npm ci` → `npm run dev` → `http://127.0.0.1:5173/?workspace=guide`。旧角色与旧工程继续保留。模型来源、复用方式与明确限制见 [角色接入说明](docs/NARUTO-CHARACTER.md)；这是 CC BY 标注的已有角色模型，不能视为原创个人 IP。
 
 后续步行修正：连续时间预览、按路程落脚、支撑脚约束、重心和起停过渡；实际运行截图、视频与测量见 [步行优化验收](docs/walk-refinement-evidence/README.md)。

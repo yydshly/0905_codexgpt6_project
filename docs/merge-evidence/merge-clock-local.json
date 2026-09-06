@@ -1,0 +1,67 @@
+{
+  "pages": {
+    "stats": {
+      "startTime": "2026-09-06T05:33:03.790Z",
+      "duration": 71418.968,
+      "expected": 2,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "checks": [
+      {
+        "title": "真实点击入口、快速切换、跳过、动作完成、镜头冲突与路径保护",
+        "file": "guide.spec.ts",
+        "results": [
+          {
+            "status": "passed",
+            "durationMs": 17738
+          }
+        ]
+      },
+      {
+        "title": "导览网站包离线于编辑器、子路径部署、作品关联与访客模式",
+        "file": "guide.spec.ts",
+        "results": [
+          {
+            "status": "passed",
+            "durationMs": 12683
+          }
+        ]
+      }
+    ]
+  },
+  "software": {
+    "stats": {
+      "startTime": "2026-09-06T05:33:03.768Z",
+      "duration": 57747.56,
+      "expected": 2,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "checks": [
+      {
+        "title": "真实点击入口、快速切换、跳过、动作完成、镜头冲突与路径保护",
+        "file": "guide.spec.ts",
+        "results": [
+          {
+            "status": "passed",
+            "durationMs": 20095
+          }
+        ]
+      },
+      {
+        "title": "导览网站包离线于编辑器、子路径部署、作品关联与访客模式",
+        "file": "guide.spec.ts",
+        "results": [
+          {
+            "status": "passed",
+            "durationMs": 34964
+          }
+        ]
+      }
+    ]
+  },
+  "scope": "Two clock-race regression cases; no runtime changes. Full real-clock video was independently verified in run 34012951161."
+}

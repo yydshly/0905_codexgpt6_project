@@ -1,0 +1,27 @@
+{
+  "refs": {
+    "source": "a186d29b790255d309a3b807be3cfdf56e19a99e",
+    "pr2Merge": "1400f9b45ce001f8e9f0d239b8f73ce3694ee1d2",
+    "pr1Merge": "0558edd4c0cb2df579643b9be60ad27cbbb6cacf",
+    "remoteMainAtMerge": "0558edd4c0cb2df579643b9be60ad27cbbb6cacf"
+  },
+  "trees": {
+    "source": "217a5615940d9922ec8a5ecf0da1bae0f2e1e0fe",
+    "pr2Merge": "217a5615940d9922ec8a5ecf0da1bae0f2e1e0fe",
+    "pr1Merge": "217a5615940d9922ec8a5ecf0da1bae0f2e1e0fe",
+    "remoteMainAtMerge": "217a5615940d9922ec8a5ecf0da1bae0f2e1e0fe"
+  },
+  "allMergeContentsEqualSource": true,
+  "ciSource": "b83885e47b9a828f3871dcfedb7a91d6c1fd89f5",
+  "changesAfterCi": [
+    "docs/CI-GUIDE-VERIFICATION.md",
+    "tests/guide.spec.ts"
+  ],
+  "runtimeSrcTreeUnchanged": true,
+  "runtimeSrcTree": "c25350732ec3080b8ee2b4b6326c45a469a2b691",
+  "preMergePreviewTrees": {
+    "pr2": "217a5615940d9922ec8a5ecf0da1bae0f2e1e0fe",
+    "pr1": "217a5615940d9922ec8a5ecf0da1bae0f2e1e0fe"
+  },
+  "validationScope": "Earlier CI: 49 pass, 2 interaction clock races. Corrected two cases passed locally at Pages subpath and in SwiftShader; new remote full rerun pending at merge."
+}

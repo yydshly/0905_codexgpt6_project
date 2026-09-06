@@ -1,0 +1,133 @@
+{
+  "stats": {
+    "startTime": "2026-09-06T04:58:36.814Z",
+    "duration": 139935.961,
+    "expected": 11,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "checks": [
+    {
+      "title": "导览闭环：修改、历史、保存恢复、JSON、真实视频重新播放与同帧比对",
+      "file": "guide.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 69126
+        }
+      ]
+    },
+    {
+      "title": "真实点击入口、快速切换、跳过、动作完成、镜头冲突与路径保护",
+      "file": "guide.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 15875
+        }
+      ]
+    },
+    {
+      "title": "导览网站包离线于编辑器、子路径部署、作品关联与访客模式",
+      "file": "guide.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 6622
+        }
+      ]
+    },
+    {
+      "title": "减少动态、保存失败、导出取消、无编码与无 WebGL 降级",
+      "file": "guide.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 2544
+        }
+      ]
+    },
+    {
+      "title": "作品展示把当前房间和作品传入导览，独立保存不覆盖原工程",
+      "file": "guide.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 2031
+        }
+      ]
+    },
+    {
+      "title": "青年骨骼、姿态重复采样、近景、旧角色迁移及模型加载失败保护",
+      "file": "guide.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 4255
+        }
+      ]
+    },
+    {
+      "title": "个人 IP 切换事务、v2 外观保留、撤销重做与旧角色网站资源",
+      "file": "guide.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 8505
+        }
+      ]
+    },
+    {
+      "title": "首次角色加载期间锁定选择，避免显示资源与工程身份不一致",
+      "file": "guide.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 989
+        }
+      ]
+    },
+    {
+      "title": "设定 01 存档保持原貌，切换设定 02 后撤销、保存与刷新一致",
+      "file": "guide.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 3610
+        }
+      ]
+    },
+    {
+      "title": "鸣人：跑步、招呼、切换旧形象、v4 迁移与动作设置恢复",
+      "file": "naruto.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 6019
+        }
+      ]
+    },
+    {
+      "title": "自然步行：连续采样、实际支撑脚锁定、任意跳转与暂停保存恢复",
+      "file": "walk.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 5756
+        }
+      ]
+    }
+  ]
+}
