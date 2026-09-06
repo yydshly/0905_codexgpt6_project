@@ -1,0 +1,43 @@
+import { test, expect } from '@playwright/test';
+import { mkdir, writeFile } from 'node:fs/promises';
+import path from 'node:path';
+
+test('鸣人：跑步、招呼、切换旧形象、v4 迁移与动作设置恢复', async ({ page }) => {
+  if (process.env.CI) { test.setTimeout(300000); page.setDefaultTimeout(45000); }
+  const out = path.resolve(process.env.GUIDE_EVIDENCE_DIR ?? 'test-results/naruto'); await mkdir(out, { recursive: true });
+  page.on('dialog', d => d.accept()); const errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
+  await page.goto('./?workspace=guide'); await expect(page.locator('html')).toHaveAttribute('data-ready', 'true');
+  const state = () => page.evaluate(() => ({ project: (window as any).__guide.project(), route: (window as any).__guide.route(), avatar: (window as any).__guide.avatar() }));
+  const seek = async (time: number) => {
+    const frame = Math.round(time * 30), whole = Math.floor(frame / 30);
+    await page.locator('#guide-scrub').fill(String(whole));
+    for (let i = 0; i < frame - whole * 30; i++) await page.locator('#guide-scrub').press('ArrowRight');
+  };
+  await seek(1.5); const walk = await state();
+  await page.locator('#guide-movement').selectOption('ninja'); await seek(1.5); const run = await state();
+  expect(run.project.guide.movement).toBe('ninja'); expect(run.avatar.clips).toContain('Run_Loop'); expect(run.avatar.pose).not.toEqual(walk.avatar.pose);
+  await page.waitForTimeout(150); await page.screenshot({ path: path.join(out, 'naruto-run-full-1440x900.png') });
+  await page.locator('#guide-character-close').click();
+  const canvas = await page.locator('#guide-canvas').boundingBox();
+  await page.mouse.move(canvas!.x + canvas!.width * .6, canvas!.y + canvas!.height * .55); await page.mouse.wheel(0, 230);
+  await page.waitForTimeout(180); await page.screenshot({ path: path.join(out, 'naruto-run-1440x900.png') });
+  await seek(5.5); await seek(1.5); expect((await state()).avatar.pose).toEqual(run.avatar.pose);
+  await page.locator('#guide-undo').click(); expect((await state()).project.guide.movement).toBe('walk');
+  await page.locator('#guide-redo').click(); expect((await state()).project.guide.movement).toBe('ninja');
+  const route = run.route.segments[1], waveTime = 8 + route.walkTime + .7 + .8;
+  await seek(waveTime); const wave = await state(); await page.locator('#guide-character-close').click(); await page.waitForTimeout(120);
+  await page.screenshot({ path: path.join(out, 'naruto-wave-1440x900.png') });
+  expect(wave.avatar.world.hand_r[1]).toBeGreaterThan(1.4);
+  await seek(waveTime + .2); expect((await state()).avatar.pose).not.toEqual(wave.avatar.pose);
+  await page.locator('#guide-save').click(); const saved = (await state()).project;
+  await page.reload(); await expect(page.locator('html')).toHaveAttribute('data-ready', 'true'); expect((await state()).project).toEqual(saved);
+  const invalid = structuredClone(saved); invalid.guide.movement = 'teleport';
+  await page.locator('#guide-file').setInputFiles({ name: 'invalid-motion.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(invalid)) });
+  await expect(page.locator('#guide-message')).toContainText('导入失败'); expect((await state()).project).toEqual(saved);
+  const old = structuredClone(saved); old.guide.version = 4; delete old.guide.movement; old.guide.avatar = 'personal-creator-02-v1';
+  await page.locator('#guide-file').setInputFiles({ name: 'edition-02-v4.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(old)) });
+  await expect(page.locator('#guide-avatar')).toHaveValue('personal-creator-02-v1'); expect((await state()).project.guide.movement).toBe('walk');
+  await expect(page.locator('#guide-movement-field')).toBeHidden(); await seek(3.1); expect((await state()).avatar.blink).toBeGreaterThan(.8);
+  await page.locator('#guide-avatar').selectOption('naruto-author-01-v1'); await expect(page.locator('#guide-movement-field')).toBeVisible();
+  expect(errors).toEqual([]); await writeFile(path.join(out, 'naruto-actions.json'), JSON.stringify({ runTime: 1.5, waveTime, walkPoseDifferent: true, deterministicRun: true, movementUndoRedo: true, savedRestoredExact: true, v4AppearanceRetained: true, invalidMovementPreservesProject: true, waveHandHeight: wave.avatar.world.hand_r[1], errors }, null, 2));
+});

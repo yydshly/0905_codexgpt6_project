@@ -1,0 +1,12 @@
+{
+  "browser": "152.0.7977.82",
+  "standalone": true,
+  "subpath": "/demo/",
+  "isolatedStorage": true,
+  "guideSettingsExact": true,
+  "naturalWalkPoseMatchesEditorExactly": true,
+  "workLinkExact": true,
+  "editorControlsAbsent": true,
+  "mobileOverflow": false,
+  "errors": []
+}

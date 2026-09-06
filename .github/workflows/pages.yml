@@ -15,7 +15,8 @@ jobs:
   build-and-verify:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    # Match the full-quality guide export budget used by pull-request verification.
+    timeout-minutes: ${{ matrix.suite == 'guide' && 45 || 25 }}
     strategy:
       fail-fast: false
       matrix:
@@ -49,7 +50,7 @@ jobs:
         run: npx playwright test --config playwright.pages.config.ts tests/projects.spec.ts
       - name: Character guide at the Pages subpath
         if: matrix.suite == 'guide'
-        run: npx playwright test --config playwright.pages.config.ts tests/guide.spec.ts tests/guide-motion.spec.ts
+        run: npx playwright test --config playwright.pages.config.ts tests/guide.spec.ts tests/guide-motion.spec.ts tests/naruto.spec.ts tests/walk.spec.ts
       - name: Keep actual browser evidence
         if: always()
         uses: actions/upload-artifact@v7.0.1

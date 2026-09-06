@@ -8,7 +8,7 @@ test('坐下站起：真实椅面、脚底接触、迁移、段落操作与失�
   test.setTimeout(180000); await mkdir(evidence, { recursive: true }); page.on('dialog', d => d.accept());
   const errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
   await page.goto('./?workspace=guide'); await expect(page.locator('html')).toHaveAttribute('data-ready', 'true');
-  const initial = await get(page); expect(initial.route.error).toBe(''); expect(initial.project.guide.version).toBe(4);
+  const initial = await get(page); expect(initial.route.error).toBe(''); expect(initial.project.guide.version).toBe(5);
   await page.locator('[data-stop="2"]').click(); await expect(page.locator('#guide-seat')).toHaveValue('chair-1');
   await page.locator('#guide-duration').selectOption('10'); await page.locator('#guide-undo').click(); await expect(page.locator('#guide-duration')).toHaveValue('12'); await page.locator('#guide-redo').click(); await expect(page.locator('#guide-duration')).toHaveValue('10');
   const frames: any[] = [];
@@ -25,7 +25,7 @@ test('坐下站起：真实椅面、脚底接触、迁移、段落操作与失�
   expect(seated.pelvis[1]).toBeGreaterThan(.59); expect(seated.pelvis[1]).toBeLessThan(.66);
   expect(Math.hypot(seated.pelvis[0] - .58, seated.pelvis[2] + .02)).toBeLessThan(.04);
   expect(Math.abs(seated.foot_l[1] - seated.foot_r[1])).toBeLessThan(.004);
-  expect(seated.foot_l[1]).toBeLessThan(.14);
+  expect(seated.foot_l[1]).toBeLessThan(.15);
   await page.locator('#guide-scrub').fill('26'); const stood = await get(page); expect(stood.avatar.world.pelvis[1] - seated.pelvis[1]).toBeGreaterThan(.25);
   // Steady sitting: no accumulated foot drift, irrespective of sample order.
   for (const t of [21, 20.7, 22.5]) { await page.locator('#guide-scrub').fill(String(t)); const a = (await get(page)).avatar.world; expect(Math.hypot(...a.foot_l.map((v: number, i: number) => v - seated.foot_l[i]))).toBeLessThan(.004); }

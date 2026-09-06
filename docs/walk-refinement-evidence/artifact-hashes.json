@@ -1,0 +1,17 @@
+[
+  {
+    "path": "src/assets/guide/naruto-author-01.glb",
+    "bytes": 2429904,
+    "sha256": "c8ae209b2ae798473bf8db5d469096244189fb56d52846453f555858af7b96c8"
+  },
+  {
+    "path": "src/assets/guide/guide-motion-v1.glb",
+    "bytes": 598368,
+    "sha256": "ffa8848e21848b4fbdc0b5166165fd8112e47ea7a1a83c7180a20b1d96d16e86"
+  },
+  {
+    "path": "docs/walk-refinement-evidence/xiaohe-guide.mp4",
+    "bytes": 17207052,
+    "sha256": "261922d366e9d134f867d1eace428e8a40dfa92d70353a683c5edf1f49eddc9e"
+  }
+]

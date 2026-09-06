@@ -1,0 +1,14 @@
+{
+  "browser": "152.0.7977.82",
+  "viewport": [
+    1000,
+    1000
+  ],
+  "source": "actual guide character factory and absolute pose sampler",
+  "studioOnly": true,
+  "metrics": {
+    "calls": 22,
+    "triangles": 10244
+  },
+  "errors": []
+}

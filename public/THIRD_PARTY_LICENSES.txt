@@ -501,3 +501,22 @@ This is a script-authored stylized 3D asset, not hand-sculpted portraiture,
 new motion capture, or a promise of resemblance to the user. Sitting and
 standing continue to use the separate CC0 motion file and project IK.
 See docs/character-ip/EDITION-02.md for reuse and validation details.
+
+
+NARUTO AUTHOR MODEL — CC BY 4.0
+Model, original UV images and outline geometry by ronildo.facanha.
+Naruto & Sasuke Low Poly + Rig + Texture (only Naruto is used).
+https://sketchfab.com/3d-models/naruto-sasuke-low-poly-rig-texture-b650b60a7bbd4f11b05a435e65116168
+https://creativecommons.org/licenses/by/4.0/
+Author-shared source: https://drive.google.com/drive/folders/1shRpOCStbGUtf4AFzzhWPDbuy6DxO61b
+
+Adapted in this project: FBX texture-path repairs, normalized mesh segments,
+Rigify-to-Quaternius skin weights, material packaging, foot contact and
+room interaction. The model and painted appearance were made by the author,
+not this project's authors. Naruto character rights are separate from the
+model's CC BY attribution; this is not an original personal-IP character.
+
+Idle_Loop, Walk_Loop, Jog_Fwd_Loop (packaged as Run_Loop), and sitting clips
+are from Quaternius, CC0, credited above. Arms-back ninja running, greeting,
+notebook handling, navigation and chair alignment are project runtime work.
+See docs/NARUTO-CHARACTER.md for the adaptation and limitations.
