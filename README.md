@@ -1,5 +1,7 @@
 # 理想书房 · 布置、短片与个人作品集
 
+[后续规划 · 暂时归档（尚未实现）](docs/PRODUCT-ROADMAP-ARCHIVE.md)：统一工程与角色历史、场景行为配置、发布前预览及角色素材规范。当前暂停实施，网页使用帮助与角色导览已加入对应说明源码；本次归档不重新发布线上网站。
+
 一间可编辑、可拍摄，也可作为个人作品主页的 3D 书房。支持 11 类物件、最多 3 段短片镜头、作品关联、多工程与保存版本，以及图片、视频、模型和独立网站导出。
 
 **当前交付归纳：**[网页入口、工程关系、角色与复用](docs/WEB-CHARACTER-SUMMARY.md)汇总截至功能提交 `129be24` 的成果。角色能力已通过 [PR #2](https://github.com/yydshly/0905_codexgpt6_project/pull/2) → [PR #1](https://github.com/yydshly/0905_codexgpt6_project/pull/1) 合入 `main`。[主干合并记录](docs/MERGE-2026-09-06.md) 记录提交、验证与发布状态。

@@ -1,0 +1,33 @@
+{
+  "date": "2026-09-06T09:08:02.387Z",
+  "browser": "152.0.7977.82",
+  "platform": "win32",
+  "base": "http://127.0.0.1:4181",
+  "build": "npm run build",
+  "checks": [
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "helpOpenClose": true,
+      "guideRoadmapReadable": true,
+      "configurationShortcut": true,
+      "guideUnchanged": true,
+      "noHorizontalOverflow": true
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "helpOpenClose": true,
+      "guideRoadmapReadable": true,
+      "configurationShortcut": true,
+      "guideUnchanged": true,
+      "noHorizontalOverflow": true
+    }
+  ],
+  "errors": [],
+  "success": true
+}

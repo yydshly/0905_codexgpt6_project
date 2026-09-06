@@ -1,4 +1,5 @@
 import './projects-help.css';
+import { productRoadmapDescription } from './product-roadmap';
 
 /** Read-only help; creating a project delegates to the existing authoring flow. */
 export function mountProjectsHelp(header:HTMLElement,startNew:()=>void,canStart:()=>boolean){
@@ -10,6 +11,7 @@ export function mountProjectsHelp(header:HTMLElement,startNew:()=>void,canStart:
     dialog.innerHTML=`<header class="help-heading"><div><span class="project-overline">A LITTLE GUIDANCE</span><h2 id="projects-help-title">理想书房 · 使用指南</h2></div><button type="button" class="help-close" aria-label="关闭使用帮助" autofocus>×</button></header>
       <div class="help-body"><p id="projects-help-intro">一套<strong>工程</strong>包含房间、短片镜头和展示页设置；一个<strong>作品</strong>是关联到物品的项目介绍与网页链接。你可以同时保留多套未完成工程。</p>
       <p class="help-path">新建工程 <span>→</span> 布置与关联 <span>→</span> 保存 <span>→</span> 作品展示 <span>→</span> 导出部署</p>
+      <details><summary>后续规划 · 尚未实现</summary><div class="help-answer">${productRoadmapDescription}</div></details>
       <details open><summary>第一次使用，从哪里开始？</summary><div class="help-answer"><ol><li>点击工程库的「新建工程」，填写名称，进入已经布置好的书房。</li><li>在同一工程中，通过顶部「1 布置书房」「2 镜头短片」「3 作品展示」切换工作内容。</li><li>暂时没做完也可以保存。右上「我的工程」→「保存并返回工程库」，下次从卡片继续。</li></ol><p class="help-note"><strong>工程库和快速工作区：</strong>管理多套方案请从工程库进入。「快速工作区」保留旧版房间、短片各一份存档；仅修改名称并保存，不会自动另存为新工程。它的新保存会在进入工程库时迁入，相同内容会去重。</p></div></details>
       <details><summary>怎样切换、复制或删除工程？</summary><div class="help-answer"><dl><dt>切换</dt><dd>当前页面右上「我的工程」可选「保存并返回工程库」或「不保存，返回工程库」。不保存时，有修改会先询问是否放弃；已保存的内容与版本不变。返回后再打开另一张卡片。</dd><dt>复制已保存内容</dt><dd>工程卡片上的「复制工程」。副本独立保存，从版本 1 开始。</dd><dt>保留当前修改，尝试新方向</dt><dd>编辑器右上「我的工程」→ 填写新名称 →「另存为新工程」。当前未保存内容也会进入副本，原工程保持原样。</dd><dt>删除不需要的工程</dt><dd>卡片底部「删除工程」，确认后删除这套工程和全部保存版本，无法撤销。可先下载当前 JSON 备份；其他工程、快速工作区存档和已发布网站不受影响。</dd></dl></div></details>
       <details><summary>怎样布置房间和调整镜头？</summary><div class="help-answer"><p>左侧物件库点击添加；点击场景中的物品或右侧物件列表选中它。拖动物品移动，右侧调整位置、朝向、材质及灯具亮度。底部切换白昼、黄昏、深夜。</p><p>切到「观察」后拖动旋转视角，滚轮缩放；也可右键拖动观察。「恢复默认视角」可回到初始构图。</p><p class="help-note"><kbd>Ctrl / ⌘ + S</kbd> 保存 · <kbd>Ctrl / ⌘ + Z</kbd> 撤销 · <kbd>Ctrl / ⌘ + Shift + Z</kbd> 重做。页面顶部也有对应按钮。</p></div></details>

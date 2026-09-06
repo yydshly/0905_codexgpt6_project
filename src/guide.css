@@ -15,4 +15,5 @@
 #guide-seat-preview{display:flex;gap:5px;margin:10px 0}#guide-seat-preview button{flex:1;padding:7px 3px;font-size:10px}
 
 .guide-scope-note{font-size:11px;line-height:1.8;padding:10px;background:#edf1e7;border-radius:6px;color:#64765e}
+.guide-roadmap{padding-top:12px}.guide-roadmap>div{font-size:11px;line-height:1.9;color:#64765e;overflow-wrap:anywhere}.guide-roadmap p{margin:0 0 12px}.guide-roadmap ol{margin:0 0 12px;padding-left:20px}.guide-roadmap li{margin-bottom:10px}.guide-roadmap strong{color:#3f5945;font-weight:600}
 #guide-loading{z-index:4}#guide-loading>div{max-width:440px}#guide-load-status{overflow-wrap:anywhere}#guide-load-hint{font-size:11px;margin:12px 0 18px;color:#71816a}#guide-loading button{font-size:12px}
