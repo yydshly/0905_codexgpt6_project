@@ -6,6 +6,8 @@
 
 Windows / Node.js 22：在仓库目录运行 `npm ci`、`npm run dev`，打开 `http://127.0.0.1:5173/?workspace=guide`。左侧设置中选择「移动方式 → 忍者跑 · 双臂后展」，点击播放。选择第三段后，「看坐下／看坐姿／看站起」可以定位相应动作。滚动左侧面板可看到全部设置，底部时间轴始终保留。
 
+默认移动方式为「自然行走」。步行使用按路程计算的左右落脚点、低抬脚和支撑脚约束；身体重心按腿长调整，转身时依次抬脚。预览按显示帧的连续时间更新，视频仍按 30 fps 对同一个动作采样。暂停时的精确时间会随工程保存，刷新恢复不会再取整到相邻视频帧。运行测量与最新视频见 [步行优化验收](walk-refinement-evidence/README.md)。
+
 `npm run build:pages` 生成 GitHub Pages 仓库子路径版本；角色 GLB 使用本地资源，不依赖素材网站运行。网页已有保存、历史、JSON、视频和独立网站包导出入口。
 
 ## 素材来源与改动
@@ -25,6 +27,7 @@ Windows / Node.js 22：在仓库目录运行 `npm ci`、`npm run dev`，打开 `
 - `sampleGuide` 根据同一工程计算路径、速度、步态相位；`createGuideCharacter` 按绝对时间计算动画与 IK。播放、拖动、视频、访客网页共用此路径，不存在另做的导出演示。
 - 独立网站包包含当前所选角色与共享坐起动作文件，保留作品关联与移动方式。网站包的运行文件包含招手、拿书、椅子对齐和忍者跑姿态适配。
 - 单独加载角色 GLB 可得到 Idle、Walk、Run 三个骨骼片段；坐起片段在共享 `guide-motion-v1.glb` 中。拿书、招手、路径和椅子对齐属于运行逻辑，不能只复制一个 GLB 就得到完整导览。
+- 本次步行修正没有修改 GLB、贴图和工程版本；`guide-gait.ts` 的落脚规划与 `adult-character.ts` 的腿部求解属于网页运行逻辑。使用导出的网站包即可带走这些改进；只加载原 GLB 的 Walk 片段不会自动获得脚步约束。
 - 可编辑 Blender 源文件：`docs/anime-character/source/naruto-adapted.blend`。制作脚本：`scripts/build-naruto-avatar.py`。重建需将作者公开 ZIP 解压至 `.scratch/assets/naruto-author`，并保留已有 Quaternius Standard 资源。
 
 ## 本版边界

@@ -1,0 +1,98 @@
+{
+  "baselineCommit": "a14757918a4a2ea23b758fa160d84e68df29b63a",
+  "before": {
+    "browser": "152.0.7977.82",
+    "context": "Fresh isolated Chrome on the same local build, 1440x900, normal walk; not the user browser renderer process",
+    "pacing": {
+      "measuredMs": 5504.299999952316,
+      "sceneFps": 30.00073621438565,
+      "frameIntervalMedianMs": 33.30000000000018,
+      "frameIntervalP95Ms": 33.5,
+      "over50Ms": 1,
+      "over100Ms": 0,
+      "maxIntervalMs": 54.19999999999982,
+      "renderCpuMeanMs": 9.025443785994716,
+      "gpu": "ANGLE (Intel, Intel(R) UHD Graphics (0x0000A788) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+    },
+    "gait": {
+      "firstRoute": {
+        "path": [
+          {
+            "x": -0.6,
+            "z": 1.2
+          },
+          {
+            "x": -0.15,
+            "z": -0.3
+          }
+        ],
+        "lengths": [
+          1.5660459763365826
+        ],
+        "length": 1.5660459763365826,
+        "walkTime": 3.057751251713567,
+        "yaw": 0.28,
+        "seat": null,
+        "target": {
+          "x": -0.030000000000000027,
+          "z": -0.9400000000000002,
+          "y": 0.81
+        },
+        "error": ""
+      },
+      "sampleRequests": 240,
+      "repeatedTimesOn60HzGrid": 119,
+      "maxVerticalCorrectionStepMeters": 0.01681546473270462,
+      "lowAnkleHorizontalSpeedMean": 0.10699254085376105,
+      "lowAnkleSamples": 38
+    }
+  },
+  "after": {
+    "browser": "152.0.7977.82",
+    "context": "Fresh isolated Chrome on the same local build, 1440x900, normal walk; not the user browser renderer process",
+    "pacing": {
+      "measuredMs": 5516.5,
+      "sceneFps": 68.93658928017798,
+      "frameIntervalMedianMs": 12.600000000000364,
+      "frameIntervalP95Ms": 16.800000000000182,
+      "over50Ms": 1,
+      "over100Ms": 0,
+      "maxIntervalMs": 79.09999999999945,
+      "renderCpuMeanMs": 2.922083334128062,
+      "gpu": "ANGLE (Intel, Intel(R) UHD Graphics (0x0000A788) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+    },
+    "gait": {
+      "firstRoute": {
+        "path": [
+          {
+            "x": -0.6,
+            "z": 1.2
+          },
+          {
+            "x": -0.15,
+            "z": -0.3
+          }
+        ],
+        "lengths": [
+          1.5660459763365826
+        ],
+        "length": 1.5660459763365826,
+        "walkTime": 3.057751251713567,
+        "yaw": 0.28,
+        "seat": null,
+        "target": {
+          "x": -0.030000000000000027,
+          "z": -0.9400000000000002,
+          "y": 0.81
+        },
+        "error": ""
+      },
+      "sampleRequests": 240,
+      "repeatedTimesOn60HzGrid": 0,
+      "maxVerticalCorrectionStepMeters": 0.000517658878434836,
+      "lowAnkleHorizontalSpeedMean": 3.7229102108051435e-07,
+      "lowAnkleSamples": 116
+    }
+  },
+  "method": "Fresh isolated headless Chrome 1440x900 on localhost Vite, natural walk. Observe scene render counter on each rAF for 5.5 seconds, discard first two intervals. This measures this machine, not the user embedded-browser process. Ankle speed proxy includes low-moving swing poses; planted-foot validation is recorded separately."
+}

@@ -34,7 +34,7 @@ export async function mountGuide(initial: GuideProject, options: { visitor?: boo
   const detail = createProjectDialog();
   let scene: StudyScene | undefined, actor: Awaited<ReturnType<typeof createGuideCharacter>> | undefined, hotspots: ReturnType<typeof mountHotspots> | undefined;
   const setButtons = () => { $('#guide-play').textContent = playing ? 'Ⅱ 暂停导览' : '▶ 播放导览'; $('#guide-play').setAttribute('aria-label', playing ? '暂停导览' : '播放导览'); if (!visitor) { $<HTMLButtonElement>('#guide-undo').disabled = !past.length || exporting; $<HTMLButtonElement>('#guide-redo').disabled = !future.length || exporting; } };
-  function pause() { playing = false; cancelAnimationFrame(frame); setButtons(); scene?.setInteractionEnabled(!exporting); $('#guide-status').textContent = exporting ? '正在生成视频' : '已暂停 · 可自由观察'; }
+  function pause() { playing = false; cancelAnimationFrame(frame); setButtons(); scene?.setInteractionEnabled(!exporting); updatePlayback(); }
   function renderSample(time: number, camera = true) {
     const sample = sampleGuide(project, route, time); actor?.apply(sample, project.guide.color);
     if (scene) { scene.renderer.shadowMap.needsUpdate = true; if (camera) scene.applyCamera(sample.camera); scene.invalidate(); }
@@ -105,13 +105,15 @@ export async function mountGuide(initial: GuideProject, options: { visitor?: boo
     if (!scene || !actor || route.error || exporting) return;
     if (project.playhead >= guideDuration(project)) seek(0);
     playing = true; startClock = performance.now(); startTime = project.playhead; setButtons();
+    let lastUI = -Infinity;
     const tick = (now: number) => {
       if (!playing || disposed) return;
-      const end = manualEnd ?? guideDuration(project), time = Math.min(end, Math.floor((startTime + (now - startClock) / 1000) * FPS) / FPS);
+      const end = manualEnd ?? guideDuration(project), time = Math.min(end, startTime + (now - startClock) / 1000);
       if (time !== project.playhead) {
         const sample = renderSample(time); project.playhead = sample.time;
-        if (project.selected !== sample.index) { project.selected = sample.index; updateSelection(); }
-        updatePlayback();
+        if (project.selected !== sample.index) { project.selected = sample.index; updateSelection(); lastUI = -Infinity; }
+        // The character/camera follow every display frame; text updates need only 10 Hz.
+        if (now - lastUI >= 100 || time >= end) { updatePlayback(); lastUI = now; }
       }
       if (time >= end) { const open = manualEnd !== null; pause(); manualEnd = null; if (open) openCurrent(); return; }
       frame = requestAnimationFrame(tick);

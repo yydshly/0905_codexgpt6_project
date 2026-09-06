@@ -1,0 +1,9 @@
+{
+  "adjacent60HzSamplesDistinct": true,
+  "actualUIFrames": 82,
+  "plantedPairs": 85,
+  "maxPlantedAnkleDriftMeters": 3.512468936219462e-7,
+  "repeatSeekExact": true,
+  "continuousPausedTime": 1.9739000000715259,
+  "pausedTimeAndPoseRestoredExactly": true
+}

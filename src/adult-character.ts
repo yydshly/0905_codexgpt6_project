@@ -125,13 +125,69 @@ export async function createGuideCharacter(avatar: GuideAvatarId = DEFAULT_GUIDE
   function leg(side: 'l' | 'r', end: T.Vector3) {
     const upper = bones.get('thigh_' + side)!, lower = bones.get('calf_' + side)!, foot = bones.get('foot_' + side)!;
     const rotation = foot.getWorldQuaternion(new T.Quaternion());
-    const a = worldPosition(upper), b = worldPosition(lower), c = worldPosition(foot), axis = end.clone().sub(a);
+    // Solve inside the rig, removing the imported avatar's non-uniform scale.
+    // World-quaternion decomposition under that scale introduces ankle drift.
+    const space = upper.parent!, local = (o: T.Object3D) => space.worldToLocal(worldPosition(o));
+    const a = local(upper), b = local(lower), c = local(foot), target = space.worldToLocal(end.clone()), axis = target.clone().sub(a);
     const l1 = a.distanceTo(b), l2 = b.distanceTo(c), d = T.MathUtils.clamp(axis.length(), .02, l1 + l2 - .001); axis.normalize();
-    const pole = world(vector(side === 'l' ? .16 : -.16, .40, .8)).sub(a); pole.addScaledVector(axis, -pole.dot(axis)).normalize();
+    const pole = space.worldToLocal(world(vector(side === 'l' ? .16 : -.16, .40, .8))).sub(a); pole.addScaledVector(axis, -pole.dot(axis)).normalize();
     const along = (l1 * l1 - l2 * l2 + d * d) / (2 * d);
     const knee = a.clone().addScaledVector(axis, along).addScaledVector(pole, Math.sqrt(Math.max(0, l1 * l1 - along * along)));
-    aim(upper, lower, knee, 1); aim(lower, foot, end, 1);
+    const aimLocal = (bone: T.Bone, child: T.Bone, point: T.Vector3) => {
+      const parent = bone.parent!, current = parent.worldToLocal(worldPosition(child)).sub(bone.position).normalize();
+      const desired = parent.worldToLocal(point.clone()).sub(bone.position).normalize();
+      bone.quaternion.premultiply(new T.Quaternion().setFromUnitVectors(current, desired)); bone.updateWorldMatrix(false, true);
+    };
+    aimLocal(upper, lower, space.localToWorld(knee)); aimLocal(lower, foot, end);
     foot.quaternion.copy(foot.parent!.getWorldQuaternion(new T.Quaternion()).invert().multiply(rotation)); foot.updateWorldMatrix(false, true);
+  }
+  // Derive ankle height and sole probes from this model's actual neutral shoe mesh.
+  // Reuse only the bottom vertices during playback instead of scanning trouser/hair geometry.
+  root.updateMatrixWorld(true);
+  const neutralFeet = (['l', 'r'] as const).map(side => ({ side, position: worldPosition(bones.get('foot_' + side)!), rotation: bones.get('foot_' + side)!.getWorldQuaternion(new T.Quaternion()) }));
+  const soleProbes: { mesh: T.SkinnedMesh; indices: number[] }[] = [];
+  let neutralFloor = Infinity;
+  for (const mesh of shoes) {
+    mesh.skeleton.update(); const indices: number[] = [], p = new T.Vector3();
+    for (let i = 0; i < mesh.geometry.attributes.position.count; i++) {
+      p.fromBufferAttribute(mesh.geometry.attributes.position, i); mesh.applyBoneTransform(i, p); mesh.localToWorld(p);
+      if (p.y < Math.min(...neutralFeet.map(f => f.position.y)) - .025) { indices.push(i); neutralFloor = Math.min(neutralFloor, p.y); }
+    }
+    soleProbes.push({ mesh, indices });
+  }
+  const standingCorrection = Number.isFinite(neutralFloor) ? .002 - neutralFloor : 0;
+  const neutralChestHeight = worldPosition(bones.get('spine_03')!).y;
+  function plantedWalk(s: GuideSample) {
+    if (!s.walkFeet) return;
+    const targets = s.walkFeet.map(plan => {
+      const neutral = neutralFeet.find(f => f.side === plan.side)!, foot = bones.get('foot_' + plan.side)!;
+      const offset = vector(neutral.position.x, 0, neutral.position.z).applyAxisAngle(vector(0, 1, 0), plan.yaw);
+      const end = vector(plan.x + offset.x, plan.ground + neutral.position.y + standingCorrection + plan.lift, plan.z + offset.z);
+      return { plan, neutral, foot, end };
+    });
+    // Keep both targets reachable. Correct the pelvis before solving either leg;
+    // stretching a straight support leg would otherwise drag its planted ankle.
+    let drop = 0;
+    for (const { plan, end } of targets) {
+      const hip = worldPosition(bones.get('thigh_' + plan.side)!), knee = worldPosition(bones.get('calf_' + plan.side)!), ankle = worldPosition(bones.get('foot_' + plan.side)!);
+      const length = hip.distanceTo(knee) + knee.distanceTo(ankle) - .006;
+      const horizontal = Math.hypot(hip.x - end.x, hip.z - end.z);
+      const maxHeight = end.y + Math.sqrt(Math.max(.001, length * length - horizontal * horizontal));
+      drop = Math.max(drop, hip.y - maxHeight);
+    }
+    if (drop > 0) {
+      const pelvis = bones.get('pelvis')!, p = worldPosition(pelvis); p.y -= drop;
+      pelvis.position.copy(pelvis.parent!.worldToLocal(p)); root.updateMatrixWorld(true);
+    }
+    for (const { plan, neutral, foot, end } of targets) {
+      leg(plan.side, end);
+      const rotation = new T.Quaternion().setFromAxisAngle(vector(0, 1, 0), plan.yaw).multiply(neutral.rotation);
+      const lateral = vector(1, 0, 0).applyAxisAngle(vector(0, 1, 0), plan.yaw);
+      rotation.premultiply(new T.Quaternion().setFromAxisAngle(lateral, plan.pitch));
+      foot.quaternion.copy(foot.parent!.getWorldQuaternion(new T.Quaternion()).invert().multiply(rotation));
+      const toe = bones.get('ball_' + plan.side); if (toe) toe.quaternion.copy(rest.get(toe.name)!.q);
+      foot.updateWorldMatrix(false, true);
+    }
   }
   function handPose(side: 'l' | 'r', weight: number, carry = 0) {
     const sign = side === 'l' ? 1 : -1, hand = bones.get('hand_' + side)!;
@@ -149,6 +205,7 @@ export async function createGuideCharacter(avatar: GuideAvatarId = DEFAULT_GUIDE
       cotton?.color.set(anime ? { sage: '#ffffff', clay: '#ffd5b5', blue: '#bddbff' }[color] : { sage: avatar === 'creator-18-v1' ? '#829c87' : '#8b9876', clay: '#b67956', blue: '#7895ae' }[color]);
       rib?.color.set({ sage: avatar === 'creator-18-v1' ? '#657d68' : '#748160', clay: '#966247', blue: '#586f88' }[color]);
       root.position.set(s.position.x, s.position.y, s.position.z); root.rotation.y = s.yaw;
+      if (s.walkFeet) root.position.y += standingCorrection;
       // Every evaluation starts at the same authored pose. Seeking never accumulates IK or morph state.
       const weight = s.walkWeight;
       const running = anime && s.locomotion === 'ninja', run = running ? weight : 0;
@@ -158,16 +215,17 @@ export async function createGuideCharacter(avatar: GuideAvatarId = DEFAULT_GUIDE
         bone.quaternion.slerp(rest.get(name)!.q, blend); bone.position.lerp(rest.get(name)!.p, blend);
       }
       if (avatar !== 'creator-18-v1') for (const [name, bone] of bones) if (/^(thumb|index|middle|ring|pinky)_/.test(name)) bone.quaternion.slerp(rest.get(name)!.q, (1 - weight) * .85);
+      if (s.walkFeet) bones.get('pelvis')!.position.lerp(rest.get('pelvis')!.p, .42 * weight);
       sittingPose(s);
       root.updateMatrixWorld(true);
       if (s.turning) {
         const turn = s.turning, delta = Math.atan2(Math.sin(turn.to - turn.from), Math.cos(turn.to - turn.from));
         for (const [i, side] of (['l', 'r'] as const).entries()) {
-          const step = T.MathUtils.clamp((turn.progress - i * .38) / .62, 0, 1);
+          const step = T.MathUtils.clamp((turn.progress - i * .5) / .5, 0, 1);
           const heading = turn.from + delta * smooth(step), foot = bones.get('foot_' + side)!;
           const local = root.worldToLocal(worldPosition(foot));
           local.applyAxisAngle(vector(0, 1, 0), heading - s.yaw);
-          local.y += Math.sin(Math.PI * step) * .055 * Math.min(1, Math.abs(delta));
+          local.y += Math.sin(Math.PI * step) ** 2 * .04 * Math.min(1, Math.abs(delta));
           const end = world(local); leg(side, end);
           rotateWorld(foot, new T.Quaternion().setFromAxisAngle(vector(0, 1, 0), heading - s.yaw));
         }
@@ -181,12 +239,14 @@ export async function createGuideCharacter(avatar: GuideAvatarId = DEFAULT_GUIDE
         pelvis.position.copy(pelvis.parent!.worldToLocal(position)); root.updateMatrixWorld(true);
         leg('l', feet[0]); leg('r', feet[1]);
       }
+      plantedWalk(s);
       const read = Math.max(s.readWeight, s.seatReadWeight), breath = Math.sin(s.time * 1.7) * .0025;
       // Follow the moving chest during the sit/stand weight shift, keeping the book clear of the lap.
       const chest = root.worldToLocal(worldPosition(bones.get('spine_03')!));
       const seatedHand = vector(.13, chest.y - .15, chest.z + .24);
       const handLeft = vector(.25, .93, .14).lerp(vector(.14, 1.10 + breath, .31), read).lerp(seatedHand, s.sitWeight);
-      handLeft.y += Math.sin(s.stride * 2) * .009 * weight; handLeft.z += Math.sin(s.stride) * .014 * weight;
+      handLeft.y += Math.sin(s.stride * 2) * .006 * weight + (chest.y - neutralChestHeight) * .45 * (1 - read) * weight;
+      handLeft.z += Math.sin(s.stride) * .028 * weight;
       const handRight = vector(-.14, 1.10 + breath, .31).lerp(vector(-.13, seatedHand.y, seatedHand.z), s.sitWeight);
       book.position.copy(vector(.24, avatar !== 'creator-18-v1' ? .83 : .91, .13).lerp(vector(0, 1.11 + breath, .32), read));
       book.position.lerp(vector(0, seatedHand.y + .01, seatedHand.z + .01), s.sitWeight);
@@ -248,14 +308,20 @@ export async function createGuideCharacter(avatar: GuideAvatarId = DEFAULT_GUIDE
       for (const m of blinkMeshes) m.morphTargetInfluences![m.morphTargetDictionary!.Blink] = blink;
       for (const m of smileMeshes) m.morphTargetInfluences![m.morphTargetDictionary!.SoftSmile] = .6;
       root.updateMatrixWorld(true);
-      // Plant the lowest sole on the floor/rug while retaining the authored heel/toe roll.
-      let lowest = Infinity;
-      for (const shoe of shoes) {
-        shoe.skeleton.update(); const positions = shoe.geometry.attributes.position;
-        for (let i = 0; i < positions.count; i++) { const v = new T.Vector3().fromBufferAttribute(positions, i); shoe.applyBoneTransform(i, v); shoe.localToWorld(v); lowest = Math.min(lowest, v.y); }
+      lastFootCorrection = standingCorrection;
+      if (!s.walkFeet) {
+        // Other actions retain authored heel/toe roll. Walking is already planted
+        // by IK and must not have the whole body shifted after the leg solve.
+        let lowest = Infinity;
+        const probe = new T.Vector3();
+        for (const { mesh: shoe, indices } of soleProbes) {
+          shoe.skeleton.update(); const positions = shoe.geometry.attributes.position;
+          for (const i of indices) { probe.fromBufferAttribute(positions, i); shoe.applyBoneTransform(i, probe); shoe.localToWorld(probe); lowest = Math.min(lowest, probe.y); }
+        }
+        lastFootCorrection = Number.isFinite(lowest) ? s.position.y + .002 - lowest : 0;
+        root.position.y += lastFootCorrection;
       }
-      lastFootCorrection = Number.isFinite(lowest) ? s.position.y + .002 - lowest : 0;
-      root.position.y += lastFootCorrection; root.updateMatrixWorld(true);
+      root.updateMatrixWorld(true);
     },
     metrics: () => ({ asset: avatar, bones: bones.size, skinnedMeshes: (() => { let n = 0; root.traverse(o => { if (o instanceof T.SkinnedMesh) n++; }); return n; })(), blinkMeshes: blinkMeshes.length, blink: blinkMeshes[0]?.morphTargetInfluences?.[blinkMeshes[0].morphTargetDictionary!.Blink], clips: [...gltf.animations.map(a => a.name), ...sittingClips.keys()], footCorrection: lastFootCorrection, world: Object.fromEntries(['pelvis', 'Head', 'foot_l', 'foot_r', 'hand_l', 'hand_r'].map(name => [name, worldPosition(bones.get(name)!).toArray()])), pose: [...bones].map(([name, b]) => ({ name, position: b.position.toArray(), rotation: b.quaternion.toArray() })) }),
     dispose() { root.removeFromParent(); resources.forEach(resource => resource.dispose()); },

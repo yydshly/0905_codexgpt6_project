@@ -21,7 +21,7 @@ test('导览闭环：修改、历史、保存恢复、JSON、真实视频重新�
   expect((await project(page)).guide.avatar).toBe('naruto-author-01-v1');
   expect(await page.evaluate(() => (window as any).__guide.avatar().asset)).toBe('naruto-author-01-v1');
   await page.locator('[data-stop="1"]').click();
-  await page.locator('#guide-movement').selectOption('ninja');
+  await page.locator('#guide-movement').selectOption('walk');
   await page.locator('#guide-duration').selectOption('6.5'); await page.locator('#guide-color').selectOption('clay');
   await page.locator('#guide-name').fill('小禾'); await page.locator('#guide-name').press('Tab');
   await page.locator('#guide-title').fill('小禾 · 作品导览验收'); await page.locator('#guide-title').press('Tab');
@@ -80,9 +80,9 @@ test('真实点击入口、快速切换、跳过、动作完成、镜头冲突�
 });
 
 test('导览网站包离线于编辑器、子路径部署、作品关联与访客模式', async ({ page, browser }) => {
-  await ready(page); await page.locator('#guide-movement').selectOption('ninja'); await page.locator('#guide-name').fill('阿禾'); await page.locator('#guide-name').press('Tab'); await page.locator('#guide-color').selectOption('blue'); const author = await project(page);
+  await ready(page); await page.locator('#guide-movement').selectOption('walk'); await page.locator('#guide-name').fill('阿禾'); await page.locator('#guide-name').press('Tab'); await page.locator('#guide-color').selectOption('blue'); const author = await project(page);
   const event = page.waitForEvent('download'); await page.locator('#guide-publish').click(); const download = await event, file = path.join(evidence, 'xiaohe-guide.website.zip'); await download.saveAs(file); const files = unzipSync(new Uint8Array(await readFile(file))); const published = JSON.parse(new TextDecoder().decode(files['project.json'])); expect(published.guide).toEqual(author.guide); expect(published.app).toBe('ideal-study-guide');
-  expect(new TextDecoder().decode(files['LICENSES.txt'])).toContain('ronildo.facanha'); expect(published.guide.movement).toBe('ninja');
+  expect(new TextDecoder().decode(files['LICENSES.txt'])).toContain('ronildo.facanha'); expect(published.guide.movement).toBe('walk');
   expect(files['assets/naruto-author-01.glb']).toEqual(new Uint8Array(await readFile('src/assets/guide/naruto-author-01.glb')));
   expect(files['assets/personal-creator-02.glb']).toBeUndefined();
   expect(files['assets/personal-creator-01.glb']).toBeUndefined();
@@ -90,9 +90,11 @@ test('导览网站包离线于编辑器、子路径部署、作品关联与访�
   const server = createServer((req, res) => { const name = (req.url ?? '').replace(/^\/demo\//, '') || 'index.html'; const bytes = files[name]; if (!bytes) { res.writeHead(404); res.end(); return; } res.writeHead(200, { 'Content-Type': name.endsWith('.js') ? 'text/javascript' : name.endsWith('.css') ? 'text/css' : name.endsWith('.json') ? 'application/json' : 'text/html' }); res.end(bytes); });
   await new Promise<void>(r => server.listen(0, '127.0.0.1', r)); const visitor = await browser.newPage({ viewport: { width: 1440, height: 900 } }), errors: string[] = []; visitor.on('pageerror', e => errors.push(e.message));
   try { await visitor.goto(`http://127.0.0.1:${(server.address() as any).port}/demo/`); await expect(visitor.locator('html')).toHaveAttribute('data-ready', 'true'); expect((await project(visitor)).guide).toEqual(author.guide); await expect(visitor.locator('#guide-save')).toHaveCount(0); await expect(visitor.locator('#guide-import')).toHaveCount(0); await expect(visitor.locator('#guide-name-label')).toHaveText('阿禾');
+    await scrub(page, 1.5); await scrub(visitor, 1.5);
+    expect(await visitor.evaluate(() => (window as any).__guide.avatar())).toEqual(await page.evaluate(() => (window as any).__guide.avatar()));
     await visitor.locator('#guide-play').click(); await visitor.waitForTimeout(300); expect((await state(visitor)).playing).toBe(true); await visitor.locator('#guide-open').click(); await expect(visitor.locator('.work-dialog')).toBeVisible(); await expect(visitor.locator('.work-visit')).toHaveAttribute('href', 'https://github.com/yydshly/0905_codexgpt6_project'); await visitor.getByRole('button', { name: '关闭作品详情' }).click(); await scrub(visitor, 5.5); await capture(visitor, '06-independent-guide-website.png');
     await visitor.setViewportSize({ width: 390, height: 844 }); expect(await visitor.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true); await visitor.locator('#guide-play').click(); await visitor.waitForTimeout(150); expect((await state(visitor)).playing).toBe(true); await visitor.locator('#guide-play').click(); expect(errors).toEqual([]);
-    await writeFile(path.join(evidence, 'website.json'), JSON.stringify({ browser: browser.version(), standalone: true, subpath: '/demo/', isolatedStorage: true, guideSettingsExact: true, workLinkExact: true, editorControlsAbsent: true, mobileOverflow: false, errors }, null, 2));
+    await writeFile(path.join(evidence, 'website.json'), JSON.stringify({ browser: browser.version(), standalone: true, subpath: '/demo/', isolatedStorage: true, guideSettingsExact: true, naturalWalkPoseMatchesEditorExactly: true, workLinkExact: true, editorControlsAbsent: true, mobileOverflow: false, errors }, null, 2));
   } finally { await visitor.close(); await new Promise<void>(r => server.close(() => r())); }
 });
 

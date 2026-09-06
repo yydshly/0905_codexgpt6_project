@@ -1,5 +1,6 @@
+import { walkFootfall, easeGait } from './guide-gait';
 import { DEFAULT_GUIDE_AVATAR, isGuideAvatarId, type GuideAvatarId } from './guide-avatars';
-import { cameraForPose, clamp, createFilmProject, FPS, parseFilmProject, type FilmProject } from './film-model';
+import { cameraForPose, clamp, createFilmProject, parseFilmProject, type FilmProject } from './film-model';
 import { dimensions, localPoint, worldPoint, type Plan } from './model';
 import { activation, demoPortfolio, type ContentTarget } from './portfolio-model';
 
@@ -46,7 +47,7 @@ export function parseGuideProject(raw: unknown): GuideProject {
   });
   if (!Number.isInteger(p.selected) || p.selected < 0 || p.selected >= Math.max(1, stops.length) || !Number.isFinite(p.playhead) || p.playhead < 0 || p.playhead > guideDuration(p)) return fail();
   project.scene.selectedId = null;
-  return { app: 'ideal-study-guide', version: 1, name: p.name.trim(), project, guide: { version: 5, avatar: Number(p.guide.version) < 3 ? 'creator-18-v1' : p.guide.avatar, movement: Number(p.guide.version) < 5 ? 'walk' : p.guide.movement, name: p.guide.name.trim(), color: p.guide.color, stops }, selected: p.selected, playhead: Math.round(p.playhead * FPS) / FPS };
+  return { app: 'ideal-study-guide', version: 1, name: p.name.trim(), project, guide: { version: 5, avatar: Number(p.guide.version) < 3 ? 'creator-18-v1' : p.guide.avatar, movement: Number(p.guide.version) < 5 ? 'walk' : p.guide.movement, name: p.guide.name.trim(), color: p.guide.color, stops }, selected: p.selected, playhead: p.playhead };
 }
 
 const distance = (a: Point, b: Point) => Math.hypot(a.x - b.x, a.z - b.z);
@@ -119,7 +120,7 @@ export function compileGuide(p: GuideProject) {
 }
 export type GuideRoute = ReturnType<typeof compileGuide>;
 export function sampleGuide(p: GuideProject, route: GuideRoute, seconds: number) {
-  const time = clamp(Math.round(seconds * FPS) / FPS, 0, guideDuration(p));
+  const time = clamp(seconds, 0, guideDuration(p));
   let index = 0; while (index < p.guide.stops.length - 1 && time >= guideStart(p, index + 1)) index++;
   const stop = p.guide.stops[index], segment = route.segments[index];
   const elapsed = time - guideStart(p, index), duration = stop?.duration ?? 8, walkTime = segment?.walkTime ?? .8;
@@ -127,7 +128,9 @@ export function sampleGuide(p: GuideProject, route: GuideRoute, seconds: number)
   const progress = clamp(walkElapsed / travelTime, 0, 1);
   // Distance drives the gait. Accelerate / brake once, with a steady walking speed in between.
   const ramp = Math.min(.4, travelTime / 3), movingTime = clamp(walkElapsed, 0, travelTime);
-  const integral = movingTime < ramp ? movingTime * movingTime / (2 * ramp) : movingTime > travelTime - ramp ? travelTime - ramp - (travelTime - movingTime) ** 2 / (2 * ramp) : movingTime - ramp / 2;
+  // Integral of smoothstep acceleration: velocity and acceleration start/end at zero.
+  const accelerationDistance = (t: number) => { const x = clamp(t / ramp, 0, 1); return ramp * (x ** 3 - .5 * x ** 4); };
+  const integral = movingTime < ramp ? accelerationDistance(movingTime) : movingTime > travelTime - ramp ? travelTime - ramp - accelerationDistance(travelTime - movingTime) : movingTime - ramp / 2;
   const traveled = (segment?.length ?? 0) * integral / (travelTime - ramp);
   let position = { ...route.home }, direction = .3, remaining = traveled;
   if (segment) {
@@ -146,7 +149,13 @@ export function sampleGuide(p: GuideProject, route: GuideRoute, seconds: number)
   }
   const yaw = segment?.yaw ?? .28;
   const turn = smooth((elapsed - walkTime) / .7), angleDelta = Math.atan2(Math.sin(yaw - direction), Math.cos(yaw - direction));
-  const ground = p.project.scene.objects.some(o => o.kind === 'rug' && Math.abs(localPoint(position.x, position.z, o).x) < dimensions(o).width / 2 && Math.abs(localPoint(position.x, position.z, o).z) < dimensions(o).depth / 2) ? .024 : 0;
+  const groundAt = (point: Point) => p.project.scene.objects.reduce((height, o) => {
+    if (o.kind !== 'rug') return height;
+    const local = localPoint(point.x, point.z, o), size = dimensions(o);
+    const edge = Math.min(size.width / 2 - Math.abs(local.x), size.depth / 2 - Math.abs(local.z));
+    return Math.max(height, .024 * easeGait((edge + .06) / .12));
+  }, 0);
+  const ground = groundAt(position);
   // One continuous camera track across both stops, with zero velocity at each end.
   const focus = smooth(time / 3), overview = { x: 0, y: .9, z: -.05 }, endpoint = segment?.path.at(-1) ?? route.home;
   const currentTarget = { x: (endpoint.x + (segment?.target.x ?? 0)) / 2, y: .92, z: (endpoint.z + (segment?.target.z ?? 0)) / 2 };
@@ -174,10 +183,11 @@ export function sampleGuide(p: GuideProject, route: GuideRoute, seconds: number)
   const seatBlend = sitting ? smooth(seatTime / 1.7) * (1 - smooth((elapsed - standStart) / 1.55)) : 0;
   const seatReadWeight = sitting ? smooth((seatTime - 1.7) / .5) * (1 - smooth((elapsed - standStart + .55) / .5)) : 0;
   const ninja = p.guide.avatar === 'naruto-author-01-v1' && p.guide.movement === 'ninja';
+  const walkFeet = !ninja && segment?.length && elapsed >= .5 && elapsed <= walkTime ? (['l', 'r'] as const).map(side => { const foot = walkFootfall(segment, traveled, side); return { ...foot, side, ground: segment.seat?.ground ?? groundAt(foot) }; }) : null;
   const phase = elapsed < .5 ? '转向行进方向' : elapsed < walkTime ? ninja ? '忍者跑向目标' : '走向座椅 / 作品' : elapsed < walkTime + .7 ? '转身站稳' : sitting ? elapsed < sitStart + 1.7 ? '屈膝坐下' : elapsed < standStart - .55 ? '坐姿休息' : elapsed < standStart ? '收起手册' : elapsed < duration - .5 ? '前倾站起' : '站立完成' : stop?.action === 'read' ? '翻阅随身手册' : '介绍屏幕作品';
   return { time, index, action: stop?.action ?? 'read', position: { ...position, y: segment?.seat?.ground ?? ground }, yaw: finalYaw,
-    locomotion: ninja ? 'ninja' as const : 'walk' as const,
-    stride: traveled / (ninja ? 1.5 : 1.06) * Math.PI * 2, walking: progress < 1 && !!segment?.length,
+    locomotion: ninja ? 'ninja' as const : 'walk' as const, walkFeet,
+    stride: (ninja ? traveled / 1.5 : traveled / (segment?.length ? 2 * segment.length / Math.max(2, Math.ceil(segment.length / .42)) : .84) + .25) * Math.PI * 2, walking: progress < 1 && !!segment?.length,
     walkWeight: segment?.length ? smooth(walkElapsed / .28) * (1 - smooth((elapsed - walkTime + .38) / .38)) : 0,
     sitClip, sitTime, sitWeight, seatBlend, seatReadWeight, turning, seat: segment?.seat ?? null,
     actionWeight, readWeight, pointWeight, actionTime, target: previousAction === 'point' && last ? { x: mix(last.target.x, segment!.target.x, departure), y: mix(last.target.y, segment!.target.y, departure), z: mix(last.target.z, segment!.target.z, departure) } : segment?.target ?? { x: 0, y: 1, z: 0 }, camera, phase };
