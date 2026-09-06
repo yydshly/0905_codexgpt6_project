@@ -1,7 +1,7 @@
 name: Verify study and film workbench
 on:
   push:
-    branches: [main, 'codex/film-workbench', 'codex/reusable-study', 'codex/portfolio-interactions', 'codex/publishable-portfolio', 'codex/project-library']
+    branches: [main, 'codex/film-workbench', 'codex/reusable-study', 'codex/portfolio-interactions', 'codex/publishable-portfolio', 'codex/project-library', 'codex/character-guide']
     paths-ignore: ['docs/**', 'README.md', 'THIRD_PARTY_LICENSES.txt']
   pull_request:
     paths-ignore: ['docs/**', 'README.md', 'THIRD_PARTY_LICENSES.txt']
@@ -11,11 +11,12 @@ permissions:
 jobs:
   browser-acceptance:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    # The full 26.5-second guide is rendered at unchanged 720p on software GPUs.
+    timeout-minutes: ${{ matrix.suite == 'guide' && 45 || 25 }}
     strategy:
       fail-fast: false
       matrix:
-        suite: [film-export, film-controls, room-reuse, portfolio, publish, projects]
+        suite: [film-export, film-controls, room-reuse, portfolio, publish, projects, guide]
     steps:
       - uses: actions/checkout@v7.0.1
       - uses: actions/setup-node@v7.0.0
@@ -43,6 +44,9 @@ jobs:
       - name: Independent projects, snapshots and publishing
         if: matrix.suite == 'projects'
         run: npx playwright test tests/projects.spec.ts
+      - name: Character guide, shared animation sampling, actual video and standalone website
+        if: matrix.suite == 'guide'
+        run: npx playwright test tests/guide.spec.ts tests/guide-motion.spec.ts tests/naruto.spec.ts tests/walk.spec.ts
       - name: Keep final browser evidence
         if: always()
         uses: actions/upload-artifact@v7.0.1

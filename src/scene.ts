@@ -21,6 +21,7 @@ export class StudyScene {
   composer:EffectComposer;
   ao:SSAOPass;
   groups=new Map<string,T.Group>();
+  contentOccluders:T.Object3D[]=[];
   selection=new T.Group();
   mode:'edit'|'orbit'='edit';
   plan!:Plan;
@@ -152,7 +153,7 @@ export class StudyScene {
   /** The first visible surface owns a click; never raycast only the interactive objects. */
   contentTargetAt(clientX:number,clientY:number):ContentTarget|null {
     this.cast({clientX,clientY});
-    const hit=this.ray.intersectObjects([this.room,...this.groups.values()],true)[0];
+    const hit=this.ray.intersectObjects([this.room,...this.groups.values(),...this.contentOccluders],true)[0];
     let node:T.Object3D|null=hit?.object??null,partId:ContentTarget['partId']|undefined;
     while(node){if(node.userData.partId)partId=node.userData.partId;if(node.userData.itemId)return resolveContentTarget(this.plan.portfolio,node.userData.itemId,partId);node=node.parent;}
     return null;

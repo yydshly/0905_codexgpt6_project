@@ -1,0 +1,19 @@
+{
+  "blender": "4.5.3 LTS",
+  "fileOpened": true,
+  "meshObjects": 110,
+  "bones": 67,
+  "nlaClips": [
+    "Idle_Loop",
+    "Walk_Loop"
+  ],
+  "visibleClip": [
+    "Idle_Loop"
+  ],
+  "facialMorphs": [
+    "Basis",
+    "Blink",
+    "SoftSmile"
+  ],
+  "notesAvailable": true
+}

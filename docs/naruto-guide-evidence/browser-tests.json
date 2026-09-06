@@ -1,0 +1,162 @@
+{
+  "stats": {
+    "startTime": "2026-09-06T03:34:23.163Z",
+    "duration": 165933.562,
+    "expected": 15,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "tests": [
+    {
+      "title": "坐下站起：真实椅面、脚底接触、迁移、段落操作与失败保护",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 7028
+        }
+      ]
+    },
+    {
+      "title": "导览闭环：修改、历史、保存恢复、JSON、真实视频重新播放与同帧比对",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 70436
+        }
+      ]
+    },
+    {
+      "title": "真实点击入口、快速切换、跳过、动作完成、镜头冲突与路径保护",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 12529
+        }
+      ]
+    },
+    {
+      "title": "导览网站包离线于编辑器、子路径部署、作品关联与访客模式",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 5011
+        }
+      ]
+    },
+    {
+      "title": "减少动态、保存失败、导出取消、无编码与无 WebGL 降级",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 2299
+        }
+      ]
+    },
+    {
+      "title": "作品展示把当前房间和作品传入导览，独立保存不覆盖原工程",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 2481
+        }
+      ]
+    },
+    {
+      "title": "青年骨骼、姿态重复采样、近景、旧角色迁移及模型加载失败保护",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 6038
+        }
+      ]
+    },
+    {
+      "title": "个人 IP 切换事务、v2 外观保留、撤销重做与旧角色网站资源",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 9567
+        }
+      ]
+    },
+    {
+      "title": "首次角色加载期间锁定选择，避免显示资源与工程身份不一致",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 1906
+        }
+      ]
+    },
+    {
+      "title": "设定 01 存档保持原貌，切换设定 02 后撤销、保存与刷新一致",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 5500
+        }
+      ]
+    },
+    {
+      "title": "鸣人：跑步、招呼、切换旧形象、v4 迁移与动作设置恢复",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 5767
+        }
+      ]
+    },
+    {
+      "title": "全部 11 类物件整体关联、双部位优先级、历史和旧配置迁移",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 6697
+        }
+      ]
+    },
+    {
+      "title": "个人主页闭环：物件绑定、设置保存、ZIP、独立访客与 GLB 宿主",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 13372
+        }
+      ]
+    },
+    {
+      "title": "访客缺失文件、无 WebGL、减少动态及键盘降级",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 1152
+        }
+      ]
+    },
+    {
+      "title": "每类物件真实几何均可点击，整体入口不依赖模型部位",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 3827
+        }
+      ]
+    }
+  ]
+}

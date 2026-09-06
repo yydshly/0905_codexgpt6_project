@@ -1,0 +1,52 @@
+{
+  "timestamp": "2026-09-06T03:40:05.888Z",
+  "browser": "152.0.7977.82",
+  "checks": [
+    {
+      "time": 1.5,
+      "region": {
+        "x": 0.38544087557726875,
+        "y": 0.28478721880849084,
+        "w": 0.12220654057094299,
+        "h": 0.3139894700937022
+      },
+      "personalPreviewToVideoMae": 5.403021918402778,
+      "legacyPreviewToVideoMae": 25.583387586805557
+    },
+    {
+      "time": 5.5,
+      "region": {
+        "x": 0.3989359647345002,
+        "y": 0.25137769831386914,
+        "w": 0.14130130355603465,
+        "h": 0.35500680603816237
+      },
+      "personalPreviewToVideoMae": 4.512681749131945,
+      "legacyPreviewToVideoMae": 22.82442898220486
+    },
+    {
+      "time": 10,
+      "region": {
+        "x": 0.39840256816079667,
+        "y": 0.3686981998920711,
+        "w": 0.13520435575224088,
+        "h": 0.35049565439094776
+      },
+      "personalPreviewToVideoMae": 4.522074381510417,
+      "legacyPreviewToVideoMae": 61.23029920789931
+    },
+    {
+      "time": 13,
+      "region": {
+        "x": 0.461458748762665,
+        "y": 0.2847666048850427,
+        "w": 0.13309148881447364,
+        "h": 0.34897679690028804
+      },
+      "personalPreviewToVideoMae": 4.042616102430555,
+      "legacyPreviewToVideoMae": 32.87981499565972
+    }
+  ],
+  "errors": [],
+  "note": "Actual saved MP4 re-opened. Cropped upper-body/head region projected independently from the current camera and actor position. The old avatar is a negative control: its preview must differ more from this exported personal avatar."
+}

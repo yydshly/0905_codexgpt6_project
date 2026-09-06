@@ -1,0 +1,136 @@
+{
+  "timestamp": "2026-09-05T18:29:17.364Z",
+  "stats": {
+    "startTime": "2026-09-05T18:29:17.364Z",
+    "duration": 141448.59399999998,
+    "expected": 12,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "suite": "Chrome, GitHub Pages repository subpath",
+  "runtimeAsset": "personal-creator-01-v1",
+  "assetSha256": "75bc6af11f8fd569cebc8a28a766ba3d8a8f0ae25e2949fb553985abab966798",
+  "cases": [
+    {
+      "title": "导览闭环：修改、历史、保存恢复、JSON、真实视频重新播放与同帧比对",
+      "passed": true,
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 45890
+        }
+      ]
+    },
+    {
+      "title": "真实点击入口、快速切换、跳过、动作完成、镜头冲突与路径保护",
+      "passed": true,
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 20279
+        }
+      ]
+    },
+    {
+      "title": "导览网站包离线于编辑器、子路径部署、作品关联与访客模式",
+      "passed": true,
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 16162
+        }
+      ]
+    },
+    {
+      "title": "减少动态、保存失败、导出取消、无编码与无 WebGL 降级",
+      "passed": true,
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 5542
+        }
+      ]
+    },
+    {
+      "title": "作品展示把当前房间和作品传入导览，独立保存不覆盖原工程",
+      "passed": true,
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 2207
+        }
+      ]
+    },
+    {
+      "title": "青年骨骼、姿态重复采样、近景、旧角色迁移及模型加载失败保护",
+      "passed": true,
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 4282
+        }
+      ]
+    },
+    {
+      "title": "个人 IP 切换事务、v2 外观保留、撤销重做与旧角色网站资源",
+      "passed": true,
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 8163
+        }
+      ]
+    },
+    {
+      "title": "首次角色加载期间锁定选择，避免显示资源与工程身份不一致",
+      "passed": true,
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 959
+        }
+      ]
+    },
+    {
+      "title": "全部 11 类物件整体关联、双部位优先级、历史和旧配置迁移",
+      "passed": true,
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 5383
+        }
+      ]
+    },
+    {
+      "title": "个人主页闭环：物件绑定、设置保存、ZIP、独立访客与 GLB 宿主",
+      "passed": true,
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 14876
+        }
+      ]
+    },
+    {
+      "title": "访客缺失文件、无 WebGL、减少动态及键盘降级",
+      "passed": true,
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 1117
+        }
+      ]
+    },
+    {
+      "title": "每类物件真实几何均可点击，整体入口不依赖模型部位",
+      "passed": true,
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 4987
+        }
+      ]
+    }
+  ]
+}

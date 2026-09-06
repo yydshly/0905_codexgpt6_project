@@ -421,3 +421,102 @@ Exhibit B - "Incompatible With Secondary Licenses" Notice
   This Source Code Form is "Incompatible With Secondary Licenses", as
   defined by the Mozilla Public License, v. 2.0.
 
+
+FFLATE 0.8.3 (website ZIP packaging)
+MIT License
+
+Copyright (c) 2026 Arjun Barrett
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+QUATERNIUS — ADULT GUIDE CHARACTER ASSETS
+Universal Base Characters [Standard] and Universal Animation Library [Standard]
+Models, hairstyles, painted textures and base locomotion by Quaternius.
+License: CC0 1.0 Universal (Public Domain Dedication)
+https://creativecommons.org/publicdomain/zero/1.0/
+https://quaternius.com/packs/universalbasecharacters.html
+https://quaternius.itch.io/universal-base-characters
+https://quaternius.itch.io/universal-animation-library
+
+This project adapts the Superhero_Male_FullBody base, Eyebrows, Eyes and
+Hair_SimpleParted; uses Idle_Loop and Walk_Loop; adjusts proportions,
+wardrobe, shoes, eye joints, facial morphs and mesh/texture packaging.
+Reading, book handling, screen presentation and deterministic pose evaluation
+are implemented by this project. The original human modeling, texture and
+locomotion quality belongs to Quaternius, not this project's authors.
+See docs/ADULT-AVATAR.md and src/assets/guide/ for source and preparation details.
+
+
+PERSONAL IP SAMPLE 01 — INCREMENTAL ASSET AUTHORSHIP
+src/assets/guide/personal-creator-01.glb is derived from creator-18.glb.
+Retained CC0-derived components: Quaternius skeleton, Idle_Loop and Walk_Loop,
+hand anatomy, skin-weighted sleeve and trouser topology. Shoes and earlier
+wardrobe preparation are this project's previous modifications of that base.
+Newly authored in scripts/build-personal-avatar.py: parametric oval head and
+neck, facial surfaces, eyes, eyelids, brows and facial morphs, layered hair,
+tea-brown glasses, open overshirt cut, collar, cuffs, pocket and folded-page
+badge. These are actual 3D geometry, not baked character pictures. The IP
+concept image is separately AI-generated and is a visual reference, not a
+third-party human model. Existing Quaternius credits and CC0 notices remain.
+See docs/character-ip/INTEGRATION.md for scope, provenance and limitations.
+
+
+GUIDE MOTION V1 — CC0 SOURCE CLIPS, PROJECT RUNTIME ADAPTATION
+src/assets/guide/guide-motion-v1.glb contains Walk_Loop, Sitting_Enter,
+Sitting_Idle_Loop and Sitting_Exit from Quaternius Universal Animation
+Library [Standard], under the same CC0 license above. Extracted without
+meshes/textures by scripts/build-guide-motion.py; original bone samples
+retained. These are external authored skeletal clips, not newly recorded
+motion capture or original animation by this project. This project's work:
+distance-driven gait timing, staged turns, transition blending, chair-relative
+alignment, hip height correction, leg/arm IK, notebook handling, deterministic
+preview/export sampling and integration. See docs/MOTION-GUIDE.md.
+
+
+PERSONAL IP EDITION 02 — MODEL AND BLENDER SOURCE
+src/assets/guide/personal-creator-02.glb and
+ docs/character-ip/source/personal-creator-02.blend retain the CC0-derived
+Quaternius body parts, skeleton and Idle_Loop / Walk_Loop as credited above.
+New/modified in scripts/build-personal-avatar-v2.py: freeform swept hair
+locks and undercut, refined head/face, almond eyes, lips, vertex skin color,
+slimmer tea frames, collar and tailoring. The .blend preserves separate
+editable meshes; the runtime GLB merges compatible meshes for rendering.
+This is a script-authored stylized 3D asset, not hand-sculpted portraiture,
+new motion capture, or a promise of resemblance to the user. Sitting and
+standing continue to use the separate CC0 motion file and project IK.
+See docs/character-ip/EDITION-02.md for reuse and validation details.
+
+
+NARUTO AUTHOR MODEL — CC BY 4.0
+Model, original UV images and outline geometry by ronildo.facanha.
+Naruto & Sasuke Low Poly + Rig + Texture (only Naruto is used).
+https://sketchfab.com/3d-models/naruto-sasuke-low-poly-rig-texture-b650b60a7bbd4f11b05a435e65116168
+https://creativecommons.org/licenses/by/4.0/
+Author-shared source: https://drive.google.com/drive/folders/1shRpOCStbGUtf4AFzzhWPDbuy6DxO61b
+
+Adapted in this project: FBX texture-path repairs, normalized mesh segments,
+Rigify-to-Quaternius skin weights, material packaging, foot contact and
+room interaction. The model and painted appearance were made by the author,
+not this project's authors. Naruto character rights are separate from the
+model's CC BY attribution; this is not an original personal-IP character.
+
+Idle_Loop, Walk_Loop, Jog_Fwd_Loop (packaged as Run_Loop), and sitting clips
+are from Quaternius, CC0, credited above. Arms-back ninja running, greeting,
+notebook handling, navigation and chair alignment are project runtime work.
+See docs/NARUTO-CHARACTER.md for the adaptation and limitations.

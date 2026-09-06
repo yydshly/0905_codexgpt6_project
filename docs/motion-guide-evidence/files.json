@@ -1,0 +1,42 @@
+{
+  "acceptance.json": {
+    "bytes": 3845,
+    "sha256": "d5816b683dbb798b87787997b82ec428d6f6585b3d1778216fa7e77b3bb13b09"
+  },
+  "adult-avatar.json": {
+    "bytes": 405,
+    "sha256": "0900c65f5a81e871bbd487c7cdd6fb621748c88982d53938915b88fab027be12"
+  },
+  "journey.json": {
+    "bytes": 13575,
+    "sha256": "1e190dc8658e9e4ea5e9209a8ab1a51533103646041f1f2b5f998eb720ace1cc"
+  },
+  "legacy-avatar.website.zip": {
+    "bytes": 6646290,
+    "sha256": "cd90ec090a5674e10658dc7cacd13903b28a3b117f1078b9e1e709eb76f47674"
+  },
+  "motion-checks.json": {
+    "bytes": 2851,
+    "sha256": "9dbe1ac395f5c461c1808d49790e8ce37e8f32aeac736fbc9be62d97f2623b75"
+  },
+  "performance.json": {
+    "bytes": 1169,
+    "sha256": "1232c0cbdacbd8a714e4aa73550a9971857b63b7875e434395fa21a8a70b3668"
+  },
+  "verified-guide.json": {
+    "bytes": 5802,
+    "sha256": "5123b3570523ec2d2685d0e4a33234a9208d15b2ef734d5541efd72f782f4c08"
+  },
+  "website.json": {
+    "bytes": 234,
+    "sha256": "d2ecfcf72e147a554000b050d877457330cb7c26e18c1bc110f1e70aec751072"
+  },
+  "xiaohe-guide.mp4": {
+    "bytes": 14061255,
+    "sha256": "f0d7e3c76e6263006ff6d06238b2e4b70f10c029102cba70be136dff505fca69"
+  },
+  "xiaohe-guide.website.zip": {
+    "bytes": 3878401,
+    "sha256": "a9a0f2869e28bb01ff5c787ff90ea960ac09671cab1786f8f5d7fe9f49dcf63f"
+  }
+}

@@ -2,6 +2,10 @@
 
 一间可编辑、可拍摄，也可作为个人作品主页的 3D 书房。支持 11 类物件、最多 3 段短片镜头、作品关联、多工程与保存版本，以及图片、视频、模型和独立网站导出。
 
+**当前交付归纳：**[网页入口、工程关系、角色与复用](docs/WEB-CHARACTER-SUMMARY.md)汇总截至功能提交 `129be24` 的成果。当前开发分支为 `codex/anime-character`，基于 `codex/character-guide`，通过 [PR #2](https://github.com/yydshly/0905_codexgpt6_project/pull/2) 审阅；推送该分支不会自动更新公开站点。
+
+角色导览默认 28 秒，包含阅读、介绍、坐下阅读并站起。新建示例使用作者提供的鸣人模型，支持自然行走／忍者跑、招手、最多三段时间轴、设置与历史、本地快照、JSON、真实视频和独立网站包；保留青年基础版及个人 IP 设定 01／02 与旧工程。最新修正包括支撑脚约束、起停与重心过渡、连续时间预览及精确暂停恢复。[角色接入与来源](docs/NARUTO-CHARACTER.md) · [步行优化与实际视频](docs/walk-refinement-evidence/README.md) · [个人 IP 02 制作记录](docs/character-ip/EDITION-02.md)。鸣人模型是外部已有角色资产，不属于原创个人 IP；[人物质量升级路线](docs/CHARACTER-QUALITY-ROADMAP.md)中的后续建议不等于已交付功能。
+
 主分支 `main` 汇总此前各阶段成果。当前发布包括工程库使用帮助、带备份与确认的工程删除，以及「不保存，返回工程库」。[本次发布总结与线上验收](docs/RELEASE-2026-09-05.md)。
 
 公开入口：[我的工程](https://yydshly.github.io/0905_codexgpt6_project/?workspace=projects) · [默认短片](https://yydshly.github.io/0905_codexgpt6_project/) · [作品展示示例](https://yydshly.github.io/0905_codexgpt6_project/?workspace=portfolio)。本机与线上存档分开，带走现有工程请在本机备份 JSON，再在线上导入。
@@ -11,12 +15,13 @@
 Node.js 22.12+，支持 WebGL 2 的桌面浏览器：
 
 ```bash
-git switch main
+git switch codex/anime-character  # 已发布原版请使用 main
 npm ci
 npm run dev
 ```
 
 - [我的工程](http://127.0.0.1:5173/?workspace=projects)：管理多套方案、复制、另存为、保存版本与恢复、删除与使用帮助。
+- [角色导览](http://127.0.0.1:5173/?workspace=guide)：点击播放体验当前角色的作品导览与坐下 / 站起；左侧可切换角色及移动方式。从作品展示顶部进入会带上当前房间和作品关联，也可导入已有 JSON。
 - [布置书房](http://127.0.0.1:5173/?workspace=room)：快速工作区。选中任意家具，在右侧「作品入口」配置作品。管理多套方案请从工程库进入。
 - [作品展示示例](http://127.0.0.1:5173/?workspace=portfolio)：直接点击书籍或屏幕、标记或作品列表，打开项目详情。
 - [短片工作台](http://127.0.0.1:5173/?workspace=film)：默认入口，已编排 10 秒作品，支持最多 3 段镜头与真实视频导出。
@@ -35,7 +40,7 @@ npx playwright test tests/portfolio.spec.ts
 npx playwright test --config playwright.pages.config.ts tests/portfolio.spec.ts
 ```
 
-本机测试使用已安装的 Chrome，CI 使用 Chromium。运行时不需要账号、API 密钥或云服务，也不下载外部模型/字体。不要直接双击 HTML；请使用 HTTP 服务。
+本机测试使用已安装的 Chrome，CI 使用 Chromium。运行时不需要账号、API 密钥或云服务，模型文件随应用提供，不从第三方服务加载模型/字体。不要直接双击 HTML；请使用 HTTP 服务。
 
 ## 保存与带走作品
 
@@ -49,6 +54,9 @@ GLB 带走模型、材质和部位标识；JSON 带走房间、照片与作品�
 
 ## 文档与实际交付
 
+- [个人 IP 02：实际效果、Blender 源文件、GLB、视频与验收](docs/character-ip/EDITION-02.md)
+- [新增网页能力、角色导览和远端交付归纳](docs/WEB-CHARACTER-SUMMARY.md)
+- [人物质量升级路线：模型、绑定、动画、控制与渲染（部分推进）](docs/CHARACTER-QUALITY-ROADMAP.md)
 - [本次发布总结、线上地址与验证](docs/RELEASE-2026-09-05.md)
 - [工程删除与不保存返回](docs/PROJECT-ACTIONS.md)
 - [工程库使用帮助](docs/PROJECTS-HELP.md)
@@ -70,7 +78,7 @@ GLB 带走模型、材质和部位标识；JSON 带走房间、照片与作品�
 
 ## GitHub Pages 部署
 
-[发布工作流](.github/workflows/pages.yml)仅支持在 main 上手动触发。它在真实仓库子路径并行执行六组完整浏览器套件，全部通过后才发布构建产物。普通提交不会自动更新站点。
+[发布工作流](.github/workflows/pages.yml)仅支持在 main 上手动触发。它在真实仓库子路径并行执行七组浏览器套件，全部通过后才发布构建产物。普通提交不会自动更新站点。
 
 ```bash
 npm run build:pages
@@ -105,7 +113,7 @@ npm run test:live
 | `src/projects.ts` / `src/project-store.ts` / `src/project-menu.ts` | 工程库、IndexedDB 与版本事务、切换和另存为 |
 | `src/portfolio-*.ts` / `src/publish-dialog.ts` / `src/site-export.ts` | 作品关联、访客展示、个人网站配置与导出 |
 | `src/player.ts` / `src/glb-portfolio.ts` / `src/integration.ts` | 独立播放器、GLB 点击适配和宿主示例 |
-| `tests/*.spec.ts` | 六组真实浏览器验收，当前合计 39 项 |
+| `tests/*.spec.ts` | 10 个文件共 51 项已定义用例，CI 分为七组；各轮实际执行结果见对应验收记录 |
 
 ## 已知边界
 
@@ -114,3 +122,10 @@ npm run test:live
 主要支持桌面编辑，窄屏工程库与访客页已有浏览器窗口验证；真实手机 GPU、Safari/Firefox 和大量工程长期负载未验证。没有回收站或整库历史备份；保存失败会明确反馈，重要内容请下载 JSON。
 
 历次成果和测量保留在对应文档，不把旧版本截图当作当前线上结果：[原房间验收](docs/VERIFICATION.md) · [造型优化](docs/REFINEMENT.md) · [编辑体验](docs/USABILITY.md) · [首次上线](docs/PAGES.md)。
+
+
+## 鸣人动漫角色（独立分支）
+
+`codex/anime-character` 新增作者提供的鸣人模型，支持自然行走／忍者跑、招呼、阅读、坐下站起，以及同一时间轴的视频和独立网站导出。`npm ci` → `npm run dev` → `http://127.0.0.1:5173/?workspace=guide`。旧角色与旧工程继续保留。模型来源、复用方式与明确限制见 [角色接入说明](docs/NARUTO-CHARACTER.md)；这是 CC BY 标注的已有角色模型，不能视为原创个人 IP。
+
+后续步行修正：连续时间预览、按路程落脚、支撑脚约束、重心和起停过渡；实际运行截图、视频与测量见 [步行优化验收](docs/walk-refinement-evidence/README.md)。

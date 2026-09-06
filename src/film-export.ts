@@ -1,5 +1,6 @@
 import { FPS, sampleFilm, totalDuration, type FilmProject } from './film-model';
 import type { StudyScene } from './scene';
+import type { CameraState } from './model';
 
 export interface ExportFormat { id: 'avc' | 'vp9' | 'vp8'; label: string; extension: string; mime: string; codec: string }
 const FORMATS: ExportFormat[] = [
@@ -17,22 +18,26 @@ export async function detectExportFormats(): Promise<ExportFormat[]> {
 }
 
 export async function encodeFilm(scene: StudyScene, project: FilmProject, format: ExportFormat, signal: AbortSignal, progress: (frame: number, frames: number) => void) {
+  return encodeSequence(scene, { name: project.name, duration: totalDuration(project), sample: time => sampleFilm(project, time).camera }, format, signal, progress);
+}
+
+/** Preview and export supply the same absolute-time sampler; no export-only animation. */
+export async function encodeSequence(scene: StudyScene, sequence: { name: string; duration: number; sample(time: number): CameraState }, format: ExportFormat, signal: AbortSignal, progress: (frame: number, frames: number) => void) {
   const { Output, BufferTarget, Mp4OutputFormat, WebMOutputFormat, CanvasSource, Quality } = await import('mediabunny');
   const capture = scene.captureSession(1280, 720);
   const output = new Output({ target: new BufferTarget(), format: format.id === 'avc' ? new Mp4OutputFormat({ fastStart: 'in-memory' }) : new WebMOutputFormat() });
-  const frames = Math.round(totalDuration(project) * FPS);
+  const frames = Math.round(sequence.duration * FPS);
   try {
     const source = new CanvasSource(scene.renderer.domElement, { codec: format.id, fullCodecString: format.codec, quality: new Quality({ bitrate: 5_000_000 }), latencyMode: 'quality', keyFrameInterval: 1 });
     output.addVideoTrack(source, { frameRate: FPS });
-    output.setMetadataTags({ title: project.name });
+    output.setMetadataTags({ title: sequence.name });
     await output.start();
     for (let frame = 0; frame < frames; frame++) {
       signal.throwIfAborted();
       const frameStarted=performance.now();
-      const sample = sampleFilm(project, frame / FPS);
-      capture.render(sample.camera);
+      capture.render(sequence.sample(frame / FPS));
       signal.throwIfAborted();
-      await source.add(frame / FPS, 1 / FPS, { keyFrame: frame === 0 || sample.progress === 0 });
+      await source.add(frame / FPS, 1 / FPS, { keyFrame: frame % FPS === 0 });
       progress(frame + 1, frames);
       // A zero-delay task alone can starve browser input during software GPU readback.
       // Slow frames leave a real input/paint window; timestamps and pixels stay unchanged.

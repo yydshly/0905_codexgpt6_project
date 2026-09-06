@@ -1,0 +1,11 @@
+{
+  "stats": {
+    "startTime": "2026-09-06T03:39:29.028Z",
+    "duration": 47477.751000000004,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "reason": "Final packaged attribution and saved ninja movement; whole-body running screenshot"
+}
