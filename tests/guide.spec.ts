@@ -60,19 +60,20 @@ test('导览闭环：修改、历史、保存恢复、JSON、真实视频重新�
 });
 
 test('真实点击入口、快速切换、跳过、动作完成、镜头冲突与路径保护', async ({ page }) => {
+  // Keep action/selection assertions independent of GPU readback time. Advance
+  // the browser clock explicitly when checking completion of a real action.
+  await page.clock.install({ time: new Date('2026-09-06T00:00:00Z') });
   await ready(page);
+  await page.clock.pauseAt(new Date('2026-09-06T01:00:00Z'));
   // Hide only the DOM sign, then click its anchor on the real book mesh.
   const book = page.locator('.study-hotspot[data-target="desk-1/book-1"]'), bookBox = await book.boundingBox();
-  // Capture the result of the real pointer event before slow GPU readback can
-  // consume the entire eight-second segment before Playwright reads the state.
-  await page.locator('#guide-canvas canvas').evaluate(el => el.addEventListener('pointerup', () => { (window as any).__clickedGuideState = (window as any).__guide.state(); }, { once: true }));
   await book.evaluate(el => { el.style.visibility = 'hidden'; }); await page.mouse.click(bookBox!.x + bookBox!.width / 2, bookBox!.y + bookBox!.height / 2); await book.evaluate(el => { el.style.visibility = ''; });
-  expect(await page.evaluate(() => (window as any).__clickedGuideState.playing)).toBe(true);
-  if (await page.locator('.work-dialog').isVisible()) await page.getByRole('button', { name: '关闭作品详情' }).click();
+  expect((await state(page)).playing).toBe(true);
+  await page.clock.runFor(32);
   await page.locator('.study-hotspot[data-target="monitor-1/screen"]').click(); expect((await project(page)).selected).toBe(1);
-  if (!await page.locator('.work-dialog').isVisible()) await page.locator('#guide-open').click(); await expect(page.locator('.work-dialog')).toBeVisible(); await expect(page.locator('#work-title')).toHaveText('让空间，成为作品'); expect((await state(page)).playing).toBe(false); await page.getByRole('button', { name: '关闭作品详情' }).click();
-  await page.waitForTimeout(700); await expect(page.locator('.work-dialog')).toBeHidden();
-  await page.locator('.study-hotspot[data-target="desk-1/book-1"]').click(); await expect(page.locator('.work-dialog')).toBeVisible({ timeout: 15000 }); await expect(page.locator('#work-title')).toHaveText('理想书房 · 开源创作'); await page.getByRole('button', { name: '关闭作品详情' }).click();
+  await page.locator('#guide-open').click(); await expect(page.locator('.work-dialog')).toBeVisible(); await expect(page.locator('#work-title')).toHaveText('让空间，成为作品'); expect((await state(page)).playing).toBe(false); await page.getByRole('button', { name: '关闭作品详情' }).click();
+  await page.clock.runFor(700); await expect(page.locator('.work-dialog')).toBeHidden();
+  await page.locator('.study-hotspot[data-target="desk-1/book-1"]').click(); await page.clock.fastForward(9000); await expect(page.locator('.work-dialog')).toBeVisible(); await expect(page.locator('#work-title')).toHaveText('理想书房 · 开源创作'); await page.getByRole('button', { name: '关闭作品详情' }).click();
   await page.locator('#guide-play').click(); const canvas = await page.locator('#guide-canvas').boundingBox(); await page.mouse.move(canvas!.x + canvas!.width * .65, canvas!.y + canvas!.height * .8); await page.mouse.down(); await page.mouse.move(canvas!.x + canvas!.width * .7, canvas!.y + canvas!.height * .75, { steps: 10 }); await page.mouse.up(); expect((await state(page)).playing).toBe(false);
   const p = await project(page), before = await page.evaluate(() => (window as any).__guide.camera()); await page.locator('#guide-camera').click(); expect(await page.evaluate(() => (window as any).__guide.camera())).not.toEqual(before); expect(await project(page)).toEqual(p);
   // Check every sampled floor location against independently expanded rotated rectangles.
@@ -94,11 +95,13 @@ test('导览网站包离线于编辑器、子路径部署、作品关联与访�
   expect(files['assets/creator-18.glb']).toBeUndefined(); expect(files['assets/guide-motion-v1.glb']).toEqual(new Uint8Array(await readFile('src/assets/guide/guide-motion-v1.glb')));
   const server = createServer((req, res) => { const name = (req.url ?? '').replace(/^\/demo\//, '') || 'index.html'; const bytes = files[name]; if (!bytes) { res.writeHead(404); res.end(); return; } res.writeHead(200, { 'Content-Type': name.endsWith('.js') ? 'text/javascript' : name.endsWith('.css') ? 'text/css' : name.endsWith('.json') ? 'application/json' : 'text/html' }); res.end(bytes); });
   await new Promise<void>(r => server.listen(0, '127.0.0.1', r)); const visitor = await browser.newPage({ viewport: { width: 1440, height: 900 } }), errors: string[] = []; visitor.on('pageerror', e => errors.push(e.message)); if (process.env.CI) visitor.setDefaultTimeout(45000);
+  await visitor.clock.install({ time: new Date('2026-09-06T00:00:00Z') });
   try { await visitor.goto(`http://127.0.0.1:${(server.address() as any).port}/demo/`); await expect(visitor.locator('html')).toHaveAttribute('data-ready', 'true'); expect((await project(visitor)).guide).toEqual(author.guide); await expect(visitor.locator('#guide-save')).toHaveCount(0); await expect(visitor.locator('#guide-import')).toHaveCount(0); await expect(visitor.locator('#guide-name-label')).toHaveText('阿禾');
+    await visitor.clock.pauseAt(new Date('2026-09-06T01:00:00Z'));
     await scrub(page, 1.5); await scrub(visitor, 1.5);
     expect(await visitor.evaluate(() => (window as any).__guide.avatar())).toEqual(await page.evaluate(() => (window as any).__guide.avatar()));
-    await visitor.locator('#guide-play').click(); await visitor.waitForTimeout(300); expect((await state(visitor)).playing).toBe(true); await visitor.locator('#guide-open').click(); await expect(visitor.locator('.work-dialog')).toBeVisible(); await expect(visitor.locator('.work-visit')).toHaveAttribute('href', 'https://github.com/yydshly/0905_codexgpt6_project'); await visitor.getByRole('button', { name: '关闭作品详情' }).click(); await scrub(visitor, 5.5); await capture(visitor, '06-independent-guide-website.png');
-    await visitor.setViewportSize({ width: 390, height: 844 }); expect(await visitor.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true); await visitor.locator('#guide-play').click(); await visitor.waitForTimeout(150); expect((await state(visitor)).playing).toBe(true); await visitor.locator('#guide-play').click(); expect(errors).toEqual([]);
+    await visitor.locator('#guide-play').click(); await visitor.clock.runFor(300); expect((await state(visitor)).playing).toBe(true); await visitor.locator('#guide-open').click(); await expect(visitor.locator('.work-dialog')).toBeVisible(); await expect(visitor.locator('.work-visit')).toHaveAttribute('href', 'https://github.com/yydshly/0905_codexgpt6_project'); await visitor.getByRole('button', { name: '关闭作品详情' }).click(); await scrub(visitor, 5.5); await visitor.clock.runFor(32); await capture(visitor, '06-independent-guide-website.png');
+    await visitor.setViewportSize({ width: 390, height: 844 }); expect(await visitor.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true); await visitor.locator('#guide-play').click(); await visitor.clock.runFor(150); expect((await state(visitor)).playing).toBe(true); await visitor.locator('#guide-play').click(); expect(errors).toEqual([]);
     await writeFile(path.join(evidence, 'website.json'), JSON.stringify({ browser: browser.version(), standalone: true, subpath: '/demo/', isolatedStorage: true, guideSettingsExact: true, naturalWalkPoseMatchesEditorExactly: true, workLinkExact: true, editorControlsAbsent: true, mobileOverflow: false, errors }, null, 2));
   } finally { await visitor.close(); await new Promise<void>(r => server.close(() => r())); }
 });
