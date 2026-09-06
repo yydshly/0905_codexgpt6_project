@@ -56,6 +56,54 @@ test('角色加载恢复：取消与超时不更改工程，失败后可以重�
   expect(await project(page)).toEqual(original);
 });
 
+test('慢速下载有进展时继续加载，仍可取消，不误触发固定总时长限制', async ({ page }) => {
+  await page.clock.install(); await ready(page);
+  // Inject paced delivery of the real model bytes; the UI and decoder still consume a real stream.
+  await page.evaluate(() => {
+    const original = window.fetch.bind(window);
+    window.fetch = async (...args) => {
+      const response = await original(...args);
+      if (!String(args[0]).includes('personal-creator-02')) return response;
+      const bytes = new Uint8Array(await response.arrayBuffer()), size = Math.ceil(bytes.length / 4);
+      const timers: ReturnType<typeof setTimeout>[] = [];
+      const body = new ReadableStream<Uint8Array>({
+        start(controller) {
+          controller.enqueue(bytes.slice(0, size));
+          for (let i = 1; i < 4; i++) timers.push(setTimeout(() => {
+            controller.enqueue(bytes.slice(i * size, (i + 1) * size));
+            if (i === 3) controller.close();
+          }, i * 20000));
+        },
+        cancel() { timers.forEach(clearTimeout); },
+      });
+      return new Response(body, { status: response.status, headers: response.headers });
+    };
+  });
+  await page.locator('#guide-avatar').selectOption('personal-creator-02-v1');
+  await expect(page.locator('#guide-load-status')).toContainText('MB');
+  for (let i = 0; i < 2; i++) {
+    const before = await page.locator('#guide-load-status').textContent();
+    await page.clock.fastForward(21000);
+    await expect(page.locator('#guide-load-status')).not.toHaveText(before!);
+    await expect(page.locator('#guide-load-cancel')).toBeEnabled();
+  }
+  await capture(page, 'slow-progress-1440.png');
+  await page.locator('#guide-load-cancel').click();
+  await expect(page.locator('#guide-loading')).toBeHidden();
+  expect((await project(page)).guide.avatar).toBe('naruto-author-01-v1');
+  // Start the transfer again after cancelling an active body reader.
+  await page.locator('#guide-avatar').selectOption('personal-creator-02-v1');
+  await expect(page.locator('#guide-load-status')).toContainText('MB');
+  for (let i = 0; i < 2; i++) {
+    const before = await page.locator('#guide-load-status').textContent();
+    await page.clock.fastForward(21000);
+    await expect(page.locator('#guide-load-status')).not.toHaveText(before!);
+  }
+  await page.clock.fastForward(21000);
+  await expect.poll(() => page.evaluate(() => (window as any).__guide.avatar()?.asset)).toBe('personal-creator-02-v1');
+  await expect(page.locator('#guide-play')).toBeEnabled();
+});
+
 test('四种角色连续切换释放资源，配置入口可见且保存刷新保持一致', async ({ page, browser }) => {
   if (!process.env.CI) test.setTimeout(120000);
   const errors: string[] = [], resources: unknown[] = [];

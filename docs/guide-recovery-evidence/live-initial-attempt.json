@@ -1,0 +1,57 @@
+{
+  "sourceCommit": "c99c76146e1af0b574b469cc825b1f0f5967e64e",
+  "stats": {
+    "startTime": "2026-09-06T07:56:11.240Z",
+    "duration": 130179.48999999999,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  },
+  "cases": [
+    {
+      "title": "角色加载恢复：取消与超时不更改工程，失败后可以重试或换角色",
+      "ok": false,
+      "results": [
+        {
+          "status": "failed",
+          "durationMs": 50170,
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('html')\nExpected: \u001b[32m\"true\"\u001b[39m\nReceived: \u001b[31m\"error\"\u001b[39m\nTimeout:  30000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" with timeout 30000ms\u001b[22m\n\u001b[2m  - waiting for locator('html')\u001b[22m\n\u001b[2m    63 × locator resolved to <html lang=\"zh-CN\" data-ready=\"error\">…</html>\u001b[22m\n\u001b[2m       - unexpected value \"error\"\u001b[22m\n"
+        }
+      ]
+    },
+    {
+      "title": "四种角色连续切换释放资源，配置入口可见且保存刷新保持一致",
+      "ok": false,
+      "results": [
+        {
+          "status": "failed",
+          "durationMs": 59111,
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"\u001b[7mpersonal-creat\u001b[27mor-0\u001b[7m2\u001b[27m-v1\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mnaruto-auth\u001b[27mor-0\u001b[7m1\u001b[27m-v1\"\u001b[39m\n\nCall Log:\n- Timeout 30000ms exceeded while waiting on the predicate"
+        }
+      ]
+    },
+    {
+      "title": "失效或损坏的快照来源不阻断有效存档恢复，原始数据不会被覆盖",
+      "ok": true,
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 7862,
+          "error": null
+        }
+      ]
+    },
+    {
+      "title": "导览网站包离线于编辑器、子路径部署、作品关联与访客模式",
+      "ok": true,
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 9351,
+          "error": null
+        }
+      ]
+    }
+  ]
+}

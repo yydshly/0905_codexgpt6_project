@@ -1,0 +1,55 @@
+{
+  "url": "https://yydshly.github.io/0905_codexgpt6_project/?workspace=guide&snapshot=dedc4ede-7052-44be-8df7-57dad10dffe0",
+  "browser": "152.0.7977.82",
+  "network": {
+    "2056.18": {
+      "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/naruto-author-01-VveAJh75.glb",
+      "started": 1788681574117,
+      "bytes": 2429904,
+      "status": 200,
+      "protocol": "h2",
+      "finished": 1788681584209
+    },
+    "2056.26": {
+      "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/guide-motion-v1-BPhcysLX.glb",
+      "started": 1788681584239,
+      "bytes": 598368,
+      "status": 200,
+      "protocol": "h2",
+      "finished": 1788681586488
+    },
+    "2056.27": {
+      "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/personal-creator-02-kX-zTZ-r.glb",
+      "started": 1788681586828,
+      "bytes": 6436922,
+      "status": 200,
+      "protocol": "h2",
+      "failed": "net::ERR_ABORTED"
+    },
+    "2056.28": {
+      "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/personal-creator-02-kX-zTZ-r.glb",
+      "started": 1788681616851,
+      "bytes": 4103856,
+      "status": 200,
+      "protocol": "h2",
+      "failed": "net::ERR_ABORTED"
+    }
+  },
+  "steps": [
+    {
+      "label": "ready",
+      "ms": 16658,
+      "avatar": "naruto-author-01-v1",
+      "message": "此快照不在当前浏览器中，现显示示例。此链接不能跨设备分享；请导入导览 JSON，或使用网站包发布。"
+    },
+    {
+      "label": "failure personal-creator-02-v1",
+      "ms": 30044,
+      "avatar": "naruto-author-01-v1",
+      "message": "角色切换失败，保留当前工程：角色模型加载超过 30 秒，请检查网络后重试。"
+    }
+  ],
+  "errors": [
+    "page.waitForFunction: Timeout 45000ms exceeded."
+  ]
+}
