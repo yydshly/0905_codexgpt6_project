@@ -1,0 +1,916 @@
+{
+  "timestamp": "2026-09-06T06:41:09.307Z",
+  "releasedCommit": "f96ceb486bfcd5944f440d9f45a6bd995adbf4f3",
+  "baseURL": "https://yydshly.github.io/0905_codexgpt6_project/",
+  "guideURL": "https://yydshly.github.io/0905_codexgpt6_project/?workspace=guide",
+  "environment": {
+    "os": "Windows 11",
+    "browser": "Chrome 152.0.7977.82",
+    "node": "22.15.0",
+    "playwright": "1.62.1",
+    "dpr": 1
+  },
+  "github": {
+    "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/34014774610",
+    "status": "completed",
+    "conclusion": "success",
+    "createdAt": "2026-09-06T05:45:31Z",
+    "updatedAt": "2026-09-06T06:19:05Z",
+    "jobs": [
+      {
+        "name": "build-and-verify (room-reuse)",
+        "status": "completed",
+        "conclusion": "success",
+        "startedAt": "2026-09-06T05:45:35Z",
+        "completedAt": "2026-09-06T05:54:25Z",
+        "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/34014774610/job/101436554993"
+      },
+      {
+        "name": "build-and-verify (film-export)",
+        "status": "completed",
+        "conclusion": "success",
+        "startedAt": "2026-09-06T05:45:34Z",
+        "completedAt": "2026-09-06T05:54:48Z",
+        "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/34014774610/job/101436554994"
+      },
+      {
+        "name": "build-and-verify (projects)",
+        "status": "completed",
+        "conclusion": "success",
+        "startedAt": "2026-09-06T05:45:35Z",
+        "completedAt": "2026-09-06T05:52:05Z",
+        "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/34014774610/job/101436555026"
+      },
+      {
+        "name": "build-and-verify (publish)",
+        "status": "completed",
+        "conclusion": "success",
+        "startedAt": "2026-09-06T05:45:34Z",
+        "completedAt": "2026-09-06T05:49:20Z",
+        "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/34014774610/job/101436555031"
+      },
+      {
+        "name": "build-and-verify (film-controls)",
+        "status": "completed",
+        "conclusion": "success",
+        "startedAt": "2026-09-06T05:45:34Z",
+        "completedAt": "2026-09-06T05:53:55Z",
+        "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/34014774610/job/101436555054"
+      },
+      {
+        "name": "build-and-verify (guide)",
+        "status": "completed",
+        "conclusion": "success",
+        "startedAt": "2026-09-06T05:45:34Z",
+        "completedAt": "2026-09-06T06:18:50Z",
+        "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/34014774610/job/101436555062"
+      },
+      {
+        "name": "build-and-verify (portfolio)",
+        "status": "completed",
+        "conclusion": "success",
+        "startedAt": "2026-09-06T05:45:35Z",
+        "completedAt": "2026-09-06T05:48:38Z",
+        "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/34014774610/job/101436555145"
+      },
+      {
+        "name": "deploy",
+        "status": "completed",
+        "conclusion": "success",
+        "startedAt": "2026-09-06T06:18:54Z",
+        "completedAt": "2026-09-06T06:19:04Z",
+        "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/34014774610/job/101440190829"
+      }
+    ]
+  },
+  "live": {
+    "command": "GUIDE_EVIDENCE_DIR=test-results/character-live npm run test:live",
+    "initial": {
+      "stats": {
+        "startTime": "2026-09-06T06:19:36.629Z",
+        "duration": 677679.156,
+        "expected": 49,
+        "skipped": 0,
+        "unexpected": 2,
+        "flaky": 0
+      },
+      "tests": [
+        {
+          "title": "短片完整验收：修改第二镜头、播放、保存刷新、真实视频下载并打开检查",
+          "file": "film.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 33758,
+              "errors": []
+            }
+          ]
+        },
+        {
+          "title": "镜头时序、排序、撤销重做、连续机位拖动与确定性拖动播放头",
+          "file": "film.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 6557,
+              "errors": []
+            }
+          ]
+        },
+        {
+          "title": "v1 迁移、非法工程保护、工程内房间编辑及旧存档隔离",
+          "file": "film.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 6083,
+              "errors": []
+            }
+          ]
+        },
+        {
+          "title": "视频取消恢复、无编码降级、低动态和窄屏预览",
+          "file": "film.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 4520,
+              "errors": []
+            }
+          ]
+        },
+        {
+          "title": "无 WebGL 时仍能保存和导出工程，存储失败给出错误",
+          "file": "film.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 2373,
+              "errors": []
+            }
+          ]
+        },
+        {
+          "title": "顶部工作区入口可见，保存房间并返回同一短片，失败时留在当前页",
+          "file": "film.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 9103,
+              "errors": []
+            }
+          ]
+        },
+        {
+          "title": "默认自动播放、性能测量与浏览器支持的 WebM 格式实际编码回放",
+          "file": "film.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 36694,
+              "errors": []
+            }
+          ]
+        },
+        {
+          "title": "坐下站起：真实椅面、脚底接触、迁移、段落操作与失败保护",
+          "file": "guide-motion.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 11905,
+              "errors": []
+            }
+          ]
+        },
+        {
+          "title": "导览闭环：修改、历史、保存恢复、JSON、真实视频重新播放与同帧比对",
+          "file": "guide.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 81941,
+              "errors": []
+            }
+          ]
+        },
+        {
+          "title": "真实点击入口、快速切换、跳过、动作完成、镜头冲突与路径保护",
+          "file": "guide.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 9791,
+              "errors": []
+            }
+          ]
+        },
+        {
+          "title": "导览网站包离线于编辑器、子路径部署、作品关联与访客模式",
+          "file": "guide.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 16191,
+              "errors": []
+            }
+          ]
+        },
+        {
+          "title": "减少动态、保存失败、导出取消、无编码与无 WebGL 降级",
+          "file": "guide.spec.ts",
+          "ok": false,
+          "results": [
+            {
+              "status": "failed",
+              "durationMs": 12125,
+              "errors": [
+                "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('html')\nExpected: \u001b[32m\"true\"\u001b[39m\nReceived: \u001b[31m\"\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('html')\u001b[22m\n\u001b[2m    22 × locator resolved to <html lang=\"zh-CN\">…</html>\u001b[22m\n\u001b[2m       - unexpected value \"null\"\u001b[22m\n\n\n   6 |\n   7 | const evidence = path.resolve(process.env.GUIDE_EVIDENCE_DIR ?? 'test-results/guide-evidence');\n>  8 | const ready = async (page: Page) => { await page.goto('./?workspace=guide'); await expect(page.locator('html')).toHaveAttribute('data-ready', 'true'); };\n     |                                                                                                                 ^\n   9 | const project = (page: Page) => page.evaluate(() => (window as any).__guide.project());\n  10 | const state = (page: Page) => page.evaluate(() => (window as any).__guide.state());\n  11 | const scrub = async (page: Page, time: number) => { await page.locator('#guide-scrub').fill(String(time)); await page.waitForTimeout(120); };\n    at ready (E:\\0905_codexgpt6_project\\tests\\guide.spec.ts:8:113)\n    at E:\\0905_codexgpt6_project\\tests\\guide.spec.ts:110:57"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "作品展示把当前房间和作品传入导览，独立保存不覆盖原工程",
+          "file": "guide.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 9284,
+              "errors": []
+            }
+          ]
+        },
+        {
+          "title": "青年骨骼、姿态重复采样、近景、旧角色迁移及模型加载失败保护",
+          "file": "guide.spec.ts",
+          "ok": false,
+          "results": [
+            {
+              "status": "failed",
+              "durationMs": 12268,
+              "errors": [
+                "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('html')\nExpected: \u001b[32m\"true\"\u001b[39m\nReceived: \u001b[31m\"\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('html')\u001b[22m\n\u001b[2m    22 × locator resolved to <html lang=\"zh-CN\">…</html>\u001b[22m\n\u001b[2m       - unexpected value \"null\"\u001b[22m\n\n\n   6 |\n   7 | const evidence = path.resolve(process.env.GUIDE_EVIDENCE_DIR ?? 'test-results/guide-evidence');\n>  8 | const ready = async (page: Page) => { await page.goto('./?workspace=guide'); await expect(page.locator('html')).toHaveAttribute('data-ready', 'true'); };\n     |                                                                                                                 ^\n   9 | const project = (page: Page) => page.evaluate(() => (window as any).__guide.project());\n  10 | const state = (page: Page) => page.evaluate(() => (window as any).__guide.state());\n  11 | const scrub = async (page: Page, time: number) => { await page.locator('#guide-scrub').fill(String(time)); await page.waitForTimeout(120); };\n    at ready (E:\\0905_codexgpt6_project\\tests\\guide.spec.ts:8:113)\n    at E:\\0905_codexgpt6_project\\tests\\guide.spec.ts:130:3"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "个人 IP 切换事务、v2 外观保留、撤销重做与旧角色网站资源",
+          "file": "guide.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 22385,
+              "errors": []
+            }
+          ]
+        },
+        {
+          "title": "首次角色加载期间锁定选择，避免显示资源与工程身份不一致",
+          "file": "guide.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 4502,
+              "errors": []
+            }
+          ]
+        },
+        {
+          "title": "设定 01 存档保持原貌，切换设定 02 后撤销、保存与刷新一致",
+          "file": "guide.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 17523,
+              "errors": []
+            }
+          ]
+        },
+        {
+          "title": "鸣人：跑步、招呼、切换旧形象、v4 迁移与动作设置恢复",
+          "file": "naruto.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 11168,
+              "errors": []
+            }
+          ]
+        },
+        {
+          "title": "作品闭环：配置、模型点击、移动材质历史、恢复、JSON、GLB 与宿主接入",
+          "file": "portfolio.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 19273,
+              "errors": []
+            }
+          ]
+        },
+        {
+          "title": "作品错误、取消关联与历史、旧版房间和短片迁移",
+          "file": "portfolio.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 8078,
+              "errors": []
+            }
+          ]
+        },
+        {
+          "title": "展示页窄屏、键盘焦点、夜间、无 WebGL 降级与空状态",
+          "file": "portfolio.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 4852,
+              "errors": []
+            }
+          ]
+        },
+        {
+          "title": "展示性能、可见性遮挡与原始模型导出的部位标识",
+          "file": "portfolio.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 3773,
+              "errors": []
+            }
+          ]
+        },
+        {
+          "title": "上一版 v2 房间和 v3 短片本地存档升级，保留原始字节",
+          "file": "portfolio.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 6619,
+              "errors": []
+            }
+          ]
+        },
+        {
+          "title": "旧房间与短片分别迁入、内容不变、重开去重、后续快速存档保留为新工程",
+          "file": "projects.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 5031,
+              "errors": []
+            }
+          ]
+        },
+        {
+          "title": "多工程完整闭环：新建、另存为、复制、跨视图、保存版本恢复与分别发布",
+          "file": "projects.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 21512,
+              "errors": []
+            }
+          ]
+        },
+        {
+          "title": "并发保存冲突保留两边修改、失败后可另存为，未改动保存不增加版本",
+          "file": "projects.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 8132,
+              "errors": []
+            }
+          ]
+        },
+        {
+          "title": "无效导入、数据库不可用、真实事务回滚和键盘焦点",
+          "file": "projects.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 7254,
+              "errors": []
+            }
+          ]
+        },
+        {
+          "title": "缩略图不可用时仍能管理工程、配额错误回滚与工程库加载测量",
+          "file": "projects.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 8123,
+              "errors": []
+            }
+          ]
+        },
+        {
+          "title": "删除工程：取消、备份、全部版本清理、其他工程完整与空状态",
+          "file": "projects.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 5419,
+              "errors": []
+            }
+          ]
+        },
+        {
+          "title": "删除失败回滚、并发更新保护、被删工程旧标签页仍可另存为",
+          "file": "projects.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 7474,
+              "errors": []
+            }
+          ]
+        },
+        {
+          "title": "删除迁入工程后刷新不复活原存档，快速存档原始字节保留",
+          "file": "projects.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 2212,
+              "errors": []
+            }
+          ]
+        },
+        {
+          "title": "不保存返回：三个工作页面、放弃与取消、存档版本不变、保存失败可离开",
+          "file": "projects.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 23426,
+              "errors": []
+            }
+          ]
+        },
+        {
+          "title": "全部 11 类物件整体关联、双部位优先级、历史和旧配置迁移",
+          "file": "publish.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 6849,
+              "errors": []
+            }
+          ]
+        },
+        {
+          "title": "个人主页闭环：物件绑定、设置保存、ZIP、独立访客与 GLB 宿主",
+          "file": "publish.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 17299,
+              "errors": []
+            }
+          ]
+        },
+        {
+          "title": "访客缺失文件、无 WebGL、减少动态及键盘降级",
+          "file": "publish.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 946,
+              "errors": []
+            }
+          ]
+        },
+        {
+          "title": "每类物件真实几何均可点击，整体入口不依赖模型部位",
+          "file": "publish.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 5035,
+              "errors": []
+            }
+          ]
+        },
+        {
+          "title": "照片沿墙编辑、原档迁移、图片保存刷新及整屋/单件 GLB 独立打开",
+          "file": "reuse.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 15361,
+              "errors": []
+            }
+          ]
+        },
+        {
+          "title": "沙发与床添加、移动旋转材质、双尺寸与多视角",
+          "file": "reuse.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 4585,
+              "errors": []
+            }
+          ]
+        },
+        {
+          "title": "真实宿主网页驱动 iframe：材质、光照、定位、播放及工程导入",
+          "file": "reuse.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 4604,
+              "errors": []
+            }
+          ]
+        },
+        {
+          "title": "旧短片 v2 升级到 v4：镜头保留、内嵌房间迁移、原存档不覆盖",
+          "file": "reuse.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 4210,
+              "errors": []
+            }
+          ]
+        },
+        {
+          "title": "完整验收：添加、拖动、旋转、灯光、材质、历史、本地恢复、PNG、JSON",
+          "file": "study.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 10268,
+              "errors": []
+            }
+          ]
+        },
+        {
+          "title": "移动边界、桌面跟随、历史一致、选择删除、观察和缩放",
+          "file": "study.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 7044,
+              "errors": []
+            }
+          ]
+        },
+        {
+          "title": "多视角、两种桌面尺寸、黄昏、键盘和真实帧时测量",
+          "file": "study.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 18700,
+              "errors": []
+            }
+          ]
+        },
+        {
+          "title": "无 WebGL 时保留 JSON 备份能力，并明确提示",
+          "file": "study.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 3690,
+              "errors": []
+            }
+          ]
+        },
+        {
+          "title": "浏览器存储失败给出真实失败反馈，不伪报保存",
+          "file": "study.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 14282,
+              "errors": []
+            }
+          ]
+        },
+        {
+          "title": "八类物件可添加，材质预览同步，键盘焦点和连续调光历史正确",
+          "file": "study.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 21798,
+              "errors": []
+            }
+          ]
+        },
+        {
+          "title": "优化回归：镜头预设状态、保存恢复与编辑模式提示",
+          "file": "study.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 25692,
+              "errors": []
+            }
+          ]
+        },
+        {
+          "title": "优化回归：合批键帽/毯穗仍可选中，材质、删除撤销和导出无辅助标记",
+          "file": "study.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 18189,
+              "errors": []
+            }
+          ]
+        },
+        {
+          "title": "物件切换、重复编号、重命名、键盘保护及长名称布局",
+          "file": "study.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 11889,
+              "errors": []
+            }
+          ]
+        },
+        {
+          "title": "异常镜头和物件名称导入保留方案，旧 v1 文件仍可编辑",
+          "file": "study.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 15331,
+              "errors": []
+            }
+          ]
+        },
+        {
+          "title": "自然步行：连续采样、实际支撑脚锁定、任意跳转与暂停保存恢复",
+          "file": "walk.spec.ts",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 23043,
+              "errors": []
+            }
+          ]
+        }
+      ]
+    },
+    "recheck": {
+      "durationMs": 147873.231,
+      "runs": [
+        {
+          "command": "npx playwright test --config playwright.live.config.ts tests/guide.spec.ts --grep \"减少动态、保存失败|青年骨骼、姿态重复采样\" --output test-results/live-retry",
+          "stats": {
+            "startTime": "2026-09-06T06:31:22.628Z",
+            "duration": 57389.80100000001,
+            "expected": 1,
+            "skipped": 0,
+            "unexpected": 1,
+            "flaky": 0
+          },
+          "tests": [
+            {
+              "title": "减少动态、保存失败、导出取消、无编码与无 WebGL 降级",
+              "file": "guide.spec.ts",
+              "ok": false,
+              "results": [
+                {
+                  "status": "failed",
+                  "durationMs": 39520,
+                  "errors": [
+                    "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('html')\nExpected: \u001b[32m\"true\"\u001b[39m\nReceived: \u001b[31m\"\"\u001b[39m\nTimeout:  30000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" with timeout 30000ms\u001b[22m\n\u001b[2m  - waiting for locator('html')\u001b[22m\n\u001b[2m    61 × locator resolved to <html lang=\"zh-CN\">…</html>\u001b[22m\n\u001b[2m       - unexpected value \"null\"\u001b[22m\n\n\n   6 |\n   7 | const evidence = path.resolve(process.env.GUIDE_EVIDENCE_DIR ?? 'test-results/guide-evidence');\n>  8 | const ready = async (page: Page) => { await page.goto('./?workspace=guide'); await expect(page.locator('html')).toHaveAttribute('data-ready', 'true'); };\n     |                                                                                                                 ^\n   9 | const project = (page: Page) => page.evaluate(() => (window as any).__guide.project());\n  10 | const state = (page: Page) => page.evaluate(() => (window as any).__guide.state());\n  11 | const scrub = async (page: Page, time: number) => { await page.locator('#guide-scrub').fill(String(time)); await page.waitForTimeout(120); };\n    at ready (E:\\0905_codexgpt6_project\\tests\\guide.spec.ts:8:113)\n    at E:\\0905_codexgpt6_project\\tests\\guide.spec.ts:110:57"
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "青年骨骼、姿态重复采样、近景、旧角色迁移及模型加载失败保护",
+              "file": "guide.spec.ts",
+              "ok": true,
+              "results": [
+                {
+                  "status": "passed",
+                  "durationMs": 12548,
+                  "errors": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "command": "npx playwright test --config playwright.live.config.ts tests/guide.spec.ts --grep \"减少动态、保存失败\" --output test-results/live-retry2",
+          "stats": {
+            "startTime": "2026-09-06T06:34:50.195Z",
+            "duration": 43717.398,
+            "expected": 0,
+            "skipped": 0,
+            "unexpected": 1,
+            "flaky": 0
+          },
+          "tests": [
+            {
+              "title": "减少动态、保存失败、导出取消、无编码与无 WebGL 降级",
+              "file": "guide.spec.ts",
+              "ok": false,
+              "results": [
+                {
+                  "status": "failed",
+                  "durationMs": 39723,
+                  "errors": [
+                    "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('html')\nExpected: \u001b[32m\"true\"\u001b[39m\nReceived: \u001b[31m\"\"\u001b[39m\nTimeout:  30000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" with timeout 30000ms\u001b[22m\n\u001b[2m  - waiting for locator('html')\u001b[22m\n\u001b[2m    55 × locator resolved to <html lang=\"zh-CN\">…</html>\u001b[22m\n\u001b[2m       - unexpected value \"null\"\u001b[22m\n\n\n   6 |\n   7 | const evidence = path.resolve(process.env.GUIDE_EVIDENCE_DIR ?? 'test-results/guide-evidence');\n>  8 | const ready = async (page: Page) => { await page.goto('./?workspace=guide'); await expect(page.locator('html')).toHaveAttribute('data-ready', 'true'); };\n     |                                                                                                                 ^\n   9 | const project = (page: Page) => page.evaluate(() => (window as any).__guide.project());\n  10 | const state = (page: Page) => page.evaluate(() => (window as any).__guide.state());\n  11 | const scrub = async (page: Page, time: number) => { await page.locator('#guide-scrub').fill(String(time)); await page.waitForTimeout(120); };\n    at ready (E:\\0905_codexgpt6_project\\tests\\guide.spec.ts:8:113)\n    at E:\\0905_codexgpt6_project\\tests\\guide.spec.ts:110:57"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "command": "npx playwright test --config playwright.live.config.ts tests/guide.spec.ts --grep \"减少动态、保存失败\" --output test-results/live-retry3 --trace off",
+          "stats": {
+            "startTime": "2026-09-06T06:38:31.185Z",
+            "duration": 46766.032,
+            "expected": 1,
+            "skipped": 0,
+            "unexpected": 0,
+            "flaky": 0
+          },
+          "tests": [
+            {
+              "title": "减少动态、保存失败、导出取消、无编码与无 WebGL 降级",
+              "file": "guide.spec.ts",
+              "ok": true,
+              "results": [
+                {
+                  "status": "passed",
+                  "durationMs": 42870,
+                  "errors": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "verifiedDistinctTests": 51,
+    "allVerified": true,
+    "note": "First run: 49 pass, 2 readiness timeouts. At 30 seconds, legacy avatar case passed; reduced-motion loading still timed out twice with incomplete model response bodies while tracing. An independent CDP network probe loaded reduced-motion mode in 7792 ms. The unchanged full reduced-motion case then passed with trace recording off and the same 30-second expectation. All initial and recheck outcomes retained. No runtime or deployed asset changes; no feature assertions or export quality reduced."
+  },
+  "userDataTouched": false,
+  "publicDeploymentPerformed": true,
+  "assetsVerified": "assets.json",
+  "artifacts": [
+    {
+      "file": "01-guide-default-1440x900.png",
+      "bytes": 468775,
+      "sha256": "4cb7ff92eebae42f51ca0abb13cb3335a153d12e79db37c35651cb8ec41b1f7f"
+    },
+    {
+      "file": "02-guide-reading-1440x900.png",
+      "bytes": 555771,
+      "sha256": "876d276eecef53c3dec81794c4db6e13fe408b241b298d8a23f7ff1785f55d75"
+    },
+    {
+      "file": "03-guide-pointing-1280x800.png",
+      "bytes": 396732,
+      "sha256": "5e731aeb81c6d5772d65618c2923b678f4efb6c2df17d2a0ed5509a9cc99cb0f"
+    },
+    {
+      "file": "04-guide-seated-1280x800.png",
+      "bytes": 425234,
+      "sha256": "db320517a7a5502c124c5a25113e3231662961f5e577419ffe1aed3d7fdb3445"
+    },
+    {
+      "file": "05-guide-wave-1440x900.png",
+      "bytes": 455736,
+      "sha256": "0a319e63666b5833bda0c97a0f07a70f4e3f4439a12e90d542c3101a625c209f"
+    },
+    {
+      "file": "06-independent-guide-website.png",
+      "bytes": 558628,
+      "sha256": "deebc9f78a6ddd853f89e957c685dde948a519299371471617b509169f9f366d"
+    },
+    {
+      "file": "assets.json",
+      "bytes": 18846,
+      "sha256": "f15a81f5e261e70da0e37ffd1901e3f23c5b914386ff0b51dcdbb5c43a2982b8"
+    },
+    {
+      "file": "guide-journey.json",
+      "bytes": 5692,
+      "sha256": "dce7c3a30e72b9882c407ff101b58f7a1c835934f632b1d022a1811621319456"
+    },
+    {
+      "file": "guide-website.json",
+      "bytes": 281,
+      "sha256": "fd4b7b1a8e9c961b981ae04f550783e0c0ab8ff9cce0edd4e4ed5ffe5fdf4f7d"
+    },
+    {
+      "file": "initial-load-network.json",
+      "bytes": 30018,
+      "sha256": "2f313242f5bb569b14110f334bc9aa3f787ef1a55851262b6d7ee58688bad51b"
+    },
+    {
+      "file": "initial-loading-timeout.png",
+      "bytes": 124614,
+      "sha256": "2b8c4fd5f47cd17197e7d177e2249cd2c4e44875ed405c0e60946e90038839b3"
+    },
+    {
+      "file": "main-verification.json",
+      "bytes": 2504,
+      "sha256": "748dc56887e5450a27cafd7380af5c20194617fefb5bf788f4d192141dae96fa"
+    },
+    {
+      "file": "motion-checks.json",
+      "bytes": 2838,
+      "sha256": "b37aac591d71bc40082174d4f7ce7aac482a67c917486d1af9e8844136b13007"
+    },
+    {
+      "file": "naruto-actions.json",
+      "bytes": 300,
+      "sha256": "f99d353761d27939b970dbc7f3422c6dfe861b0e5d5aaeff269cd2145f183655"
+    },
+    {
+      "file": "online-guide-website.zip",
+      "bytes": 2753422,
+      "sha256": "e27ce80551c98fe5e67560fa47d9ab080b180b93e73579d5a2b3b71b51eb96d5"
+    },
+    {
+      "file": "online-guide.mp4",
+      "bytes": 17261004,
+      "sha256": "6bd640918442dde6021ff0f6c5aa5e4e855614a63fe83fdf7d2e3f052dbcda9b"
+    },
+    {
+      "file": "reduced-motion-network-probe.json",
+      "bytes": 791,
+      "sha256": "cb520ffec0f44db715f71dd32d05a7ca4021106a1f7b5b0209c1ed616442c197"
+    },
+    {
+      "file": "verified-guide.json",
+      "bytes": 5823,
+      "sha256": "ef9413bc579eebe3850359407814aae075ccb86f89f4b7187850a7dec723e9c7"
+    },
+    {
+      "file": "walk-browser-checks.json",
+      "bytes": 256,
+      "sha256": "e4e65be00a352d4e75d8d84aac043ca07615d43ebc0d327a9151f6bb6b346558"
+    }
+  ]
+}

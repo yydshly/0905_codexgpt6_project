@@ -1,0 +1,66 @@
+{
+  "conclusion": "success",
+  "createdAt": "2026-09-06T05:36:54Z",
+  "headSha": "0558edd4c0cb2df579643b9be60ad27cbbb6cacf",
+  "jobs": [
+    {
+      "completedAt": "2026-09-06T05:44:22Z",
+      "conclusion": "success",
+      "name": "browser-acceptance (film-controls)",
+      "startedAt": "2026-09-06T05:38:28Z",
+      "status": "completed",
+      "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/34014424798/job/101435642669"
+    },
+    {
+      "completedAt": "2026-09-06T05:47:25Z",
+      "conclusion": "success",
+      "name": "browser-acceptance (room-reuse)",
+      "startedAt": "2026-09-06T05:38:30Z",
+      "status": "completed",
+      "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/34014424798/job/101435642758"
+    },
+    {
+      "completedAt": "2026-09-06T05:41:41Z",
+      "conclusion": "success",
+      "name": "browser-acceptance (publish)",
+      "startedAt": "2026-09-06T05:38:28Z",
+      "status": "completed",
+      "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/34014424798/job/101435642772"
+    },
+    {
+      "completedAt": "2026-09-06T05:42:47Z",
+      "conclusion": "success",
+      "name": "browser-acceptance (portfolio)",
+      "startedAt": "2026-09-06T05:38:29Z",
+      "status": "completed",
+      "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/34014424798/job/101435642773"
+    },
+    {
+      "completedAt": "2026-09-06T05:45:02Z",
+      "conclusion": "success",
+      "name": "browser-acceptance (projects)",
+      "startedAt": "2026-09-06T05:38:36Z",
+      "status": "completed",
+      "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/34014424798/job/101435642777"
+    },
+    {
+      "completedAt": "2026-09-06T06:11:34Z",
+      "conclusion": "success",
+      "name": "browser-acceptance (guide)",
+      "startedAt": "2026-09-06T05:38:29Z",
+      "status": "completed",
+      "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/34014424798/job/101435642789"
+    },
+    {
+      "completedAt": "2026-09-06T05:48:01Z",
+      "conclusion": "success",
+      "name": "browser-acceptance (film-export)",
+      "startedAt": "2026-09-06T05:38:30Z",
+      "status": "completed",
+      "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/34014424798/job/101435642822"
+    }
+  ],
+  "status": "completed",
+  "updatedAt": "2026-09-06T06:11:35Z",
+  "url": "https://github.com/yydshly/0905_codexgpt6_project/actions/runs/34014424798"
+}

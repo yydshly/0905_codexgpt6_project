@@ -1,0 +1,1073 @@
+[
+  {
+    "attempt": "live",
+    "test": "guide-减少动态、保存失败、导出取消、无编码与无-WebGL-降级",
+    "failurePhase": "Initial page readiness, before feature assertions",
+    "expectationTimeoutMs": 10000,
+    "observedResponses": [
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/?workspace=guide",
+        "status": 200,
+        "elapsedMs": 839.519,
+        "timings": {
+          "dns": 0,
+          "connect": 311.202,
+          "ssl": 311.202,
+          "send": 0,
+          "wait": 215.663,
+          "receive": 1.452
+        },
+        "bodyBytes": 870,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/index-CPKyja8O.js",
+        "status": 200,
+        "elapsedMs": 220.12900000000002,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 216.258,
+          "receive": 3.871
+        },
+        "bodyBytes": 2067,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/photos-DNmPtbVq.js",
+        "status": 200,
+        "elapsedMs": 402.77700000000004,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 302.103,
+          "receive": 100.674
+        },
+        "bodyBytes": 1018,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/portfolio-Dteycu2T.css",
+        "status": 200,
+        "elapsedMs": 1011.0849999999999,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 1008.411,
+          "receive": 2.674
+        },
+        "bodyBytes": 3913,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/guide-D5QHv_GS.css",
+        "status": 200,
+        "elapsedMs": 1010.908,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 1008.077,
+          "receive": 2.831
+        },
+        "bodyBytes": 3535,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/guide-ClxhpYX9.js",
+        "status": 200,
+        "elapsedMs": 1011.601,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 1007.98,
+          "receive": 3.621
+        },
+        "bodyBytes": 20460,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/content-anchor-C1lTh8u0.js",
+        "status": 200,
+        "elapsedMs": 1012.153,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 301.776,
+          "receive": 710.377
+        },
+        "bodyBytes": 144967,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/film-model-TPvVButx.js",
+        "status": 200,
+        "elapsedMs": 1185.105,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 1007.857,
+          "receive": 177.248
+        },
+        "bodyBytes": 8163,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/scene-c7XisPfr.js",
+        "status": 200,
+        "elapsedMs": 1186.963,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 1009.072,
+          "receive": 177.891
+        },
+        "bodyBytes": 57791,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/favicon.svg",
+        "status": 200,
+        "elapsedMs": 553.909,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 552.845,
+          "receive": 1.064
+        },
+        "bodyBytes": 497,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/film-export-DnHo33b2.js",
+        "status": 200,
+        "elapsedMs": 1575.4969999999998,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 1007.89,
+          "receive": 567.607
+        },
+        "bodyBytes": 1504,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/hotspots-KnSLi_T0.js",
+        "status": 200,
+        "elapsedMs": 1575.375,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 1007.96,
+          "receive": 567.415
+        },
+        "bodyBytes": 1245,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/project-dialog-Cj0xrIer.js",
+        "status": 200,
+        "elapsedMs": 1575.58,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 1007.592,
+          "receive": 567.988
+        },
+        "bodyBytes": 979,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/project-session-C7mm5Bt5.js",
+        "status": 200,
+        "elapsedMs": 1575.4009999999998,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 1006.925,
+          "receive": 568.476
+        },
+        "bodyBytes": 386,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/project-store-Cm3CSx0M.js",
+        "status": 200,
+        "elapsedMs": 1575.458,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 1007.439,
+          "receive": 568.019
+        },
+        "bodyBytes": 2604,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/GLTFLoader-C6vOh2u4.js",
+        "status": 200,
+        "elapsedMs": 1575.346,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 1008.944,
+          "receive": 566.402
+        },
+        "bodyBytes": 13494,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/naruto-author-01-VveAJh75.glb",
+        "status": 200,
+        "elapsedMs": 218.759,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 218.759,
+          "receive": -1
+        },
+        "bodyBytes": -1,
+        "failure": null
+      }
+    ],
+    "note": "HTTP 200 does not imply body download completed. Negative receive/body-size values indicate no completion captured before test ended."
+  },
+  {
+    "attempt": "live",
+    "test": "guide-青年骨骼、姿态重复采样、近景、旧角色迁移及模型加载失败保护",
+    "failurePhase": "Initial page readiness, before feature assertions",
+    "expectationTimeoutMs": 10000,
+    "observedResponses": [
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/?workspace=guide",
+        "status": 200,
+        "elapsedMs": 1135.94,
+        "timings": {
+          "dns": 0,
+          "connect": 413.584,
+          "ssl": 413.584,
+          "send": 0,
+          "wait": 307.602,
+          "receive": 1.17
+        },
+        "bodyBytes": 875,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/index-CPKyja8O.js",
+        "status": 200,
+        "elapsedMs": 306.867,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 303.523,
+          "receive": 3.344
+        },
+        "bodyBytes": 2068,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/guide-D5QHv_GS.css",
+        "status": 200,
+        "elapsedMs": 614.059,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 611.6,
+          "receive": 2.459
+        },
+        "bodyBytes": 3568,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/portfolio-Dteycu2T.css",
+        "status": 200,
+        "elapsedMs": 614.5870000000001,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 612.397,
+          "receive": 2.19
+        },
+        "bodyBytes": 3982,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/project-session-C7mm5Bt5.js",
+        "status": 200,
+        "elapsedMs": 612.596,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 610.276,
+          "receive": 2.32
+        },
+        "bodyBytes": 386,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/photos-DNmPtbVq.js",
+        "status": 200,
+        "elapsedMs": 613.182,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 611.402,
+          "receive": 1.78
+        },
+        "bodyBytes": 1241,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/hotspots-KnSLi_T0.js",
+        "status": 200,
+        "elapsedMs": 613.889,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 611.639,
+          "receive": 2.25
+        },
+        "bodyBytes": 1231,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/GLTFLoader-C6vOh2u4.js",
+        "status": 200,
+        "elapsedMs": 612.511,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 301.472,
+          "receive": 311.039
+        },
+        "bodyBytes": 13428,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/film-model-TPvVButx.js",
+        "status": 200,
+        "elapsedMs": 613.624,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 611.831,
+          "receive": 1.793
+        },
+        "bodyBytes": 8165,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/film-export-DnHo33b2.js",
+        "status": 200,
+        "elapsedMs": 1142.101,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 899.912,
+          "receive": 242.189
+        },
+        "bodyBytes": 1281,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/project-dialog-Cj0xrIer.js",
+        "status": 200,
+        "elapsedMs": 1142.1779999999999,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 899.481,
+          "receive": 242.697
+        },
+        "bodyBytes": 956,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/content-anchor-C1lTh8u0.js",
+        "status": 200,
+        "elapsedMs": 1141.9589999999998,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 613.395,
+          "receive": 528.564
+        },
+        "bodyBytes": 144977,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/favicon.svg",
+        "status": 200,
+        "elapsedMs": 836.303,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 835.782,
+          "receive": 0.521
+        },
+        "bodyBytes": 440,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/project-store-Cm3CSx0M.js",
+        "status": 200,
+        "elapsedMs": 1456.808,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 1454.214,
+          "receive": 2.594
+        },
+        "bodyBytes": 2547,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/scene-c7XisPfr.js",
+        "status": 200,
+        "elapsedMs": 1456.161,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 1140.935,
+          "receive": 315.226
+        },
+        "bodyBytes": 57966,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/guide-ClxhpYX9.js",
+        "status": 200,
+        "elapsedMs": 1457.085,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 1455.777,
+          "receive": 1.308
+        },
+        "bodyBytes": 20264,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/naruto-author-01-VveAJh75.glb",
+        "status": 200,
+        "elapsedMs": 7270.371,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 303.005,
+          "receive": 6967.366
+        },
+        "bodyBytes": 2095629,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/guide-motion-v1-BPhcysLX.glb",
+        "status": 200,
+        "elapsedMs": 1492.1370000000002,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 298.007,
+          "receive": 1194.13
+        },
+        "bodyBytes": 229801,
+        "failure": null
+      }
+    ],
+    "note": "HTTP 200 does not imply body download completed. Negative receive/body-size values indicate no completion captured before test ended."
+  },
+  {
+    "attempt": "live-retry",
+    "test": "guide-减少动态、保存失败、导出取消、无编码与无-WebGL-降级",
+    "failurePhase": "Initial page readiness, before feature assertions",
+    "expectationTimeoutMs": 30000,
+    "observedResponses": [
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/?workspace=guide",
+        "status": 200,
+        "elapsedMs": 934.7769999999998,
+        "timings": {
+          "dns": 0.004,
+          "connect": 355.455,
+          "ssl": 354.621,
+          "send": 0,
+          "wait": 221.012,
+          "receive": 3.685
+        },
+        "bodyBytes": 877,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/index-CPKyja8O.js",
+        "status": 200,
+        "elapsedMs": 245.083,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 236.16,
+          "receive": 8.923
+        },
+        "bodyBytes": 2068,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/guide-ClxhpYX9.js",
+        "status": 200,
+        "elapsedMs": 724.525,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 380.455,
+          "receive": 344.07
+        },
+        "bodyBytes": 20236,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/film-model-TPvVButx.js",
+        "status": 200,
+        "elapsedMs": 1250.126,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 1244.995,
+          "receive": 5.131
+        },
+        "bodyBytes": 8377,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/scene-c7XisPfr.js",
+        "status": 200,
+        "elapsedMs": 2245.658,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 890.445,
+          "receive": 1355.213
+        },
+        "bodyBytes": 57741,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/portfolio-Dteycu2T.css",
+        "status": 200,
+        "elapsedMs": 2441.361,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 2429.506,
+          "receive": 11.855
+        },
+        "bodyBytes": 3776,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/photos-DNmPtbVq.js",
+        "status": 200,
+        "elapsedMs": 3315.5469999999996,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 2429.162,
+          "receive": 886.385
+        },
+        "bodyBytes": 1017,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/guide-D5QHv_GS.css",
+        "status": 200,
+        "elapsedMs": 4500.721,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 2428.145,
+          "receive": 2072.576
+        },
+        "bodyBytes": 3567,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/project-dialog-Cj0xrIer.js",
+        "status": 200,
+        "elapsedMs": 4501.147,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 2429.779,
+          "receive": 2071.368
+        },
+        "bodyBytes": 998,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/film-export-DnHo33b2.js",
+        "status": 200,
+        "elapsedMs": 4500.923,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 2429.908,
+          "receive": 2071.015
+        },
+        "bodyBytes": 1507,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/project-session-C7mm5Bt5.js",
+        "status": 200,
+        "elapsedMs": 4502.414,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 2428.287,
+          "receive": 2074.127
+        },
+        "bodyBytes": 371,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/project-store-Cm3CSx0M.js",
+        "status": 200,
+        "elapsedMs": 4499.956,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 2428.279,
+          "receive": 2071.677
+        },
+        "bodyBytes": 2572,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/hotspots-KnSLi_T0.js",
+        "status": 200,
+        "elapsedMs": 4501.614,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 2428.979,
+          "receive": 2072.635
+        },
+        "bodyBytes": 1457,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/GLTFLoader-C6vOh2u4.js",
+        "status": 200,
+        "elapsedMs": 4499.9259999999995,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 2429.913,
+          "receive": 2070.013
+        },
+        "bodyBytes": 13426,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/content-anchor-C1lTh8u0.js",
+        "status": 200,
+        "elapsedMs": 4505.978,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 1245.937,
+          "receive": 3260.041
+        },
+        "bodyBytes": 144976,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/favicon.svg",
+        "status": 200,
+        "elapsedMs": 226.439,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 224.751,
+          "receive": 1.688
+        },
+        "bodyBytes": 431,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/naruto-author-01-VveAJh75.glb",
+        "status": 200,
+        "elapsedMs": 223.108,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 223.108,
+          "receive": -1
+        },
+        "bodyBytes": -1,
+        "failure": null
+      }
+    ],
+    "note": "HTTP 200 does not imply body download completed. Negative receive/body-size values indicate no completion captured before test ended."
+  },
+  {
+    "attempt": "live-retry2",
+    "test": "guide-减少动态、保存失败、导出取消、无编码与无-WebGL-降级",
+    "failurePhase": "Initial page readiness, before feature assertions",
+    "expectationTimeoutMs": 30000,
+    "observedResponses": [
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/?workspace=guide",
+        "status": 200,
+        "elapsedMs": 1904.61,
+        "timings": {
+          "dns": 0.011,
+          "connect": 500.501,
+          "ssl": 499.183,
+          "send": 0,
+          "wait": 902.422,
+          "receive": 2.493
+        },
+        "bodyBytes": 877,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/index-CPKyja8O.js",
+        "status": 200,
+        "elapsedMs": 705.172,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 696.663,
+          "receive": 8.509
+        },
+        "bodyBytes": 2092,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/photos-DNmPtbVq.js",
+        "status": 200,
+        "elapsedMs": 310.348,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 301.163,
+          "receive": 9.185
+        },
+        "bodyBytes": 1056,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/portfolio-Dteycu2T.css",
+        "status": 200,
+        "elapsedMs": 1048.6399999999999,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 316.554,
+          "receive": 732.086
+        },
+        "bodyBytes": 3977,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/hotspots-KnSLi_T0.js",
+        "status": 200,
+        "elapsedMs": 1050.229,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 1040.554,
+          "receive": 9.675
+        },
+        "bodyBytes": 1232,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/project-session-C7mm5Bt5.js",
+        "status": 200,
+        "elapsedMs": 1050.535,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 1040.78,
+          "receive": 9.755
+        },
+        "bodyBytes": 410,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/film-model-TPvVButx.js",
+        "status": 200,
+        "elapsedMs": 1050.192,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 1043.742,
+          "receive": 6.45
+        },
+        "bodyBytes": 8165,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/content-anchor-C1lTh8u0.js",
+        "status": 200,
+        "elapsedMs": 5154.566,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 1046.45,
+          "receive": 4108.116
+        },
+        "bodyBytes": 145150,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/guide-D5QHv_GS.css",
+        "status": 200,
+        "elapsedMs": 6717.635,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 3827.256,
+          "receive": 2890.379
+        },
+        "bodyBytes": 3553,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/film-export-DnHo33b2.js",
+        "status": 200,
+        "elapsedMs": 6721.9,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 6709.571,
+          "receive": 12.329
+        },
+        "bodyBytes": 1282,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/GLTFLoader-C6vOh2u4.js",
+        "status": 200,
+        "elapsedMs": 6716.786,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 3833.361,
+          "receive": 2883.425
+        },
+        "bodyBytes": 13451,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/guide-ClxhpYX9.js",
+        "status": 200,
+        "elapsedMs": 6721.021,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 3838.955,
+          "receive": 2882.066
+        },
+        "bodyBytes": 20265,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/project-dialog-Cj0xrIer.js",
+        "status": 200,
+        "elapsedMs": 7333.345,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 6709.67,
+          "receive": 623.675
+        },
+        "bodyBytes": 998,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/project-store-Cm3CSx0M.js",
+        "status": 200,
+        "elapsedMs": 7332.2080000000005,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 7321.483,
+          "receive": 10.725
+        },
+        "bodyBytes": 2571,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/scene-c7XisPfr.js",
+        "status": 200,
+        "elapsedMs": 7332.157,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 6712.308,
+          "receive": 619.849
+        },
+        "bodyBytes": 57943,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/favicon.svg",
+        "status": 200,
+        "elapsedMs": 717.338,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 651.571,
+          "receive": 65.767
+        },
+        "bodyBytes": 598,
+        "failure": null
+      },
+      {
+        "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/naruto-author-01-VveAJh75.glb",
+        "status": 200,
+        "elapsedMs": 469.31,
+        "timings": {
+          "dns": -1,
+          "connect": -1,
+          "ssl": -1,
+          "send": 0,
+          "wait": 469.31,
+          "receive": -1
+        },
+        "bodyBytes": -1,
+        "failure": null
+      }
+    ],
+    "note": "HTTP 200 does not imply body download completed. Negative receive/body-size values indicate no completion captured before test ended."
+  }
+]

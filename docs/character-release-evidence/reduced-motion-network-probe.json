@@ -1,0 +1,30 @@
+{
+  "ready": true,
+  "elapsedMs": 7792,
+  "reducedMotion": true,
+  "models": {
+    "59012.17": {
+      "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/naruto-author-01-VveAJh75.glb",
+      "requestedAtMs": 4613,
+      "bytes": 2429904,
+      "encodedBytes": 2095251,
+      "status": 200,
+      "headersAtMs": 6060,
+      "lastDataMs": 6162,
+      "finishedAtMs": 6163,
+      "totalEncodedBytes": 2095628
+    },
+    "59012.26": {
+      "url": "https://yydshly.github.io/0905_codexgpt6_project/assets/guide-motion-v1-BPhcysLX.glb",
+      "requestedAtMs": 6303,
+      "bytes": 598368,
+      "encodedBytes": 229615,
+      "status": 200,
+      "headersAtMs": 6613,
+      "lastDataMs": 6773,
+      "finishedAtMs": 6773,
+      "totalEncodedBytes": 229779
+    }
+  },
+  "errors": []
+}
